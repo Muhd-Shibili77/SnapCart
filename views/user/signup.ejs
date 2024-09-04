@@ -1,0 +1,58 @@
+<%- include ("../partial/header" )-%>
+<section class="login_align">
+<div class="signup-container">
+    <div class="login-image">
+        <img class="img-fluid" src="/images/about-left-image.jpg" alt="Shopping Mall Image">
+    </div>
+    <div class="login-form">
+        <h2>Create an account</h2>
+        <p>Enter your details below</p>
+        <form action="/user/signup" method="post">
+            <div class="input-group">
+               
+                <input type="text" class="borderless" id="email" name="name" placeholder="Name" >
+                <p class="text-danger"><%= locals.Emptyname?Emptyname:null%></p>
+            </div>
+            <div class="input-group">
+                
+                <input type="text" id="email" class="borderless" name="email" placeholder="Email" >
+                <p class="text-danger"><%= locals.existemail?existemail:null%></p>
+            </div>
+            <div class="input-group">
+                
+                <input type="text"  class="borderless" name="phone" placeholder="Phone Number" >
+                <p class="text-danger"><%= locals.Emptyphone?Emptyphone:null%></p>
+                <p class="text-danger"><%= locals.existphone?existphone:null%></p>
+            </div>
+            <div class="input-group">
+              
+                <input type="password" id="password" class="borderless" name="password" placeholder="Password"  
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}" 
+                title="Password must be at least 8 characters long 
+                 include at least one uppercase letter,
+                 one lowercase letter, one number, and 
+                 one special character.">
+            </div>
+                    
+                        <div class="row pt-3">
+                            <div class="col-sm-12">
+                                <button type="submit" value="submit" class="btn btn-dark px-4 py-2 fs-6  signup-button" style="font-size: 0.9rem;">Create Account</button>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 flex-column mt-3 mb-2">
+                            <a href="/auth/google" class="btn btn-lg btn-outline-dark" style="font-size: 0.9rem;">
+                                <!-- Google Sign In Button -->
+                                <span class="ms-2 fs-6 fw-bold"> <i class="bi bi-google"></i>  Sign in with Google</span>
+                            </a>
+                            <p class="mb-0 text-center" style="font-size: 0.85rem;">Already have Account? <a href="/user/login" class="fw-bold text-dark text-decoration-none">Login</a></p>
+                        </div>
+
+
+        </form>
+        
+       
+    </div>
+</div>
+</section>
+
+<%- include ("../partial/footer" )-%>
