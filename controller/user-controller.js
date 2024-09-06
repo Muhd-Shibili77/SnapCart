@@ -19,8 +19,10 @@ const post_login = async (req, res) => {
 
 
   try {
-    const userexist = await User.findOne({ email: email });
-   
+    const userexist = await User.findOne({ email: email ,isAdmin:false});
+   if(userexist.isBlock){
+    res.render('user/login',{blocked:"you are blocked"})
+   }else{
     if (userexist) {
       const passwordmatch = await bcrypt.compare(password, userexist.password);
       if (passwordmatch) {
@@ -34,6 +36,8 @@ const post_login = async (req, res) => {
     } else {
       res.render("user/login", { notexist: "Email not found" });
     }
+   }
+    
   } catch (err) {
     console.log("error in login ", err);
   }

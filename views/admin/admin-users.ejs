@@ -51,7 +51,7 @@
                           </div>
                         <div class="dashboard-1">
                           <div class="dashboard-11"></div>
-                          <a href="#" class="dashboard btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/dashboard.png" alt="">Dashboard </a>
+                          <a href="/admin/dashboard" class="dashboard btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/dashboard.png" alt="">Dashboard </a>
                         </div>
                         
                         <div class="users">
@@ -60,7 +60,7 @@
                         </div>
                         <div class="products">
                           <div class="order"></div>
-                          <a href="#" class="products-1 btn "><img style="width: 35px; margin-right: 15px;" src="/images/icons/order.png" alt=""> Products </a>
+                          <a href="/admin/products" class="products-1 btn "><img style="width: 35px; margin-right: 15px;" src="/images/icons/order.png" alt=""> Products </a>
                         </div>
                         <div class="offers">
                           <div class="order"></div>
@@ -72,11 +72,11 @@
                         </div>
                         <div class="categories">
                           <div class="categories-2"></div>
-                          <a href="#" class="categories-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/categories.png" alt=""> Categories </a>
+                          <a href="/admin/category" class="categories-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/categories.png" alt=""> Categories </a>
                         </div>
                         <div class="brands">
                           <div class="brand-1"></div>
-                          <a href="#" class="brands-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/brand.png" alt=""> Brands </a>
+                          <a href="/admin/brand" class="brands-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/brand.png" alt=""> Brands </a>
                         </div>
                         <div class="coupon">
                           <div class="coupon-1"></div>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="payment-2">
                           <div class="logout-1"></div>
-                          <a  href="#" class="logout btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/logout.png" alt=""> Logout </a>
+                          <a  href="/admin/logout" class="logout btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/logout.png" alt=""> Logout </a>
                         </div>
                       </div>
                       <div class="icon">
@@ -104,7 +104,7 @@
             <div class="container-fluid main-area">
                 <div class="group-1000005981 admin-name">
                     <div class="shibili">
-                     <img style="width: 35px; margin-right: 15px; margin-bottom: 15px;" src="/images/icons/user (2).png" alt="">Shibili
+                     <img style="width: 30px; margin-right: 15px; margin-bottom: 15px;" src="/images/icons/user (2).png" alt="">Shibili
                     </div>
                   </div>
                   <div class="">
@@ -116,33 +116,98 @@
                 <thead>
                     <tr>
                       <th scope="col">Sl</th>
-                      <th scope="col">Username</th>
+                      <th scope="col">Name</th>
                       <th scope="col">Email</th>
                       <th scope="col">Phone</th>
                       <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
+                    <% if(typeof users !='undefined' && users.length > 0 ) { %>
+                      <% users.forEach((user,index) => { %>
                     <tr>
-                      <th scope="row">1</th>
-                      <td>Shahid</td>
-                      <td>Shahid@gmail.com</td>
-                      <td>98787452</td>
-                      <td><button type="button" class="btn btn-danger">Block</button></td>
+                      <th scope="row"><%= index+1 %></th>
+                      <td><%= user.name %></td>
+                      <td><%= user.email %></td>
+                      <td><%= user.phone %></td>
+                      <td><% if (user.isBlock) { %>
+                        <button type="button" class="btn btn-success unblock-button" data-user-id="<%= user._id %>">UNBLOCK</button>
+                      <% } else { %>
+                        <button type="button" class="btn btn-danger block-button" data-user-id="<%= user._id %>">BLOCK</button>
+                      <% } %></td>
+                      
                     </tr>
+                    <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td  colspan="6" class="text-center">No user available</td>
+                      </tr>
+                    <% } %>
                   </tbody>
               </table>
         </div>
         </div>
-
-
-
-    
-    
-    
-    
     </div> 
 </section>
+<script>
+
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    const blockbuttons = document.querySelectorAll(".block-button")
+    const unblockbuttons = document.querySelectorAll(".unblock-button")
+
+//blocking user
+
+    blockbuttons.forEach(button =>{
+      button.addEventListener('click',async ()=>{
+        const userId = button.getAttribute("data-user-id")
+        try{
+          const responce = await fetch('/admin/block',{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json',
+            },
+            body:JSON.stringify({userId})
+          });
+
+          if(responce.ok){
+            location.reload(); // Reload the page
+          }else{
+            alert('Failed to block user');
+          }
+        }catch(err){
+          console.error('Error while blocking user:', error);
+        }
+      })
+    })
+
+    //unblocking user
+
+    unblockbuttons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const userId = button.getAttribute('data-user-id');
+            try {
+              console.log(userId)
+                const response = await fetch('/admin/unblock', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId })
+                });
+
+                if (response.ok) {
+                    location.reload(); // Reload the page
+                } else {
+                    alert('Failed to unblock user');
+                }
+            } catch (error) {
+                console.error('Error unblocking user:', error);
+            }
+        });
+    });
+})
+</script>
 
 
 

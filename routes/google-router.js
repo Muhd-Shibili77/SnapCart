@@ -13,12 +13,14 @@ router.get('/', passport.authenticate('google', {
 router.get('/callback', 
     passport.authenticate('google', { failureRedirect: '/auth/google/failure' }),
     (req, res) => {
+        console.log('session fom google', req.session);
         res.redirect('/auth/google/protected'); // Or any route you prefer
     }
 );
 
 // Protected Route (only accessible if authenticated)
 router.get('/protected',(req, res) => {
+
     res.redirect('/user/home')
 });
 

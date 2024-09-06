@@ -44,6 +44,11 @@ app.use('/auth/google',googleAuth)
 app.use('/user',userrouter)
 app.use('/admin',adminrouter)
 
+
+
+
+
+
 app.get('/',(req,res)=>{
     if(req.session.user){
         res.redirect('/user/home')
@@ -55,7 +60,10 @@ app.get('/',(req,res)=>{
 })
 
 
-
+app.use((req, res, next) => {
+    res.render('partial/404')
+    // res.status(404).send('404 Not Found: The page you are looking for does not exist.');
+  });
 
 
 

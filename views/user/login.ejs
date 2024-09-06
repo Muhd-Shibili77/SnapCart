@@ -11,6 +11,7 @@
     <div class="login-form mt-5">
         <h2>Log in to SnapCart</h2>
         <p>Enter your details below</p>
+        <p class="text-danger text-center"><%= locals.blocked ? blocked : null %></p>
         <form class="mt-3" action="/user/login" method="post">
             <div class="input-group">
                 <input type="text" id="email" name="email" class="borderless" placeholder="Email"  required>

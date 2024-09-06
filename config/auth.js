@@ -12,7 +12,6 @@ passport.use(new GoogleStrategy({
   },
   async function(request, accessToken, refreshToken, profile, done) {
     try {
-        console.log(profile);
         
         // Find the user by email instead of googleId
         let user = await User.findOne({ email: profile.emails[0].value });
@@ -44,7 +43,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user);
 });
 
 passport.deserializeUser(async (id, done) => {
