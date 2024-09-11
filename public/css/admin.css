@@ -809,4 +809,7 @@
     color: #2a2a2a!important;
   }
 
-
+.newVarient{
+  display: flex;
+  justify-content: end;
+}

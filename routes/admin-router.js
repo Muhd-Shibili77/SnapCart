@@ -1,5 +1,6 @@
 const express = require("express");
 const adminrouter = express.Router();
+const upload = require('../config/multer')
 
 const {
   admin_login,
@@ -21,6 +22,11 @@ const {
   delete_brand,
   restore_brand,
   edit_brand,
+  post_add_products,
+  delete_products,
+  restore_products,
+  post_edit_products,
+  get_edit_products,
 } = require("../controller/adminController");
 
 adminrouter.get("/login", admin_login);
@@ -38,6 +44,16 @@ adminrouter.post("/unblock", unblock_users);
 adminrouter.get("/products", admin_products);
 
 adminrouter.get("/add_products", add_products);
+
+adminrouter.post("/add_products",upload.any(), post_add_products);
+
+adminrouter.post("/delete_products", delete_products);
+
+adminrouter.post("/restore_product", restore_products);
+
+adminrouter.get("/edit_product", get_edit_products);
+
+adminrouter.post("/edit_product",upload.any(), post_edit_products);
 
 adminrouter.get("/category", admin_category);
 

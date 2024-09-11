@@ -104,7 +104,7 @@
             <div class="container-fluid main-area">
                 <div class="group-1000005981 admin-name">
                     <div class="shibili">
-                     <img style="width: 35px; margin-right: 15px; margin-bottom: 15px;" src="/images/icons/user (2).png" alt="">Shibili
+                     <img style="width: 30px; margin-right: 15px; margin-bottom: 15px;" src="/images/icons/user (2).png" alt="">Shibili
                     </div>
                   </div>
                   <div class="">
@@ -126,26 +126,37 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td><img src="/images/women-02.jpg" style="width: 45px; height: 45px;" class="img-fluid" alt=""></td>
-                      <td>Top</td>
-                      <td>Party wear</td>
-                      <td>Allensolly</td>
-                      <td> 7 in stock </td>
-                      <td> $34 </td>
-                      <td><button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Top</td>
-                      <td><img src="/images/women-02.jpg" style="width: 45px; height: 45px;" class="img-fluid" alt=""></td>
-                      <td>Party wear</td>
-                      <td>Allensolly</td>
-                      <td> 7 in stock </td>
-                      <td> $34 </td>
-                      <td><button type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button></td>
-                    </tr>
+                    <% if(typeof product !='undefined' && product.length > 0 ) { %>
+                      <% product.forEach((products,index) => { %>
+                      <tr>
+                        <th scope="row"><%= index+1 %></th>
+                        <td><img src="/<%= products.variants[0].images[0] %>" style="width: 45px; height: 45px;" class="img-fluid" alt="icon"></td>
+                        <td><%= products.product_name %></td>
+                        <td><%= products.category_id.category_name %></td>
+                        <td><%= products.brand_id.brand_name %></td>
+                        <td class="<%= products.variants[0].stock > 0 ? 'text-success' : 'text-danger' %>">
+                          <%= products.variants[0].stock > 0 ? `${products.variants[0].stock} In Stock` : 'Out of Stock' %>
+                        </td>
+                        <td><%= products.variants[0].price %></td>
+                        <td><% if (products.isDelete) { %>
+                          <button type="button" class="btn btn-success restore-button" data-product-id="<%= products._id %>">RESTORE</button>
+                        <% } else { %>
+                          <button type="button" class="btn btn-danger delete-button" data-product-id="<%= products._id %>">DELETE</button>
+                          <a type="button" class="btn btn-outline-dark " href="/admin/edit_product?id=<%= products._id %>">EDIT</a>
+                        <% } %>
+                      </td>
+                        
+                      </tr>
+                      <% }) %>
+                  
+                      
+
+                      <% } else { %>
+                        <tr>
+                          <td  colspan="9" class="text-center">No product available</td>
+                        </tr>
+                      <% } %>
+                    
                   </tbody>
               </table>
               <div>
@@ -162,6 +173,67 @@
     
     </div> 
 </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded",()=>{
+    const deletebuttons = document.querySelectorAll(".delete-button")
+    const restorebuttons = document.querySelectorAll(".restore-button")
+    
+
+
+//deleting category
+
+    deletebuttons.forEach(button =>{
+      button.addEventListener('click',async ()=>{
+        const proId = button.getAttribute("data-product-id")
+        console.log(proId)
+        try{
+          console.log('3')
+          const responce = await fetch('/admin/delete_products',{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json',
+            },
+            body:JSON.stringify({proId})
+          });
+
+          if(responce.ok){
+            location.reload(); // Reload the page
+          }else{
+            alert('Failed to delete product');
+          }
+        }catch(err){
+          console.error('Error while deleting product:', error);
+        }
+      })
+    })
+
+    //restoring category
+
+    restorebuttons.forEach(button => {
+        button.addEventListener('click', async () => {
+          const proId = button.getAttribute("data-product-id")
+            try {
+                const response = await fetch('/admin/restore_product', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ proId })
+                });
+
+                if (response.ok) {
+                    location.reload(); // Reload the page
+                } else {
+                    alert('Failed to restoring category');
+                }
+            } catch (error) {
+                console.error('Error while restoring category:', error);
+            }
+        });
+    });
+})
+</script>
 
 
 

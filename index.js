@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const passport = require ('passport')
 const session = require('express-session')
 const nocache = require ('nocache')
+const cropper = require ('cropperjs')
+// require('cropperjs/dist/cropper.css');
 app.set('view engine','ejs')
 
 app.use(express.json());
@@ -14,6 +16,7 @@ app.use(express.urlencoded({extended:true}))
 require('dotenv').config();
 const port=process.env.PORT || 3000
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('uploads'));
 const userrouter=require('./routes/user-router')
 const adminrouter=require('./routes/admin-router')
 const googleAuth= require('./routes/google-router')
