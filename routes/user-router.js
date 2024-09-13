@@ -11,6 +11,11 @@ const {
   post_otp_verification,
   resend_otp,
   user_logout,
+  allProducts,
+  singleProduct,
+  category,
+  about,
+  contact,
 } = require("../controller/user-controller");
 
 userrouter.get("/login", get_login);
@@ -28,6 +33,16 @@ userrouter.post("/otp", post_otp_verification);
 userrouter.post("/resendOtp",resend_otp);
 
 userrouter.get("/home", get_home);
+
+userrouter.get('/products',allProducts)
+
+userrouter.get('/product',singleProduct)
+
+userrouter.get('/category',category)
+
+userrouter.get('/about',about)
+
+userrouter.get('/contact',contact)
 
 userrouter.get("/logout", user_logout);
 

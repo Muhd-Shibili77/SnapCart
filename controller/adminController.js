@@ -233,7 +233,17 @@ const restore_products =async(req,res)=>{
   if (req.session.isAdmin) {
     try {
       const { proId } = req.body;
-      await Product.findByIdAndUpdate(proId, { isDelete: false });
+      const product = await Product.findById(proId).populate('category_id').populate('brand_id')
+
+      const category = await Category.findById(product.category_id._id)
+      const brand = await Brand.findById(product.brand_id._id)
+
+      if(category.isDeleted || brand.isDeleted ){
+        return res.status(400).json({ message: 'The brand or category of this product is deleted' });
+      }else{
+        await Product.findByIdAndUpdate(proId, { isDelete: false });
+      }
+
 
       res.status(200).json({ message: "product restored successfully" });
     } catch (err) {
@@ -396,8 +406,13 @@ const delete_category = async (req, res) => {
     try {
       const { catId } = req.body;
       await Category.findByIdAndUpdate(catId, { isDeleted: true });
+
+      await Product.updateMany({category_id:catId},{$set:{isDelete:true}})
+
+
+
       console.log("category deleted successfully");
-      res.status(200).json({ message: "category deleted successfully" });
+      res.status(200).json({ message: "category and related products are deleted successfully" });
     } catch (err) {
       console.log("something went wrong while deleting the category");
       res
@@ -415,7 +430,9 @@ const restore_category = async (req, res) => {
       const { catId } = req.body;
       await Category.findByIdAndUpdate(catId, { isDeleted: false });
 
-      res.status(200).json({ message: "category restored successfully" });
+      await Product.updateMany({category_id:catId},{$set:{isDelete:false}})
+
+      res.status(200).json({ message: "category and related products are restored successfully" });
     } catch (err) {
       res
         .status(500)
@@ -489,6 +506,8 @@ const delete_brand = async (req, res) => {
     try {
       const { brandId } = req.body;
       await Brand.findByIdAndUpdate(brandId, { isDeleted: true });
+      await Product.updateMany({brand_id:brandId},{$set:{isDelete:true}})
+
       res.status(200).json({ message: "brand deleted successfully" });
     } catch (err) {
       console.log("something went wrong while deleting the brand");
@@ -506,7 +525,7 @@ const restore_brand = async (req, res) => {
     try {
       const { brandId } = req.body;
       await Brand.findByIdAndUpdate(brandId, { isDeleted: false });
-
+      await Product.updateMany({brand_id:brandId},{$set:{isDelete:false}})
       res.status(200).json({ message: "brand restored successfully" });
     } catch (err) {
       res

@@ -225,10 +225,12 @@
                 if (response.ok) {
                     location.reload(); // Reload the page
                 } else {
-                    alert('Failed to restoring category');
+                    const data = await response.json();
+                    alert(data.message);
                 }
             } catch (error) {
                 console.error('Error while restoring category:', error);
+                alert('An error occurred while trying to restore the product.');
             }
         });
     });

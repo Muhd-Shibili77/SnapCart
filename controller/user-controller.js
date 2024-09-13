@@ -3,6 +3,9 @@ const User = require("../model/userdb");
 const validator = require("validator");
 const nodemailer = require("nodemailer");
 const OTP = require("../model/otpdb");
+const Product = require('../model/productDB')
+const Category = require('../model/categoryDB')
+const Brand = require('../model/brandDB')
 const axios = require('axios');
 
 const get_login = (req, res) => {
@@ -210,18 +213,66 @@ const resend_otp = async (req, res) => {
   }
 };
 
-const get_home = (req, res) => {
-  
-    res.render("user/home");
+const get_home = async(req, res) => {
+  if(req.session.email){
+    const mensProduct = await Product.find({category_id:'66e01b1fb148f23cc19fa331'}).populate('category_id')
+    const womensProduct = await Product.find({category_id:'66e18d806bf28e92c6d2e0ea'}).populate('category_id')
+    const kidsProduct = await Product.find({category_id:'66e18d856bf28e92c6d2e0f2'}).populate('category_id')
+    const accessoris = await Product.find({category_id:'66e2970551da17d55eb8ba49'}).populate('category_id')
+    res.render("user/home",{mensProduct,womensProduct,kidsProduct,accessoris});
+
+  }else{
+    res.redirect('/user/login')
+  }
 
 };
 
+const allProducts = async (req,res)=>{
+  if(req.session.email){
+    const product = await Product.find()
+    res.render('user/products',{product})
+  }else{
+    res.redirect('/user/login')
+  }
+}
 
+const singleProduct = async(req,res)=>{
+  if(req.session.email){
+    const id = req.query.id
+    const product = await Product.findOne({_id:id}).populate('category_id')
+    const category = product.category_id;
+    const relatableProduct = await Product.find({category_id:category})
+    res.render('user/single-product',{product,relatableProduct})
+  }else{
+    res.redirect('/user/login')
+  }
+}
 
+const category =async (req,res)=>{
+  if(req.session.email){
+    const id = req.query.id
+    const category = await Product.find({category_id:id}).populate('category_id')
+    res.render('user/category',{category})
 
+  }else{
+    res.redirect('/user/login')
+  }
+}
 
-
-
+const about = (req,res)=>{
+  if(req.session.email){
+    res.render('user/about')
+  }else{
+    res.redirect('/user/login')
+  }
+}
+const contact = (req,res)=>{
+  if(req.session.email){
+    res.render('user/contact')
+  }else{
+    res.redirect('/user/login')
+  }
+}
 
 
 const user_logout=(req,res)=>{
@@ -245,4 +296,9 @@ module.exports = {
   post_otp_verification,
   user_logout,
   resend_otp,
+  allProducts,
+  singleProduct,
+  category,
+  about,
+  contact,
 }

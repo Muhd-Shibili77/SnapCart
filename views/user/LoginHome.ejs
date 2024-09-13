@@ -49,7 +49,7 @@
                                 confidence</h4>
                             
                             <div class="main-border-button">
-                                <a href="#">Purchase Now!</a>
+                                <a href="/user/login">Purchase Now!</a>
                             </div>
                         </div>
                         <img src="/images/left-banner-image.jpg" alt="">
@@ -71,7 +71,7 @@
                                             <h4>Women</h4>
                                             <p>Elevate your wardrobe with our women's fashion collection, featuring chic and versatile pieces designed to empower your unique style</p>
                                             <div class="main-border-button">
-                                                <a href="#">View More</a>
+                                                <a href="/user/login">View More</a>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                             <h4>Men</h4>
                                             <p>Step up your style game with our men's fashion selection, offering modern and classic pieces that redefine sophistication and comfort</p>
                                             <div class="main-border-button">
-                                                <a href="#">View More</a>
+                                                <a href="/user/login">View More</a>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                             <h4>Kids</h4>
                                             <p>Discover the latest in kids' fashion with playful and comfortable clothing that combines style and fun for every little trendsetter.</p>
                                             <div class="main-border-button">
-                                                <a href="#">View More</a>
+                                                <a href="/user/login">View More</a>
                                             </div>
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@
                                             <h4>Accessories</h4>
                                             <p>Explore our collection of stylish accessories, including shoes, belts, and more, to complete your look with the perfect finishing touches</p>
                                             <div class="main-border-button">
-                                                <a href="#">View More</a>
+                                                <a href="/user/login">View More</a>
                                             </div>
                                         </div>
                                     </div>
@@ -146,14 +146,20 @@
     </div>
 </div>
 <!-- ***** Main Banner Area End ***** -->
- <!-- ***** Men Area Starts ***** -->
- <section class="section" id="men">
+  <!-- ***** Men Area Starts ***** -->
+  <section class="section" id="men">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-heading">
                     <h2>Men's Latest</h2>
-                    
+                   
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-end">
+                <div class="section-heading">
+                   
+                    <a href="/user/login" class="btn btn-outline-dark">View More</a>
                 </div>
             </div>
         </div>
@@ -163,86 +169,44 @@
             <div class="col-lg-12">
                 <div class="men-item-carousel">
                     <div class="owl-men-item owl-carousel">
-                        
+                        <% mensProduct.forEach((element)=> { %>
                         <div class="item">
                             <div class="thumb">
-                                <img src="/images/men-01.jpg" alt="">
+                                
+                                <a href="/user/login"> <img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                             </div>
                             <div class="down-content">
-                                <h4>Classic Spring</h4>
-                                <span>$120.00</span>
+                                <h4><%= element.product_name %></h4>
+                                <span>INR <%= element.variants[0].price %></span>
                                 <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="/images/men-02.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Air Force 1 X</h4>
-                                <span>$90.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="/images/men-03.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Love Nana ‘20</h4>
-                                <span>$150.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="/images/men-01.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Classic Spring</h4>
-                                <span>$120.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <% }); %>
+                       
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- ***** Men Area Ends ***** -->
- <!-- ***** Women Area Starts ***** -->
- <section class="section" id="women">
+  <!-- ***** Women Area Starts ***** -->
+  <section class="section" id="women">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-heading">
                     <h2>Women's Latest</h2>
-                    
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-end">
+                <div class="section-heading">
+                    <a href="/user/login" class="btn btn-outline-dark">View More</a>
                 </div>
             </div>
         </div>
@@ -252,70 +216,26 @@
             <div class="col-lg-12">
                 <div class="women-item-carousel">
                     <div class="owl-women-item owl-carousel">
+                        <% womensProduct.forEach((element)=> { %>
                         <div class="item">
                             <div class="thumb">
-                                <img src="/images/women-01.jpg" alt="">
+                                
+                                <a href="/user/login"> <img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                             </div>
                             <div class="down-content">
-                                <h4>New Green Jacket</h4>
-                                <span>$75.00</span>
+                                <h4><%= element.product_name %></h4>
+                                <span>INR <%= element.variants[0].price %></span>
                                 <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-half"></i></li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="/images/women-02.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Classic Dress</h4>
-                                <span>$45.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="/images/women-03.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Spring Collection</h4>
-                                <span>$130.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="thumb">
-                                <img src="/images/women-01.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Classic Spring</h4>
-                                <span>$120.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <% }); %>
+
                     </div>
                 </div>
             </div>
@@ -323,14 +243,19 @@
     </div>
 </section>
 <!-- ***** Women Area Ends ***** -->
- <!-- ***** Kids Area Starts ***** -->
- <section class="section" id="kids">
+
+  <!-- ***** Kids Area Starts ***** -->
+  <section class="section" id="kids">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-heading">
                     <h2>Kid's Latest</h2>
-                    
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-end">
+                <div class="section-heading">
+                    <a href="/user/login" class="btn btn-outline-dark">View More</a>
                 </div>
             </div>
         </div>
@@ -340,84 +265,88 @@
             <div class="col-lg-12">
                 <div class="kid-item-carousel">
                     <div class="owl-kid-item owl-carousel">
-                        <div class="item">
-                            <div class="thumb">
-                               
-                                <img src="/images/kid-01.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>School Collection</h4>
-                                <span>$80.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="thumb">
-                               
-                                <img src="/images/kid-02.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Summer Cap</h4>
-                                <span>$12.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <% kidsProduct.forEach((element)=> { %>
                         <div class="item">
                             <div class="thumb">
                                 
-                                <img src="/images/kid-03.jpg" alt="">
+                                <a href="/user/login"><img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                             </div>
                             <div class="down-content">
-                                <h4>Classic Kid</h4>
-                                <span>$30.00</span>
+                                <h4><%= element.product_name %></h4>
+                                <span>INR <%= element.variants[0].price %></span>
                                 <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="item">
-                            <div class="thumb">
-                               
-                                <img src="/images/kid-01.jpg" alt="">
-                            </div>
-                            <div class="down-content">
-                                <h4>Classic Spring</h4>
-                                <span>$120.00</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <% }); %>
+                       
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <!-- ***** Kids Area Ends ***** -->
-<!-- ***** Best selling product starts ***** -->
+ <!-- ***** accessoies Area starts ***** -->
+
+ <section class="section" id="kids">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h2>Accessories Latest</h2>
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-end">
+                <div class="section-heading">
+                    <a href="/user/login" class="btn btn-outline-dark">View More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="kid-item-carousel">
+                    <div class="owl-kid-item owl-carousel">
+                        <% accessoris.forEach((element)=> { %>
+                        <div class="item">
+                            <div class="thumb">
+                                
+                                <a href="/user/login"><img src="/<%= element.variants[0].images[0] %>" alt=""></a>
+                            </div>
+                            <div class="down-content">
+                                <h4><%= element.product_name %></h4>
+                                <span>INR <%= element.variants[0].price %></span>
+                                <ul class="stars">
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <% }); %>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ***** accessoies Area ends ***** -->
+ <!-- ***** Best selling product starts ***** -->
     
-<section class="section" id="bestSelling">
+ <section class="section" id="bestSelling">
     
     <div class="container my-5">
         <div class="section-heading">
@@ -427,33 +356,33 @@
         <div class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col d-flex">
                 <div class="product-card p-3">
-                    <img src="/images/kid-01.jpg" alt="dress" class="product-img card-img-top img-thumbnail">
-                    <h4>Summer cap</h4>
-                    <p class="price">$150</p>
+                    <img src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
+                    <h4><%= womensProduct[0].product_name %></h4>
+                    <p class="price">INR <%= womensProduct[0].variants[0].price %></p>
                     <p class="rating">★★★★★</p>
                 </div>
             </div>
             <div class="col">
                 <div class="product-card p-3">
-                    <img src="/images/kid-03.jpg" alt="dress" class="product-img card-img-top img-thumbnail">
-                    <h4>Classic Kid</h4>
-                    <p class="price">$12</span></p>
+                    <img src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
+                    <h4><%= mensProduct[0].product_name %></h4>
+                    <p class="price">INR <%= mensProduct[0].variants[0].price %></span></p>
                     <p class="rating">★★★★☆</p>
                 </div>
             </div>
             <div class="col">
                 <div class="product-card p-3">
-                    <img src="/images/kid-02.jpg" alt="dress" class="product-img card-img-top img-thumbnail">
-                    <h4>School collections</h4>
-                    <p class="price">$12</p>
+                    <img src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
+                    <h4><%= kidsProduct[0].product_name %></h4>
+                    <p class="price">INR <%= kidsProduct[0].variants[0].price %></p>
                     <p class="rating">★★★★☆</p>
                 </div>
             </div>
             <div class="col">
                 <div class="product-card p-3">
-                    <img src="/images/kid-02.jpg" alt="dress" class="product-img card-img-top img-thumbnail">
-                    <h4>Classic Kid</h4>
-                    <p class="price">$12</span></p>
+                    <img src="/<%= accessoris[0].variants[0].images[0]%>" alt="dress" style="height: 40vh; object-fit: cover;" class="product-img card-img-top img-thumbnail">
+                    <h4><%= accessoris[0].product_name %></h4>
+                    <p class="price">INR <%= accessoris[0].variants[0].price %></span></p>
                     <p class="rating">★★★★☆ (65)</p>
                 </div>
             </div>

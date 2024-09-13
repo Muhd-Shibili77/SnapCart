@@ -1,4 +1,4 @@
-<%- include ('./partial/header')-%>
+<%- include ('../partial/header')-%>
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -17,11 +17,11 @@
                             <input class="form-control mr-sm-2" type="search"    placeholder="Search..." aria-label="Search">
                             </form>
                         </li> 
-                        <li class="scroll-to-section"><a href="#top">Home</a></li>
-                        <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                        <li class="scroll-to-section"><a href="#women">Women's</a></li>
-                        <li class="scroll-to-section"><a href="#kids">Kid's</a></li>
-                        <li class="scroll-to-section"><a href="#">Products</a></li>
+                        <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+                        <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+                        <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+                        <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+                        <li class="scroll-to-section"><a href="/user/products">Products</a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-cart"></i></a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
@@ -30,9 +30,9 @@
                                 <li><a href="#">My Account</a></li>
                                 <li><a href="#">My Orders</a></li>
                                 <li><a href="#">My Wallet</a></li>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Logout</a></li>
+                                <li><a href="/user/about">About Us</a></li>
+                                <li><a href="/user/contact">Contact Us</a></li>
+                                <li><a href="/user/logout">Logout</a></li>
                                 
                             </ul>
                         </li>
@@ -61,30 +61,60 @@
 </div>
 <!-- ***** Main Banner Area End ***** -->
 
+
+<!-- ------------------breadcrumbs starts----------------- -->
+
+
+
+<div class="container">
+    <ol class="breadcrumb breadcrumb-arrow">
+		<li><a href="/user/home">Home</a></li>
+		<li><a href="/user/category?id=<%= product.category_id._id %>"><%= product.category_id.category_name %></a></li>
+		<li class="active"><span><%= product.product_name %></span></li>
+	</ol>
+</div>
+<!-- ------------------breadcrumbs ends----------------- -->
+
 <!-- ***** Product Area Starts ***** -->
 <section class="section" id="product">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-            <div class="left-images">
-                <img src="/images/single-product-01.jpg" alt="">
-                <img src="/images/single-product-02.jpg" alt="">
-            </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="left-images">
+                            <img src="/<%= product.variants[0].images[0] %>" 
+                            data-action="zoom" 
+                            alt="Product Image 1" 
+                            class="zoom-img">
+                             <img src="/<%= product.variants[0].images[1] %>" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="left-images">
+                            <img src="/<%= product.variants[0].images[2] %>" alt="">
+                            <img src="/<%= product.variants[0].images[3] %>" alt="">
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            
         </div>
         <div class="col-lg-4">
             <div class="right-content">
-                <h3>Addidas Shoes</h3>
+                <h3><%= product.product_name %></h3>
             <div class="mb-3">
                 <span class="badge bg-warning text-dark">4.5 ★</span>
                 <span>(150 Reviews)</span>
             </div>
-            <h4 class="text-primary">$192.00</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiuski smod</p>
+            <h4 class="text-primary">INR <%= product.variants[0].price %></h4>
+            <p><%= product.product_highlights %></p>
 
             <div class="mb-3">
                 <label for="colors" class="form-label">Colours:</label>
                 <select id="colors" class="form-select">
-                    <option selected>White</option>
+                    <option selected><%= product.variants[0].color %></option>
                     <option>Black</option>
                 </select>
             </div>
@@ -99,14 +129,19 @@
                     <option>XL</option>
                 </select>
             </div>
-
-            <div class="mb-3">
+            <h5 class="<%= product.variants[0].stock > 0 ? 'text-success' : 'text-danger' %>">
+                <%= product.variants[0].stock > 0 ? `${product.variants[0].stock} In Stock` : 'Out of Stock' %></h5>
+            <div class="mb-3 mt-3 ">
                 <label for="quantity" class="form-label">Quantity:</label>
                 <input type="number" id="quantity" class="form-control" value="2" min="1">
             </div>
 
             <div class="mb-3">
-                <button class="btn btn-primary w-100">Buy Now</button>
+               <% if(product.variants[0].stock >0 ){ %>
+                    <button class="btn btn-primary w-100">Buy Now</button>
+               <% }else{ %>
+                    <button class="btn btn-danger w-100">Notify me</button>
+               <% } %>
             </div>
 
             <div class="d-flex justify-content-between">
@@ -139,129 +174,20 @@
         </div>
         <div class="container d-flex">
         <div class="row mt-5 d-flex">
-            
-            <div class="col-md-3 mt-4">
-                <div class="card">
-                    <img src="/images/kid-01.jpg" class="card-img-top" alt="Related Item 1">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">School Collection</h5>
-                        <p class="card-text text-danger"><small><del>$160</del></small> $120</p>
-                        <span class="badge bg-warning text-dark">4.5 ★ (88)</span>
+            <% relatableProduct.forEach((element)=>{ %>
+                <% if(element.product_name != product.product_name){ %>
+                    <div class="col-md-3 mt-4">
+                        <div class="card" style="height: 70vh;">
+                            <a href="/user/product?id=<%= element._id %>"><img src="/<%= element.variants[0].images[0] %>" class="card-img-top" style="height: 50vh; object-fit: cover;" alt="Related Item 1"></a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title"><%= element.product_name %></h5>
+                                <p class="card-text text-danger"><small><del><%= element.variants[0].price+120 %></del></small> <%= element.variants[0].price %></p>
+                                <span class="badge bg-warning text-dark">4.5 ★ (88)</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3 mt-4">
-                <div class="card">
-                    <img src="/images/kid-02.jpg" class="card-img-top" alt="Related Item 2">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Classic Kid</h5>
-                        <p class="card-text text-danger"><small><del>$160</del></small> $960</p>
-                        <span class="badge bg-warning text-dark">4.5 ★ (75)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mt-4">
-                <div class="card">
-                    <img src="/images/kid-03.jpg" class="card-img-top" alt="Related Item 3">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Summer cap</h5>
-                        <p class="card-text text-danger"><small><del>$400</del></small> $370</p>
-                        <span class="badge bg-warning text-dark">4.5 ★ (99)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mt-4">
-                <div class="card">
-                    <img src="/images/kid-01.jpg" class="card-img-top" alt="Related Item 4">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">School Collection</h5>
-                        <p class="card-text text-danger"><small><del>$170</del></small> $160</p>
-                        <span class="badge bg-warning text-dark">4.5 ★ (65)</span>
-                    </div>
-                </div>
-            </div>
-           
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-01.jpg" class="card-img-top" alt="Related Item 1">
-            <div class="card-body text-center">
-                <h5 class="card-title">School Collection</h5>
-                <p class="card-text text-danger"><small><del>$160</del></small> $120</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (88)</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-02.jpg" class="card-img-top" alt="Related Item 2">
-            <div class="card-body text-center">
-                <h5 class="card-title">Classic Kid</h5>
-                <p class="card-text text-danger"><small><del>$160</del></small> $960</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (75)</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-03.jpg" class="card-img-top" alt="Related Item 3">
-            <div class="card-body text-center">
-                <h5 class="card-title">Summer cap</h5>
-                <p class="card-text text-danger"><small><del>$400</del></small> $370</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (99)</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-01.jpg" class="card-img-top" alt="Related Item 4">
-            <div class="card-body text-center">
-                <h5 class="card-title">School Collection</h5>
-                <p class="card-text text-danger"><small><del>$170</del></small> $160</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (65)</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-01.jpg" class="card-img-top" alt="Related Item 1">
-            <div class="card-body text-center">
-                <h5 class="card-title">School Collection</h5>
-                <p class="card-text text-danger"><small><del>$160</del></small> $120</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (88)</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-02.jpg" class="card-img-top" alt="Related Item 2">
-            <div class="card-body text-center">
-                <h5 class="card-title">Classic Kid</h5>
-                <p class="card-text text-danger"><small><del>$160</del></small> $960</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (75)</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-03.jpg" class="card-img-top" alt="Related Item 3">
-            <div class="card-body text-center">
-                <h5 class="card-title">Summer cap</h5>
-                <p class="card-text text-danger"><small><del>$400</del></small> $370</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (99)</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-4">
-        <div class="card">
-            <img src="/images/kid-01.jpg" class="card-img-top" alt="Related Item 4">
-            <div class="card-body text-center">
-                <h5 class="card-title">School Collection</h5>
-                <p class="card-text text-danger"><small><del>$170</del></small> $160</p>
-                <span class="badge bg-warning text-dark">4.5 ★ (65)</span>
-            </div>
-        </div>
-    </div>
+               <% } %>
+           <% }) %>
 </div>
 </div>
 </div>
@@ -317,4 +243,5 @@
         </div>
     </div>
 </footer>
-<%- include ('./partial/footer')-%>
+
+<%- include ('../partial/footer')-%>

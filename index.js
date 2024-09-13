@@ -6,7 +6,9 @@ const passport = require ('passport')
 const session = require('express-session')
 const nocache = require ('nocache')
 const cropper = require ('cropperjs')
-// require('cropperjs/dist/cropper.css');
+const Product = require('./model/productDB')
+const Category = require('./model/categoryDB')
+const Brand = require('./model/brandDB')
 app.set('view engine','ejs')
 
 app.use(express.json());
@@ -52,13 +54,17 @@ app.use('/admin',adminrouter)
 
 
 
-app.get('/',(req,res)=>{
+app.get('/',async(req,res)=>{
     if(req.session.user){
         res.redirect('/user/home')
     }else if(req.session.isAdmin){
         res.redirect('/admin')
     }else{
-        res.render('user/LoginHome')
+        const mensProduct = await Product.find({category_id:'66e01b1fb148f23cc19fa331'}).populate('category_id')
+        const womensProduct = await Product.find({category_id:'66e18d806bf28e92c6d2e0ea'}).populate('category_id')
+        const kidsProduct = await Product.find({category_id:'66e18d856bf28e92c6d2e0f2'}).populate('category_id')
+        const accessoris = await Product.find({category_id:'66e2970551da17d55eb8ba49'}).populate('category_id')
+        res.render("user/LoginHome",{mensProduct,womensProduct,kidsProduct,accessoris});
     }
 })
 

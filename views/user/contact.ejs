@@ -1,5 +1,4 @@
 <%- include ("../partial/header" )-%>
-
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -22,7 +21,7 @@
                         <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
-                        <li class="scroll-to-section"><a class="active">Products</a></li>
+                        <li class="scroll-to-section"><a href="/user/products">Products</a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-cart"></i></a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
@@ -32,7 +31,7 @@
                                 <li><a href="#">My Orders</a></li>
                                 <li><a href="#">My Wallet</a></li>
                                 <li><a href="/user/about">About Us</a></li>
-                                <li><a href="/user/contact">Contact Us</a></li>
+                                <li><a>Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
                                 
                             </ul>
@@ -49,79 +48,76 @@
     </div>
 </header>
 <!-- ***** Header Area End ***** -->
- 
  <!-- ***** Main Banner Area Start ***** -->
  <div class="page-heading about-page-heading" id="top">
     <div class="container">
         <div class="row ">
             <div class="col-lg-12">
                 <div class="inner-content">
-                    <h2>View Our Range</h2>
+                    <h2>Contact Us</h2>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- ***** Main Banner Area End ***** -->
- <!-- ------------ products -------------- -->
-
- <section>
-    <h1 class="text-center">Our Products</h1>
-    <div class="container mt-5 d-flex ">
+  <!-- ***** Contact Area Starts ***** -->
+  <div class="contact-us subscribe">
+    <div class="container">
         <div class="row">
-            
-                    <% product.forEach((element)=>{ %>
-                        <div class="col-md-3 mt-4">
-                            <div class="item">
-                                <div class="thumb">
-                                    <a href="/user/product?id=<%=element._id %>"><img style="width: 280px; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt=""></a>
-                                </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars d-flex">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-half"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            </div>
-                       <% }) %>
-                            
-                               
-                                    
-                                 
-                                   
-                                   
-                                    
-                                    
-                                   
+            <div class="col-lg-8">
+                <div class="section-heading">
+                    <h2>Say Hello. Don't Be Shy!</h2>
+    
+                    
+                </div>
+                <form id="contact" action="" method="post">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <input name="name" type="text" id="name" placeholder="Your name" required="">
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <input name="email" type="text" id="email" placeholder="Your email" required="">
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-12">
+                        <fieldset>
+                          <textarea name="message" rows="6" id="message" placeholder="Your message" required=""></textarea>
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-12">
+                        <fieldset>
+                          <button type="submit" id="form-submit" class="main-dark-button"><i class="fa fa-paper-plane"></i></button>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-6">
+                        <ul>
+                            <li>Store Location:<br><span>Sunny Isles Beach, FL 33160, United States</span></li>
+                            <li>Phone:<br><span>010-020-0340</span></li>
+                            <li>Office Location:<br><span>North Miami Beach</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul>
+                            <li>Work Hours:<br><span>07:30 AM - 9:30 PM Daily</span></li>
+                            <li>Email:<br><span>info@company.com</span></li>
+                            <li>Social Media:<br><span><a href="#">Facebook</a>, <a href="#">Instagram</a>, <a href="#">Behance</a>, <a href="#">Linkedin</a></span></li>
+                        </ul>
+                    </div>
+                </div>
+        </div>
 
-
-
-                        </div>
-                        </div>
-                        
-
- </section>
-<!-- ------------pagination-------------- -->
- <div class="container mt-5">
-    <nav aria-label="...">
-        <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">></a></li>
-        </ul>
-      </nav>
- </div>
-
-
+        </div>
+    </div>
+</div>
+<!-- ***** Contact Area Ends ***** -->
 
 <!-- ***** Footer Start ***** -->
 <footer>
@@ -169,4 +165,5 @@
         </div>
     </div>
 </footer>
+
 <%- include ("../partial/footer" )-%>

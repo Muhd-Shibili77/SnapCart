@@ -22,7 +22,7 @@
                         <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
-                        <li class="scroll-to-section"><a class="active">Products</a></li>
+                        <li class="scroll-to-section"><a href="/user/products">Products</a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-cart"></i></a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
@@ -31,7 +31,7 @@
                                 <li><a href="#">My Account</a></li>
                                 <li><a href="#">My Orders</a></li>
                                 <li><a href="#">My Wallet</a></li>
-                                <li><a href="/user/about">About Us</a></li>
+                                <li><a>About Us</a></li>
                                 <li><a href="/user/contact">Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
                                 
@@ -49,82 +49,77 @@
     </div>
 </header>
 <!-- ***** Header Area End ***** -->
- 
+
  <!-- ***** Main Banner Area Start ***** -->
  <div class="page-heading about-page-heading" id="top">
     <div class="container">
         <div class="row ">
             <div class="col-lg-12">
                 <div class="inner-content">
-                    <h2>View Our Range</h2>
+                    <h2>About Our Company</h2>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- ***** Main Banner Area End ***** -->
- <!-- ------------ products -------------- -->
-
- <section>
-    <h1 class="text-center">Our Products</h1>
-    <div class="container mt-5 d-flex ">
+ <!-- ***** About Area Starts ***** -->
+ <div class="about-us">
+    <div class="container">
         <div class="row">
-            
-                    <% product.forEach((element)=>{ %>
-                        <div class="col-md-3 mt-4">
-                            <div class="item">
-                                <div class="thumb">
-                                    <a href="/user/product?id=<%=element._id %>"><img style="width: 280px; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt=""></a>
-                                </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars d-flex">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-half"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            </div>
-                       <% }) %>
-                            
-                               
-                                    
-                                 
-                                   
-                                   
-                                    
-                                    
-                                   
+            <div class="col-lg-6">
+                <div class="left-image">
+                    <img src="/images/about-left-image.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="right-content">
+                    <h4>About Us</h4>
+                     
+                    <p>Founded in 2015, ShopEase has become South Asia's leading online shopping platform, establishing a strong presence in India. Backed by a comprehensive suite of customized marketing, data analytics, and service solutions, ShopEase collaborates with over 12,000 sellers and 350 brands, reaching out to 3.5 million customers across the region. With a rapidly expanding inventory of over 1.2 million products, ShopEase offers an extensive selection across various categories, catering to a wide range of consumer needs.</p>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** About Area Ends ***** -->
+<section class="section" id="end">
+    <div class="container my-5">
+        <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+            <div class="col">
+                <div class="feature-card p-3">
+                    <img src="/images/delivary.png" alt="Free and Fast Delivery">
+                    <h5>FREE AND FAST DELIVERY</h5>
+                    <p>Free delivery for all orders over $140</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="feature-card p-3">
+                    <img src="/images/24by7.png" alt="24/7 Customer Service">
+                    <h5>24/7 CUSTOMER SERVICE</h5>
+                    <p>Friendly 24/7 customer support</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="feature-card p-3">
+                    <img src="/images/Services.png" alt="Money Back Guarantee">
+                    <h5>MONEY BACK GUARANTEE</h5>
+                    <p>We return money within 30 days</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
+</section>
 
-
-                        </div>
-                        </div>
-                        
-
- </section>
-<!-- ------------pagination-------------- -->
- <div class="container mt-5">
-    <nav aria-label="...">
-        <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">></a></li>
-        </ul>
-      </nav>
- </div>
-
-
-
-<!-- ***** Footer Start ***** -->
-<footer>
+ <!-- ***** Footer Start ***** -->
+ <footer>
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
@@ -169,4 +164,7 @@
         </div>
     </div>
 </footer>
-<%- include ("../partial/footer" )-%>
+
+
+
+<%- include ("../partial/footer")-%>

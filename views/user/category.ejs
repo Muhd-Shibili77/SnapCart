@@ -22,7 +22,7 @@
                         <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
-                        <li class="scroll-to-section"><a class="active">Products</a></li>
+                        <li class="scroll-to-section"><a href="/user/products">Products</a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-cart"></i></a></li>
                         <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
@@ -66,11 +66,12 @@
  <!-- ------------ products -------------- -->
 
  <section>
-    <h1 class="text-center">Our Products</h1>
+    
+    <h1 class="text-center"><%= category[0].category_id.category_name  %></h1>
     <div class="container mt-5 d-flex ">
         <div class="row">
             
-                    <% product.forEach((element)=>{ %>
+            <% category.forEach((element)=>{ %>
                         <div class="col-md-3 mt-4">
                             <div class="item">
                                 <div class="thumb">
