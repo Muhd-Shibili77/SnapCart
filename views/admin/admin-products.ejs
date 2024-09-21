@@ -16,10 +16,13 @@
         color: #505050 !important;
     }
     .side1{
-      width: 320px !important;
+      width: 300px !important;
+      height: 700px !important;
       background-color: rgba(170, 170, 170, 0.52);
       border-radius: 12px;
-      margin-top: 10vh;
+      margin-top: 0vh;
+      position: fixed;
+      margin-left: 40px;
     }
     .admin-name{
         margin-left: 135vh;
@@ -68,7 +71,7 @@
                         </div>
                         <div class="orders">
                           <div class="shopping-cart"></div>
-                          <a href="#" class="orders-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/shopping-cart.png" alt="">Orders </a>
+                          <a href="/admin/orders" class="orders-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/shopping-cart.png" alt="">Orders </a>
                         </div>
                         <div class="categories">
                           <div class="categories-2"></div>
@@ -141,8 +144,9 @@
                         <td><% if (products.isDelete) { %>
                           <button type="button" class="btn btn-success restore-button" data-product-id="<%= products._id %>">RESTORE</button>
                         <% } else { %>
-                          <button type="button" class="btn btn-danger delete-button" data-product-id="<%= products._id %>">DELETE</button>
-                          <a type="button" class="btn btn-outline-dark " href="/admin/edit_product?id=<%= products._id %>">EDIT</a>
+                          <button type="button" class="btn btn-danger delete-button" data-product-id="<%= products._id %>"><i class="bi bi-trash"></i></button>
+                          <a type="button" class="btn btn-outline-dark " href="/admin/edit_product?id=<%= products._id %>"><i class="bi bi-pencil-square"></i></a>
+                          <a type="button" class="btn btn-outline-success " href="/admin/product_detail?id=<%= products._id %>"><i class="bi bi-eye"></i></a>
                         <% } %>
                       </td>
                         

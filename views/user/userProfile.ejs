@@ -1,0 +1,331 @@
+<%- include ('../partial/header')-%>
+    <!-- ***** Header Area Start ***** -->
+    <style>
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+    
+        ul li a {
+            font-weight: normal; /* Ensure the font-weight isn't too light */
+            text-decoration: none; /* Remove underline */
+            color: #000; /* Default color */
+            
+        }
+    
+        ul li a:hover {
+            text-decoration: underline;
+        }
+    
+        ul li p {
+            margin-bottom: 5px; /* Adjust margin for better spacing */
+        }
+    </style>
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="logo">
+                            <img src="/images/SnapCart.png">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                           
+                            <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+                            <li class="scroll-to-section"><a href="/user/products">Products</a></li>
+                            <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                            <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                            <li class="submenu">
+                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                                <ul>
+                                    <li><a href="#">My Account</a></li>
+                                    <li><a href="/order/order_history">My Orders</a></li>
+                                    <li><a href="#">My Wallet</a></li>
+                                    <li><a href="/user/about">About Us</a></li>
+                                    <li><a href="/user/contact">Contact Us</a></li>
+                                    <li><a href="/user/logout">Logout</a></li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <!-- ----------profile area---------------- -->
+     <div class="userprofile">
+
+         <div class="container-fluid">
+             <div class="row">
+                 <div class="col-md-3">
+                     <div class="side-bar">
+                        <div class="list mt-5">
+                            <ul class="mt-5">
+                                <li class="mt-3"><p  style="font-weight: 800;"  class="fw-bold">Manage My Account</p></li>
+                                <li><a href="#">My Profile</a></li>
+                               <li> <a href="/user/address">My Address</a></li>
+                               <li><a href="/user/password">Change Password</a></li>
+                               <li><p class="fw-bold mt-4" style="font-weight: 800;">My Orders</p></li>
+                               <li><a href="/order/order_history">Orders</a></li>
+                               
+                               <li><p class="fw-bold mt-4" style="font-weight: 800;">My Wishlist</p></li>
+                            </ul>
+
+                        </div>
+                     </div>
+                 </div>
+                 <div class="col-md-6">
+                     <div class="profile-details">
+                        <h2 class="text-center">Profile</h2>
+                        <div class="row mt-4" style="margin-left: 150px;">
+                            <div class="col-md-8">
+                                <label class="labels">Name</label> <input type="text" class="form-control" placeholder="" value="<%= user.name %>" disabled>
+                            </div>
+                        </div>
+                        <div class="row mt-4" style="margin-left: 150px;">
+                            <div class="col-md-8">
+                                <label class="labels">Phone</label> <input type="text" class="form-control" placeholder="" value="<%= user.phone %>" disabled>
+                            </div>
+                        </div>
+                        <div class="row mt-4" style="margin-left: 150px;">
+                            <div class="col-md-8">
+                                <label class="labels">Email</label> <input type="text" class="form-control" placeholder="" value="<%= user.email %>" disabled>
+                            </div>
+                            
+                        </div>
+                        <div class="row mt-4" style="margin-left: 150px;">
+                            <div class="col-md-8">
+                                <button href="" class="btn btn-outline-success edit-button" data-toggle="modal" data-target="#exampleModal" data-user-name="<%= user.name %>" data-user-phone="<%= user.phone %>" data-user-email="<%= user.email %>" data-user-id="<%= user._id %>"> Edit</button>
+                            </div>
+                            
+                        </div>
+                        
+
+                     </div>
+         
+                 </div>
+                 <div class="col-md-3">
+                    <div class="profile-icon">
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                            <img class="rounded-circle mt-5" width="140px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                            <span class="font-weight-bold"><%= user.name %></span>
+                            <span class="text-black-50"><%= user.email %></span>
+                        </div>
+                     </div>
+         
+                 </div>
+                 
+             </div>
+         </div>
+         <div class="container">
+            <div class="address">
+
+            </div>
+         </div>
+     </div>
+    
+
+    <!-- ---------------profile area ends----------------- -->
+
+    <!-- -------------------address area--------------------- -->
+    <!-- <div class="userprofile">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    
+                </div>
+                <div class="col-md-6">
+                    <div class="profile-details">
+                       <h2 class="text-center">Profile</h2>
+                       <div class="row mt-4" style="margin-left: 150px;">
+                           <div class="col-md-8">
+                               <label class="labels">Name</label> <input type="text" class="form-control" placeholder="" value="<%= user.name %>" disabled>
+                           </div>
+                       </div>
+                       <div class="row mt-4" style="margin-left: 150px;">
+                           <div class="col-md-8">
+                               <label class="labels">Phone</label> <input type="text" class="form-control" placeholder="" value="<%= user.phone %>" disabled>
+                           </div>
+                       </div>
+                       <div class="row mt-4" style="margin-left: 150px;">
+                           <div class="col-md-8">
+                               <label class="labels">Email</label> <input type="text" class="form-control" placeholder="" value="<%= user.email %>" disabled>
+                           </div>
+                           
+                       </div>
+                       <div class="row mt-4" style="margin-left: 150px;">
+                           <div class="col-md-8">
+                               <button href="" class="btn btn-outline-success edit-button" data-toggle="modal" data-target="#exampleModal" data-user-name="<%= user.name %>" data-user-phone="<%= user.phone %>" data-user-email="<%= user.email %>" data-user-id="<%= user._id %>"> Edit</button>
+                           </div>
+                           
+                       </div>
+                       
+
+                    </div>
+        
+                </div>
+                <div class="col-md-3">
+                
+                </div>
+                
+            </div>
+        </div>
+        
+    </div> -->
+    <!-- ------------------------address area ends------------------- -->
+
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Your Profile</h5>
+         
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form  id="editProfileForm">
+            <p>Name</p>
+            <p id="existerror" class="text-danger"></p>
+            <input type="text" class="form-control" id="userName" name="userName" required>
+            <p>Phone</p>
+            <p id="existerror" class="text-danger"></p>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+            <p>Email</p>
+            <p id="existerror" class="text-danger"></p>
+            <input type="text" class="form-control" id="email" name="email" required>
+              
+              <input type="hidden" id="userId" name="userId">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitEditProfile('')">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="first-item">
+                        <div class="logo">
+                            <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
+                        </div>
+                        <ul>
+
+                            <li><a href="#">SnapCart@company.com</a></li>
+                            <li><a href="#">+91 9048763044</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Shopping &amp; Categories</h4>
+                    <ul>
+                        <li><a href="#">Men’s Shopping</a></li>
+                        <li><a href="#">Women’s Shopping</a></li>
+                        <li><a href="#">Kid's Shopping</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Homepage</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Help &amp; Information</h4>
+                    <ul>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">FAQ's</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Tracking ID</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+<script>
+
+const editbuttons = document.querySelectorAll(".edit-button")
+
+
+editbuttons.forEach(button=>{
+    button.addEventListener('click',async()=>{
+        
+       const userId = button.getAttribute("data-user-id")
+       const userName = button.getAttribute("data-user-name")
+       const userEmail = button.getAttribute("data-user-email")
+       const userPhone = button.getAttribute("data-user-phone")
+       const categoryName = button.getAttribute("data-category-name")
+     
+       //put into fields in modals
+       document.getElementById('userId').value = userId;
+       document.getElementById('userName').value = userName;
+       document.getElementById('email').value = userEmail;
+       document.getElementById('phone').value = userPhone;
+     })
+})
+
+
+async function submitEditProfile() {
+  
+  const existerror= document.getElementById('existerror')
+  const form = document.getElementById('editProfileForm');
+  const userName = form.userName.value;
+  const userId = form.userId.value;
+  const email = form.email.value;
+  const phone = form.phone.value;
+  existerror.innerHTML=""
+
+
+   const responce= await fetch('/user/edit_profile',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({userName,userId,email,phone})
+    })
+    
+    if(responce.status === 400){
+      const data = await responce.json()
+      existerror.innerHTML=data.error
+      console.log(data.error)
+    }else if(responce.ok){
+      location.reload();
+    }else{
+      console.error('Error while updating category:', error);
+    }
+  
+}
+</script>
+
+
+    <%- include ('../partial/footer')-%>

@@ -1,5 +1,20 @@
 <%- include ("../partial/header" )-%>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Function to check for the success query parameter and show an alert
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('success')) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Password Changed!',
+      text: 'Your password was changed successfully.',
+      timer: 2000,
+      showConfirmButton: false
+    });
+  }
+</script>
 
 <div class="login_align">
 
@@ -14,23 +29,28 @@
         <p class="text-danger text-center"><%= locals.blocked ? blocked : null %></p>
         <form class="mt-3" action="/user/login" method="post">
             <div class="input-group">
-                <input type="text" id="email" name="email" class="borderless" placeholder="Email"  required>
+                <input type="text" id="email" name="email" class="borderless" value="shibilishanu888@gmail.com" placeholder="Email"  required>
                 <p class="text-danger"><%= locals.notexist ? notexist : null %></p>
             </div>
             <div class="input-group">
                
-                <input type="password" id="password" name="password" class="borderless mt-2" placeholder="Password" required >
+                <input type="password" id="password" name="password" class="borderless mt-2" value="Shibili@123" placeholder="Password" required >
                 <p class="text-danger"><%= locals.passNo ? passNo : null %></p>
             </div>
             <div class="row pt-3 mt-5">
                 <div class="col-sm-6">
                     <button type="submit" value="submit" class="btn btn-dark px-4 py-2 mt-2" style="font-size: 0.9rem;">Login</button>
                 </div>
+               
                 <div class="col-sm-6 mt-1 text-end">
-                    <a href="#" class="f-p text-dark text-decoration-none" style="font-size: 0.9rem;">Forget Password?</a>
+                    <a href="/user/forgetPassword" class="f-p text-dark text-decoration-none" style="font-size: 0.9rem;">Forget Password?</a>
                 </div>
             </div>
-            <p class="mb-0 text-center" style="font-size: 0.85rem;">Don't have an account ? <a href="/user/signup" class="fw-bold text-dark text-decoration-none">Signup</a></p>
+            <a href="/auth/google" class="btn btn-lg btn-outline-dark mt-3" style="font-size: 0.9rem;">
+                <!-- Google Sign In Button -->
+                <span class="ms-2 fs-6 fw-bold"> <i class="bi bi-google"></i>  Sign in with Google</span>
+            </a>
+            <p class="mb-0 text-center" style="font-size: 0.85rem; margin-top: 20px;">Don't have an account ? <a href="/user/signup" class="fw-bold text-dark text-decoration-none">Signup</a></p>
         </form>
     </div>
 </div>

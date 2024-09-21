@@ -10,17 +10,17 @@
         <form action="/user/signup" method="post">
             <div class="input-group">
                
-                <input type="text" class="borderless" id="email" name="name" placeholder="Name" >
+                <input type="text" class="borderless" id="email" name="name" placeholder="Name" required >
                 <p class="text-danger"><%= locals.Emptyname?Emptyname:null%></p>
             </div>
             <div class="input-group">
                 
-                <input type="text" id="email" class="borderless" name="email" placeholder="Email" >
+                <input type="text" id="email" class="borderless" name="email" placeholder="Email" required >
                 <p class="text-danger"><%= locals.existemail?existemail:null%></p>
             </div>
             <div class="input-group">
                 
-                <input type="text"  class="borderless" name="phone" placeholder="Phone Number" >
+                <input type="text"  class="borderless" name="phone" placeholder="Phone Number" required>
                 <p class="text-danger"><%= locals.Emptyphone?Emptyphone:null%></p>
                 <p class="text-danger"><%= locals.existphone?existphone:null%></p>
             </div>

@@ -1,247 +1,337 @@
 <%- include ('../partial/header')-%>
-<!-- ***** Header Area Start ***** -->
-<header class="header-area header-sticky">
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="logo">
+                            <img src="/images/SnapCart.png">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section">
+                                <form class="form-inline my-2 my-lg-0  " style="width:350px;">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Search..."
+                                        aria-label="Search">
+                                </form>
+                            </li>
+                            <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+                            <li class="scroll-to-section"><a href="/user/products">Products</a></li>
+                            <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                            <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                            <li class="submenu">
+                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                                <ul>
+                                    <li><a href="/user/profile">My Account</a></li>
+                                    <li><a href="/order/order_history">My Orders</a></li>
+                                    <li><a href="#">My Wallet</a></li>
+                                    <li><a href="/user/about">About Us</a></li>
+                                    <li><a href="/user/contact">Contact Us</a></li>
+                                    <li><a href="/user/logout">Logout</a></li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <!-- ***** Main Banner Area Start ***** -->
+    <div class="page-heading" id="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="inner-content">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+
+
+    <!-- ------------------breadcrumbs starts----------------- -->
+
+
+
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="#" class="logo">
-                        <img src="/images/SnapCart.png">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li class="scroll-to-section">
-                            <form class="form-inline my-2 my-lg-0  " style="width:350px;">
-                            <input class="form-control mr-sm-2" type="search"    placeholder="Search..." aria-label="Search">
-                            </form>
-                        </li> 
-                        <li class="scroll-to-section"><a href="/user/home">Home</a></li>
-                        <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
-                        <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
-                        <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
-                        <li class="scroll-to-section"><a href="/user/products">Products</a></li>
-                        <li class="scroll-to-section"><a href="#"><i class="bi bi-cart"></i></a></li>
-                        <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
-                        <li class="submenu">
-                            <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
-                            <ul>
-                                <li><a href="#">My Account</a></li>
-                                <li><a href="#">My Orders</a></li>
-                                <li><a href="#">My Wallet</a></li>
-                                <li><a href="/user/about">About Us</a></li>
-                                <li><a href="/user/contact">Contact Us</a></li>
-                                <li><a href="/user/logout">Logout</a></li>
+        <ol class="breadcrumb breadcrumb-arrow">
+            <li><a href="/user/home">Home</a></li>
+            <li><a href="/user/category?id=<%= product.category_id._id %>">
+                    <%= product.category_id.category_name %>
+                </a></li>
+            <li class="active"><span>
+                    <%= product.product_name %>
+                </span></li>
+        </ol>
+    </div>
+    <!-- ------------------breadcrumbs ends----------------- -->
+
+    <!-- ***** Product Area Starts ***** -->
+    <section class="section" id="product">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="left-images">
+                                <img src="/<%= variant.images[0] %>" data-action="zoom"
+                                    alt="Product Image 1" class="zoom-img">
+                                <img src="/<%=variant.images[1] %>" alt="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="left-images">
+                                <img src="/<%= variant.images[2] %>" alt="">
+                                <img src="/<%= variant.images[3] %>" alt="">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="right-content">
+                        <h3>
+                            <%= product.product_name %>
+                        </h3>
+                        <div class="mb-3">
+                            <span class="badge bg-warning text-dark">4.5 ★</span>
+                            <span>(150 Reviews)</span>
+                        </div>
+                        <h4 class="text-primary">INR <%= variant.price %>
+                        </h4>
+                        <p>
+                            <%= product.product_highlights %>
+                        </p>
+
+                        <div class="mb-3">
+                            <label for="colors" class="form-label">Colour: <%= variant.color %></label>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="size" class="form-label">Size:</label>
+                            <select id="size" class="form-select">
+                                <option disabled>XS</option>
+                                <option disabled>S</option>
+                                <option>M</option>
+                                <option selected>L</option>
+                                <option>XL</option>
+                            </select>
+                        </div>
+
+                        <h5 class="<%= variant.stock > 0 ? 'text-success' : 'text-danger' %>">
+                            <%= variant.stock> 0 ? `${variant.stock} In Stock` : 'Out of Stock'
+                                %>
+                        </h5>
+
+
+                        <div class="variant-selector mb-3">
+                            <h5 class="mt-4">Select Variant</h5>
+                            <div class="row mt-4">
+                                <% product.variants.forEach((variant, index)=> { %>
+                                    <div class="col-3">
+                                        <a href="/user/product?proId=<%= product._id %>&varId=<%= variant._id %>">
+                                            <img class="w-75 variant-image" data-index="<%= index %>"
+                                                src="/<%= variant.images[0] %>" alt="">
+                                        </a>
+                                        
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3 ">
+                            <label for="quantity" class="form-label">Quantity:</label>
+                            <input type="number" id="quantity" class="form-control" value="1" min="1">
+                        </div>
+
+                        <div class="mb-3">
+                            <% if(variant.stock>0 ){ %>
+
+                                <button class="btn btn-outline-dark w-100"
+                                    onclick="addToCart('<%= product._id %>','<%= variant._id %>')">Add to
+                                    cart</button>
                                 
-                            </ul>
-                        </li>
-                      
-                    </ul>        
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    
-                </nav>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- ***** Header Area End ***** -->
-  <!-- ***** Main Banner Area Start ***** -->
-  <div class="page-heading" id="top">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="inner-content"> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ***** Main Banner Area End ***** -->
+                                <% }else{ %>
 
-
-<!-- ------------------breadcrumbs starts----------------- -->
-
-
-
-<div class="container">
-    <ol class="breadcrumb breadcrumb-arrow">
-		<li><a href="/user/home">Home</a></li>
-		<li><a href="/user/category?id=<%= product.category_id._id %>"><%= product.category_id.category_name %></a></li>
-		<li class="active"><span><%= product.product_name %></span></li>
-	</ol>
-</div>
-<!-- ------------------breadcrumbs ends----------------- -->
-
-<!-- ***** Product Area Starts ***** -->
-<section class="section" id="product">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="left-images">
-                            <img src="/<%= product.variants[0].images[0] %>" 
-                            data-action="zoom" 
-                            alt="Product Image 1" 
-                            class="zoom-img">
-                             <img src="/<%= product.variants[0].images[1] %>" alt="">
+                                    <button class="btn btn-danger w-100 mt-3">Notify me</button>
+                                    <% } %>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="left-images">
-                            <img src="/<%= product.variants[0].images[2] %>" alt="">
-                            <img src="/<%= product.variants[0].images[3] %>" alt="">
-                            
+
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <span class="d-block"><strong>Free Delivery</strong></span>
+                                <small>Enter your postal code for delivery availability</small>
+                            </div>
+                            <div>
+                                <span class="d-block"><strong>Return Delivery</strong></span>
+                                <small>Free 30 Days Delivery Returns. Details</small>
+                            </div>
                         </div>
+
+                        <form action="" class="mt-5">
+                            <div class="input-group">
+                                <input type="text" id="email" name="email" class="borderless"
+                                    placeholder="Enter Coupon">
+                                <button type="submit" value="submit" class="btn btn-dark px-4 mt-4"
+                                    style="font-size: 0.9rem; margin-left: 250px;">Submit</button>
+                            </div>
+                        </form>
                     </div>
-                    
-                </div>
-            
-        </div>
-        <div class="col-lg-4">
-            <div class="right-content">
-                <h3><%= product.product_name %></h3>
-            <div class="mb-3">
-                <span class="badge bg-warning text-dark">4.5 ★</span>
-                <span>(150 Reviews)</span>
-            </div>
-            <h4 class="text-primary">INR <%= product.variants[0].price %></h4>
-            <p><%= product.product_highlights %></p>
-
-            <div class="mb-3">
-                <label for="colors" class="form-label">Colours:</label>
-                <select id="colors" class="form-select">
-                    <option selected><%= product.variants[0].color %></option>
-                    <option>Black</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="size" class="form-label">Size:</label>
-                <select id="size" class="form-select">
-                    <option>XS</option>
-                    <option>S</option>
-                    <option>M</option>
-                    <option selected>L</option>
-                    <option>XL</option>
-                </select>
-            </div>
-            <h5 class="<%= product.variants[0].stock > 0 ? 'text-success' : 'text-danger' %>">
-                <%= product.variants[0].stock > 0 ? `${product.variants[0].stock} In Stock` : 'Out of Stock' %></h5>
-            <div class="mb-3 mt-3 ">
-                <label for="quantity" class="form-label">Quantity:</label>
-                <input type="number" id="quantity" class="form-control" value="2" min="1">
-            </div>
-
-            <div class="mb-3">
-               <% if(product.variants[0].stock >0 ){ %>
-                    <button class="btn btn-primary w-100">Buy Now</button>
-               <% }else{ %>
-                    <button class="btn btn-danger w-100">Notify me</button>
-               <% } %>
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <div>
-                    <span class="d-block"><strong>Free Delivery</strong></span>
-                    <small>Enter your postal code for delivery availability</small>
-                </div>
-                <div>
-                    <span class="d-block"><strong>Return Delivery</strong></span>
-                    <small>Free 30 Days Delivery Returns. Details</small>
                 </div>
             </div>
-            
-            <form action="" class="mt-5">
-                <div class="input-group">
-                    <input type="text" id="email" name="email" class="borderless" placeholder="Enter Coupon">
-                    <button type="submit" value="submit" class="btn btn-dark px-4 mt-4" style="font-size: 0.9rem; margin-left: 250px;">Submit</button>
-                </div>
-            </form>
-        </div>
-        </div>
+    </section>
+    <!-- ***** Product Area Ends ***** -->
+
+
+    <!-- Related Items -->
+    <div class="section-heading">
+        <h2 class="text-center">Related Products</h2>
     </div>
-</section>
-<!-- ***** Product Area Ends ***** -->
-
-
- <!-- Related Items -->
-        <div class="section-heading">
-            <h2 class="text-center">Related Products</h2>
-        </div>
-        <div class="container d-flex">
+    <div class="container d-flex">
         <div class="row mt-5 d-flex">
             <% relatableProduct.forEach((element)=>{ %>
-                <% if(element.product_name != product.product_name){ %>
+                <% if(element.product_name !=product.product_name){ %>
                     <div class="col-md-3 mt-4">
                         <div class="card" style="height: 70vh;">
-                            <a href="/user/product?id=<%= element._id %>"><img src="/<%= element.variants[0].images[0] %>" class="card-img-top" style="height: 50vh; object-fit: cover;" alt="Related Item 1"></a>
+                            <a href="/user/product?id=<%= element._id %>"><img
+                                    src="/<%= element.variants[0].images[0] %>" class="card-img-top"
+                                    style="height: 50vh; object-fit: cover;" alt="Related Item 1"></a>
                             <div class="card-body text-center">
-                                <h5 class="card-title"><%= element.product_name %></h5>
-                                <p class="card-text text-danger"><small><del><%= element.variants[0].price+120 %></del></small> <%= element.variants[0].price %></p>
+                                <h5 class="card-title">
+                                    <%= element.product_name %>
+                                </h5>
+                                <p class="card-text text-danger"><small><del>
+                                            <%= element.variants[0].price+120 %>
+                                        </del></small>
+                                    <%= element.variants[0].price %>
+                                </p>
                                 <span class="badge bg-warning text-dark">4.5 ★ (88)</span>
                             </div>
                         </div>
                     </div>
-               <% } %>
-           <% }) %>
-</div>
-</div>
-</div>
-</div>
-</div>
-
- </div> 
-</section>
-
-<!-- ***** Footer Start ***** -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="first-item">
-                    <div class="logo">
-                        <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
-                    </div>
-                    <ul>
-                        
-                        <li><a href="#">SnapCart@company.com</a></li>
-                        <li><a href="#">+91 9048763044</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <h4>Shopping &amp; Categories</h4>
-                <ul>
-                    <li><a href="#">Men’s Shopping</a></li>
-                    <li><a href="#">Women’s Shopping</a></li>
-                    <li><a href="#">Kid's Shopping</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3">
-                <h4>Useful Links</h4>
-                <ul>
-                    <li><a href="#">Homepage</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3">
-                <h4>Help &amp; Information</h4>
-                <ul>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">FAQ's</a></li>
-                    <li><a href="#">Shipping</a></li>
-                    <li><a href="#">Tracking ID</a></li>
-                </ul>
-            </div>
-
+                    <% } %>
+                        <% }) %>
         </div>
     </div>
-</footer>
+    </div>
+    </div>
+    </div>
 
-<%- include ('../partial/footer')-%>
+    </div>
+    </section>
+
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="first-item">
+                        <div class="logo">
+                            <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
+                        </div>
+                        <ul>
+
+                            <li><a href="#">SnapCart@company.com</a></li>
+                            <li><a href="#">+91 9048763044</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Shopping &amp; Categories</h4>
+                    <ul>
+                        <li><a href="#">Men’s Shopping</a></li>
+                        <li><a href="#">Women’s Shopping</a></li>
+                        <li><a href="#">Kid's Shopping</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Homepage</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Help &amp; Information</h4>
+                    <ul>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">FAQ's</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Tracking ID</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        async function addToCart(product_id, variant_id) {
+            try {
+                const response = await fetch(`/cart/addToCart?Product_id=${product_id}&variant_id=${variant_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ product_id, variant_id })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to cart',
+                        showConfirmButton: false,
+                        text: result.message,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.message,
+                        showConfirmButton: true
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    showConfirmButton: true
+                });
+            }
+        }
+    </script>
+
+
+
+    <%- include ('../partial/footer')-%>

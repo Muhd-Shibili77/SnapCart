@@ -1,0 +1,559 @@
+<%- include ('../partial/header')-%>
+    <!-- ***** Header Area Start ***** -->
+    <style>
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+    
+        ul li a {
+            font-weight: normal; /* Ensure the font-weight isn't too light */
+            text-decoration: none; /* Remove underline */
+            color: #000; /* Default color */
+            
+        }
+    
+        ul li a:hover {
+            text-decoration: underline;
+        }
+    
+        ul li p {
+            margin-bottom: 5px; /* Adjust margin for better spacing */
+        }
+    </style>
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="logo">
+                            <img src="/images/SnapCart.png">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section">
+                                <form class="form-inline my-2 my-lg-0  " style="width:350px;">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Search..."
+                                        aria-label="Search">
+                                </form>
+                            </li>
+                            <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+                            <li class="scroll-to-section"><a href="/user/products">Products</a></li>
+                            <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                            <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                            <li class="submenu">
+                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                                <ul>
+                                    <li><a href="#">My Account</a></li>
+                                    <li><a href="/order/order_history">My Orders</a></li>
+                                    <li><a href="#">My Wallet</a></li>
+                                    <li><a href="/user/about">About Us</a></li>
+                                    <li><a href="/user/contact">Contact Us</a></li>
+                                    <li><a href="/user/logout">Logout</a></li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <!-- ----------profile area---------------- -->
+     <div class="userprofile">
+
+         <div class="container-fluid">
+             <div class="row">
+                 <div class="col-md-3">
+                     <div class="side-bar">
+                        <div class="list mt-5">
+                            <ul class="mt-5">
+                                <li class="mt-3"><p  style="font-weight: 800;"  class="fw-bold">Manage My Account</p></li>
+                                <li><a href="/user/profile">My Profile</a></li>
+                               <li> <a href='#'>My Address</a></li>
+                               <li><a href="/user/password">Change Password</a></li>
+                               <li><p class="fw-bold mt-4" style="font-weight: 800;">My Orders</p></li>
+                               <li><a href="/order/order_history">Orders</a></li>
+                               
+                               <li><p class="fw-bold mt-4" style="font-weight: 800;">My Wishlist</p></li>
+                            </ul>
+
+                        </div>
+                     </div>
+                 </div>
+                 <div class="col-md-9">
+                    
+                     
+                        <h2 class="text-center">Your Addresses</h2>
+                        <table class="table  mt-5">
+                            
+                            <tbody>
+                                <% if(address.length >0 && typeof address != 'undefined' ) { %>
+                                    <% address.forEach((element,index)=>{ %>
+                                        <tr>
+                                          <th scope="row"><%= index+1 %></th>
+                                          <td>
+                                            <%= element.fullName %><br><%= element.phone %><br><%= element.streetAddress %>,<br><%= element.city %>,<%= element.state %>,
+                                            <%= element.zipCode %><br><%= element.country %>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-danger delete-button" data-address-id="<%= element._id %>">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                           <button type="button" class="btn btn-outline-secondary edit-button" data-toggle="modal" data-target="#editAddressModal" 
+                                           data-address-id="<%= element._id %>" 
+                                           data-address-name="<%=element.fullName %>"
+                                           data-address-phone="<%=element.phone %>"
+                                           data-address-address="<%=element.streetAddress %>"
+                                           data-address-city="<%=element.city %>"
+                                           data-address-state="<%=element.state %>"
+                                           data-address-zipcode="<%=element.zipCode %>"
+                                           data-address-country="<%=element.country %>">
+                                            <i class="bi bi-pencil-square"></i>
+                                            </button>
+
+                                           <button type="button" class="btn btn-outline-secondary view-button" data-toggle="modal" data-target="#viewModal" 
+                                           data-address-name="<%=element.fullName %>"
+                                           data-address-address="<%=element.streetAddress %>"
+                                           data-address-phone="<%=element.phone %>"
+                                           data-address-city="<%=element.city %>"
+                                           data-address-state="<%=element.state %>"
+                                           data-address-zipcode="<%=element.zipCode %>"
+                                           data-address-country="<%=element.country %>">
+                                            <i class="bi bi-eye"></i>
+
+                                            </button>
+                                        </td>
+                                          
+                                        </tr>
+                                  <%  }) %>
+                                <% }else{ %>
+                                    <tr>
+                                        <td  colspan="6" class="text-center">No address available</td>
+                                    </tr>
+                                 <% } %>
+                              
+                             
+                            </tbody>
+                          </table>
+                          <div class="add-adress d-flex justify-content-end">
+                              <button href="" class="btn btn-outline-dark " data-toggle="modal" data-target="#addressModal" >Add Address</button>
+
+                          </div>
+                       
+                        
+
+                    
+         
+                 </div>
+                 
+                 
+             </div>
+         </div>
+         <div class="container">
+            <div class="address">
+
+            </div>
+         </div>
+     </div>
+    
+
+    <!-- ---------------profile area ends----------------- -->
+
+
+
+    <!-- add address Modal -->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Your Address</h5>
+         
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form  id="addAddressForm">
+            <p>FullName</p>
+            
+            <input type="text" class="form-control" id="userName" name="userName" required>
+            <p>streetAddress</p>
+            
+            <input type="text" class="form-control" id="address" name="address" required>
+            <p>zipCode</p>
+            
+            <input type="text" class="form-control" id="zipCode" name="zipCode" required>
+            <p>phone</p>
+            
+            <input type="text" class="form-control" id="phone" name="phone" required>
+            <p>city</p>
+            
+            <input type="text" class="form-control" id="city" name="city" required>
+            <p>state</p>
+            
+            <input type="text" class="form-control" id="state" name="state" required>
+            <p>country</p>
+            
+            <input type="text" class="form-control" id="country" name="country" required>
+              
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addAddress('')">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <!-- view address Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"> Your Address</h5>
+         
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form  id="viewAddressForm">
+            <p>FullName</p>
+            
+            <input type="text" class="form-control" id="viewUserName" name="userName" disabled>
+            <p>streetAddress</p>
+            
+            <input type="text" class="form-control" id="viewAddress" name="address" disabled>
+            <p>zipCode</p>
+            
+            <input type="text" class="form-control" id="viewZipCode" name="zipCode" disabled>
+            <p>phone</p>
+            
+            <input type="text" class="form-control" id="viewPhone" name="phone" disabled>
+            <p>city</p>
+            
+            <input type="text" class="form-control" id="viewCity" name="city" disabled>
+            <p>state</p>
+            
+            <input type="text" class="form-control" id="viewState" name="state" disabled>
+            <p>country</p>
+            
+            <input type="text" class="form-control" id="viewCountry" name="country" disabled>
+              
+          </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+
+<!-- -------edit address modal----------- -->
+
+<div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">edit Your Address</h5>
+         
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form  id="editAddressForm">
+            <p>FullName</p>
+            
+            <input type="text" class="form-control" id="editUserName" name="userName" required>
+            <p>streetAddress</p>
+            
+            <input type="text" class="form-control" id="editAddress" name="address" required>
+            <p>zipCode</p>
+            
+            <input type="text" class="form-control" id="editZipCode" name="zipCode" required>
+            <p>phone</p>
+            
+            <input type="text" class="form-control" id="editPhone" name="phone" required>
+            <p>city</p>
+            
+            <input type="text" class="form-control" id="editCity" name="city" required>
+            <p>state</p>
+            
+            <input type="text" class="form-control" id="editState" name="state" required>
+            <p>country</p>
+            
+            <input type="text" class="form-control" id="editCountry" name="country" required>
+            <input type="hidden" id="editUserId" name="userId">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="editAddress('')">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="first-item">
+                        <div class="logo">
+                            <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
+                        </div>
+                        <ul>
+
+                            <li><a href="#">SnapCart@company.com</a></li>
+                            <li><a href="#">+91 9048763044</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Shopping &amp; Categories</h4>
+                    <ul>
+                        <li><a href="#">Men’s Shopping</a></li>
+                        <li><a href="#">Women’s Shopping</a></li>
+                        <li><a href="#">Kid's Shopping</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Homepage</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Help &amp; Information</h4>
+                    <ul>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">FAQ's</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Tracking ID</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    const editbuttons = document.querySelectorAll(".edit-button")
+    const viewbuttons = document.querySelectorAll('.view-button')
+    const deletebuttons = document.querySelectorAll('.delete-button')
+
+    viewbuttons.forEach(button=>{
+        button.addEventListener('click',async()=>{
+            const name = button.getAttribute("data-address-name")
+            const address = button.getAttribute("data-address-address")
+            const city = button.getAttribute("data-address-city")
+            const state = button.getAttribute("data-address-state")
+            const zipcode = button.getAttribute("data-address-zipcode")
+            const country = button.getAttribute("data-address-country")
+            const phone = button.getAttribute("data-address-phone")
+
+            document.getElementById('viewUserName').value = name
+            document.getElementById('viewAddress').value = address
+            document.getElementById('viewCity').value = city
+            document.getElementById('viewState').value = state
+            document.getElementById('viewZipCode').value = zipcode
+            document.getElementById('viewCountry').value = country
+            document.getElementById('viewPhone').value = phone
+
+        })
+    })
+
+
+    editbuttons.forEach(button=>{
+        button.addEventListener('click',async()=>{
+            
+           const userId = button.getAttribute("data-address-id")
+           const name = button.getAttribute("data-address-name")
+            const address = button.getAttribute("data-address-address")
+            const city = button.getAttribute("data-address-city")
+            const state = button.getAttribute("data-address-state")
+            const zipcode = button.getAttribute("data-address-zipcode")
+            const country = button.getAttribute("data-address-country")
+            const phone = button.getAttribute("data-address-phone")
+         
+           //put into fields in modals
+           document.getElementById('editUserId').value = userId
+           document.getElementById('editUserName').value = name
+            document.getElementById('editAddress').value = address
+            document.getElementById('editCity').value = city
+            document.getElementById('editState').value = state
+            document.getElementById('editZipCode').value = zipcode
+            document.getElementById('editCountry').value = country
+            document.getElementById('editPhone').value = phone
+         })
+    })
+
+    deletebuttons.forEach(button=>{
+        button.addEventListener('click',async()=>{
+            const addressId = button.getAttribute('data-address-id')
+            try{
+                const response  = await fetch('/user/delete_address',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({addressId})
+
+                });
+                if (response.ok) {
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'address Deleted',
+                        text: 'The address has been successfully deleted.',
+                        confirmButtonText: 'OK'
+                     }).then(() => {
+                           location.reload(); // Reload the page after confirmation
+                     });
+                  } else {
+                       Swal.fire({
+                       icon: 'error',
+                       title: 'Failed to Delete',
+                       text: 'Unable to delete the address. Please try again later.',
+                        confirmButtonText: 'OK'
+                  });
+                }
+            }catch(errror){
+                console.error('Error while deleting address:', error);
+                    Swal.fire({
+                         icon: 'error',
+                          title: 'Error',
+                         text: 'An error occurred while deleting the address.',
+                         confirmButtonText: 'OK'
+                     });
+            }
+        })
+    })
+
+})
+
+
+
+
+
+
+
+async function addAddress() {
+  
+  const form = document.getElementById('addAddressForm');
+  const fullName = form.userName.value;
+  const address = form.address.value;
+  const zipCode = form.zipCode.value;
+  const phone = form.phone.value;
+  const city = form.city.value;
+  const state = form.state.value;
+  const country = form.country.value;
+
+  
+
+
+   const responce= await fetch('/user/add_address',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({fullName,address,zipCode,phone,city,state,country})
+    })
+    
+ 
+    
+    if(responce.ok){
+        Swal.fire({
+          icon: 'success',
+          title: 'address added',
+          text: 'The address has been successfully added.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          location.reload(); // Reload the page after confirmation
+        });
+    }else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Delete',
+          text: 'Unable to add the address. Please try again later.',
+          confirmButtonText: 'OK'
+        });
+    }
+  
+}
+
+
+async function editAddress(){
+
+ const form = document.getElementById('editAddressForm');
+  const userId = form.userId.value;
+  const fullName = form.userName.value;
+  const address = form.address.value;
+  const zipCode = form.zipCode.value;
+  const phone = form.phone.value;
+  const city = form.city.value;
+  const state = form.state.value;
+  const country = form.country.value;
+
+  
+
+
+   const responce= await fetch('/user/edit_address',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({userId,fullName,zipCode,phone,city,state,country})
+    })
+    
+ 
+    
+    if(responce.ok){
+        Swal.fire({
+          icon: 'success',
+          title: 'address updated',
+          text: 'The address has been successfully updated.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          location.reload(); // Reload the page after confirmation
+        });
+    }else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to update',
+          text: 'Unable to update the address. Please try again later.',
+          confirmButtonText: 'OK'
+        });
+    }
+
+
+}
+
+</script>
+
+
+    <%- include ('../partial/footer')-%>

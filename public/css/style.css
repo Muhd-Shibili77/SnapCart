@@ -2629,3 +2629,69 @@ body{
 .breadcrumb-arrow li span {
   color: #434a54
 }
+.profile-icon{
+  width: 100%;
+  height: 100%;
+
+}
+.profile-details{
+  width: 100%;
+  height: 60vh;
+  border: 2px solid rgb(121, 121, 121);
+  /* background-color: #191a20; */
+  margin-top: 9vh;
+}
+.userprofile{
+  margin-top: 20vh;
+  
+  width: 100%;
+  max-height: 600px;
+  height: 100%;
+}
+.side-bar{
+  max-width: 300px;
+  width: 100%;
+  height:65vh;
+  border-right: 2px solid grey;
+  margin-top: 6vh;
+  
+}
+
+.list{
+ margin-left: 15vh;
+ 
+ display: flex;
+}
+.form-email{
+  width: 90vh !important;
+  margin-left: 19vh !important;
+  background-color: #dfdede;
+}
+.table-area{
+  margin-top: 25vh;
+}
+.cart-total-box{
+  margin-left: 115vh;
+  margin-top:15vh;
+}
+.sort-input{
+  width: 150px;
+  border: 1px solid gray;
+  border-radius: 12px;
+  height: 34px;
+}
+.billing{
+  margin-top: 20vh;
+  width: 100%;
+}
+.orderImage{
+  width: 70px;
+  height: 90px;
+  object-fit: cover;
+}
+.order-details{
+  margin-top: 25vh;
+}
+.bread{
+  margin-top: 25vh;
+}

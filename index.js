@@ -22,6 +22,8 @@ app.use('/uploads', express.static('uploads'));
 const userrouter=require('./routes/user-router')
 const adminrouter=require('./routes/admin-router')
 const googleAuth= require('./routes/google-router')
+const cartrouter = require('./routes/cart-router')
+const orderrouter = require('./routes/order-router')
 const User = require('./model/userdb')
 const OTP= require("./model/otpdb")
 require('./config/auth')
@@ -48,6 +50,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/SnapCart")
 app.use('/auth/google',googleAuth)
 app.use('/user',userrouter)
 app.use('/admin',adminrouter)
+app.use('/cart',cartrouter)
+app.use('/order',orderrouter)
 
 
 

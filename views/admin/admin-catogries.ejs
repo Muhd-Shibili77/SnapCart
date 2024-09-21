@@ -16,10 +16,13 @@
         color: #505050 !important;
     }
     .side1{
-      width: 320px !important;
+      width: 300px !important;
+      height: 700px !important;
       background-color: rgba(170, 170, 170, 0.52);
       border-radius: 12px;
-      margin-top: 10vh;
+      margin-top: 0vh;
+      position: fixed;
+      margin-left: 40px;
     }
     .admin-name{
         margin-left: 135vh;
@@ -79,7 +82,7 @@
                         </div>
                         <div class="orders">
                           <div class="shopping-cart"></div>
-                          <a href="#" class="orders-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/shopping-cart.png" alt="">Orders </a>
+                          <a href="/admin/orders" class="orders-1 btn"><img style="width: 35px; margin-right: 15px;" src="/images/icons/shopping-cart.png" alt="">Orders </a>
                         </div>
                         <div class="categories">
                           <div class="categories-2"></div>
@@ -212,6 +215,9 @@
 
 </section>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   
   document.addEventListener("DOMContentLoaded",()=>{
@@ -221,28 +227,47 @@
 
 //deleting category
 
-    deletebuttons.forEach(button =>{
-      button.addEventListener('click',async ()=>{
-        const catId = button.getAttribute("data-category-id")
-        try{
-          const responce = await fetch('/admin/delete_category',{
-            method:'POST',
-            headers:{
-              'Content-Type':'application/json',
-            },
-            body:JSON.stringify({catId})
-          });
+deletebuttons.forEach(button => {
+  button.addEventListener('click', async () => {
+    const catId = button.getAttribute("data-category-id");
+    try {
+      const response = await fetch('/admin/delete_category', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ catId })
+      });
 
-          if(responce.ok){
-            location.reload(); // Reload the page
-          }else{
-            alert('Failed to delete category');
-          }
-        }catch(err){
-          console.error('Error while deleting category:', error);
-        }
-      })
-    })
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Category Deleted',
+          text: 'The category has been successfully deleted.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          location.reload(); // Reload the page after confirmation
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Delete',
+          text: 'Unable to delete the category. Please try again later.',
+          confirmButtonText: 'OK'
+        });
+      }
+    } catch (error) {
+      console.error('Error while deleting category:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while deleting the category.',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+});
+
 
     //restoring category
 
@@ -259,12 +284,30 @@
                 });
 
                 if (response.ok) {
+                  Swal.fire({
+                    icon:'success',
+                    title: 'Category Restored',
+                    text: 'The category has been successfully restored.',
+                    confirmButtonText: 'OK'  
+                  }).then(()=>{
                     location.reload(); // Reload the page
+                  })
                 } else {
-                    alert('Failed to restoring category');
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to Restore',
+                    text: 'Unable to Restore the category. Please try again later.',
+                    confirmButtonText: 'OK'
+                  });
                 }
             } catch (error) {
                 console.error('Error while restoring category:', error);
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                   text: 'An error occurred while restoring the category.',
+                  confirmButtonText: 'OK'
+               });
             }
         });
     });
@@ -306,9 +349,21 @@ async function submitEditCategory() {
       if(responce.status === 400){
         const data = await responce.json()
         existerror.innerHTML=data.error
-        console.log(data.error)
+        Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: data.error,
+        confirmButtonText: 'OK'
+      });
       }else if(responce.ok){
+        Swal.fire({
+        icon: 'success',
+        title: 'Category Updated',
+        text: 'The category has been successfully updated.',
+        confirmButtonText: 'OK'
+      }).then(()=>{
         location.reload();
+      })
       }else{
         console.error('Error while updating category:', error);
       }

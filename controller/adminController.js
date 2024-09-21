@@ -3,6 +3,8 @@ const User = require("../model/userdb");
 const Category = require("../model/categoryDB");
 const Brand = require("../model/brandDB");
 const Product = require('../model/productDB')
+const Order = require('../model/orderDB');
+
 
 const admin_login = (req, res) => {
   if (req.session.isAdmin) {
@@ -99,268 +101,6 @@ const unblock_users = async (req, res) => {
     res.redirect("/admin/login");
   }
 };
-
-const admin_products = async (req, res) => {
-  if (req.session.isAdmin) {
-    const product = await Product.find().populate('category_id').populate('brand_id')
-   
-    
-    res.render("admin/admin-products",{product});
-  } else {
-    res.redirect("/admin/login");
-  }
-};
-
-const add_products = async (req, res) => {
-  if (req.session.isAdmin) {
-    const category = await Category.find();
-    const brand = await Brand.find();
-    res.render("admin/admin-add_product", { category, brand });
-  } else {
-    res.redirect("/admin/login");
-  }
-};
-
-const post_add_products = async (req, res) => {
-  try {
-    if (req.session.isAdmin) {
-      const {
-        productName,
-        productHighlights,
-        productCategory,
-        productBrand,
-        productDescription,
-        variant_count,
-      } = req.body;
-      const images = req.files;
-      
-
-      const existProduct = await Product.findOne({ product_name: productName });
-
-      if (existProduct) {
-        return res.render('admin/admin-add_product', { exist: 'Product already exists' });
-      }
-
-      const varientDetials = [];
-
-      for (let i = 0; i < variant_count; i++) {
-        console.log('Variant', i);
-
-        const priceArray = req.body.productPrice || [];
-        const colorArray = req.body.productColor || [];
-        const sizeArray = req.body.productSize || [];
-        const stockArray = req.body.productStock || [];
-        
-        
-
-        const price = priceArray;
-        const color = colorArray[i];
-        const size = sizeArray[i];
-        const stock = stockArray;
-       
-        
-
-        if (price !== undefined) {
-          const numericPrice = Number(price.replace(/,/g, ''));
-
-          const varientImages = [];
-          
-          if (images) {
-            images.forEach(image => {
-              if (image.fieldname.startsWith(`productImage${i + 1}`)) {
-                varientImages.push(image.path); // Ensure this is the correct property
-                
-              }
-            });
-          }
-
-          
-          varientDetials.push({
-            price: numericPrice,
-            size:size,
-            stock:stock,
-            color:color,
-            images: varientImages
-          });
-          
-        } else {
-          console.error(`Price of variant ${i} is undefined`);
-        }
-      }
-      
-      const product = new Product({
-        product_name: productName,
-        product_highlights:productHighlights,
-        category_id:productCategory,
-        brand_id:productBrand,
-        product_description:productDescription,
-        variants: varientDetials
-      });
-      
-      await product.save();
-      console.log('Product saved successfully');
-      res.redirect("/admin/products");
-    } else {
-      res.redirect("/admin/login");
-    }
-  } catch (error) {
-    console.error("Something went wrong while adding the product:", error);
-    res.status(500).json({ error: "Something went wrong while adding product" });
-  }
-};
-
-
-
-const delete_products =async(req,res)=>{
-  if (req.session.isAdmin) {
-    try {
-      const { proId } = req.body;
-      await Product.findByIdAndUpdate(proId, { isDelete: true });
-      console.log("product deleted successfully");
-      res.status(200).json({ message: "product deleted successfully" });
-    } catch (err) {
-      console.log("something went wrong while deleting the product");
-      res
-        .status(500)
-        .json({ err: "something went wrong while deleting the product" });
-    }
-  } else {
-    res.redirect("/admin/login");
-  }
-
-}
-const restore_products =async(req,res)=>{
-  if (req.session.isAdmin) {
-    try {
-      const { proId } = req.body;
-      const product = await Product.findById(proId).populate('category_id').populate('brand_id')
-
-      const category = await Category.findById(product.category_id._id)
-      const brand = await Brand.findById(product.brand_id._id)
-
-      if(category.isDeleted || brand.isDeleted ){
-        return res.status(400).json({ message: 'The brand or category of this product is deleted' });
-      }else{
-        await Product.findByIdAndUpdate(proId, { isDelete: false });
-      }
-
-
-      res.status(200).json({ message: "product restored successfully" });
-    } catch (err) {
-      res
-        .status(500)
-        .json({ err: "something went wrong while restoring the product" });
-    }
-  } else {
-    res.redirect("/admin/login");
-  }
-
-}
-
-const get_edit_products=async(req,res)=>{
-  if(req.session.isAdmin){
-    const category = await Category.find();
-    const brand = await Brand.find();
-    const id =req.query.id
-    const product = await Product.findOne({_id:id}).populate('category_id').populate('brand_id')
-    
-    
-    res.render('admin/admin-edit_product',{product,category,brand})
-  }else{
-    res.redirect('/admin/login')
-  }
-}
-
-
-const post_edit_products = async (req, res) => {
-  try {
-    if (req.session.isAdmin) {
-      const category = await Category.find();
-    const brand = await Brand.find();
-      const {
-        productId, // Add productId to identify which product to update
-        productName,
-        productHighlights,
-        productCategory,
-        productBrand,
-        productDescription,
-        variant_count,
-      } = req.body;
-      console.log(req.body)
-      const images = req.files;
-
-      // Find the product by ID
-      const product = await Product.findById(productId);
-
-      if (!product) {
-        return res.status(404).json({ error: "Product not found" });
-      }
-
-      // Check if the product name already exists for another product
-      
-
-      const varientDetails = [];
-
-      for (let i = 0; i < variant_count; i++) {
-        const priceArray = req.body.productPrice || [];
-        const colorArray = req.body.productColor || [];
-        const sizeArray = req.body.productSize || [];
-        const stockArray = req.body.productStock || [];
-
-        const price = priceArray;
-        const color = colorArray[i];
-        const size = sizeArray[i];
-        const stock = stockArray;
-
-        if (price !== undefined) {
-          const numericPrice = Number(price.replace(/,/g, ''));
-
-          const variantImages = [];
-
-          if (images) {
-            images.forEach(image => {
-              if (image.fieldname.startsWith(`productImage${i + 1}`)) {
-                variantImages.push(image.path); // Ensure this is the correct property
-              }
-            });
-          }
-
-          varientDetails.push({
-            price: numericPrice,
-            size: size,
-            stock: stock,
-            color: color,
-            images: variantImages.length > 0 ? variantImages : product.variants[i]?.images || [] // Only update images if new ones are provided
-          });
-        } else {
-          console.error(`Price of variant ${i} is undefined`);
-        }
-      }
-
-      // Update product details
-      product.product_name = productName;
-      product.product_highlights = productHighlights;
-      product.category_id = productCategory;
-      product.brand_id = productBrand;
-      product.product_description = productDescription;
-      product.variants = varientDetails;
-
-      // Save the updated product
-      await product.save();
-
-      console.log('Product updated successfully');
-      res.redirect("/admin/products");
-    } else {
-      res.redirect("/admin/login");
-    }
-  } catch (error) {
-    console.error("Something went wrong while updating the product:", error);
-    res.status(500).json({ error: "Something went wrong while updating the product" });
-  }
-}
-
-
-
 
 
 
@@ -561,6 +301,35 @@ const edit_brand = async (req, res) => {
   }
 };
 
+const orders=async (req,res)=>{
+  if(req.session.isAdmin){
+       const order = await Order.find().populate('address').populate('items.product').populate('user')
+        
+      res.render('admin/admin-orders',{order})
+  }else{
+    
+      res.redirect('/admin/login')
+  }
+}
+
+const update_orderStatus = async(req,res)=>{
+  if(req.session.isAdmin){
+    const {status,orderId} =req.body
+    const orderInfo = await Order.findById(orderId)
+    console.log(orderInfo)
+    if(!orderInfo){
+      return res.status(400).json({success:false,message:'order is not found '})
+    }
+    
+    await Order.findByIdAndUpdate(orderId,{orderStatus:status})
+    res.status(200).json({success:true,message:'orderStatus successfully updated'})
+    
+    
+  }else{
+    res.redirect('/admin/login')
+  }
+}
+
 const admin_logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -578,8 +347,6 @@ module.exports = {
   admin_logout,
   block_users,
   unblock_users,
-  admin_products,
-  add_products,
   admin_category,
   add_category,
   restore_category,
@@ -590,9 +357,6 @@ module.exports = {
   delete_brand,
   restore_brand,
   edit_brand,
-  post_add_products,
-  delete_products,
-  restore_products,
-  post_edit_products,
-  get_edit_products,
+  orders,
+  update_orderStatus,
 };
