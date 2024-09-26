@@ -12,11 +12,37 @@ const orderSchema = new mongoose.Schema({
         required:true,
         ref:'User'
     },
-    address:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:'Address'
-    },
+    address:[{
+
+        fullName:{
+            type:String,
+            required:true
+        },
+        streetAddress:{
+            type:String,
+            required:true
+        },
+        pincode:{
+            type:String,
+            required:true
+        },
+        phone:{
+            type:String,
+            required:true
+        },
+        city:{
+            type:String,
+            required:true
+        },
+        state:{
+            type:String,
+            required:true
+        },
+        country:{
+            type:String,
+            required:true
+        },
+    }],
     items:[{
         product:{
             type:mongoose.Schema.Types.ObjectId,

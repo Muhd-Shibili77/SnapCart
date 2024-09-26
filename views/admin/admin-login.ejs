@@ -11,19 +11,19 @@
     <div class="login-form mt-5">
         <h2>Enter your admin </h2>
         <p>credentials to continue.</p>
-        <p class="text-danger text-center"><%= locals.notadmin ? notadmin : null %></p>
-        <form class="mt-3" action="/admin/login" method="post">
+        
+        <form class="mt-3">
             <div class="input-group">
                 <input type="text" id="email" name="email" class="borderless" value="admin@gmail.com" placeholder="Email or Phone Number"  required>
-                <p class="text-danger"><%= locals.notexist ? notexist : null %></p>
+                
             </div>
             <div class="input-group">
                 <input type="password" id="password" name="password" class="borderless mt-2" value="Admin@123" placeholder="Password" required >
-                <p class="text-danger"><%= locals.passNo ? passNo : null %></p>
+                
             </div>
             <div class="row pt-3 mt-4">
                 <div class="col-sm-6">
-                    <button type="submit" value="submit" class="btn btn-dark px-4 py-2 mt-2" style="font-size: 0.9rem;">Login</button>
+                    <button type="button" id="loginBtn" value="submit" onclick="adminLogin()" class="btn btn-dark px-4 py-2 mt-2" style="font-size: 0.9rem;">Login</button>
                 </div>
             </div>
         </form>
@@ -33,6 +33,86 @@
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+async function adminLogin() {
+            const email = document.getElementById('email').value.trim()
+            const password = document.getElementById('password').value.trim()
+            
+            
+
+            if (!email) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'email is empty',
+                    text: 'email field cannot be empty',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+            if (!password) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'password is empty',
+                    text: 'password field cannot be empty',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+
+            try {
+                const response = await fetch('/admin/login', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                })
+                
+                if (response.ok) {
+                    const result = await response.json()
+                    if (result.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: 'login successfull',
+                            text: result.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = '/admin/dashboard';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: 'login Failed',
+                            text: result.error, // Use result.message instead of result.error
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: 'Error',
+                        text: 'An error occurred. Please try again later.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: 'Network Error',
+                    text: 'An error occurred. Please check your network connection.',
+                    confirmButtonText: 'OK'
+                });
+            }
+
+
+        }
+
+
+
+</script>
 
 
 

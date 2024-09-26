@@ -187,7 +187,7 @@
                                 <div class="col-md-3">
                                     <select class="form-select form-control form-edge" name="productSize[]" id="productSize" required>
                                       <option selected disabled>Size</option>
-                                      <option>XS</option>
+                                     
                                       <option>S</option>
                                       <option>M</option>
                                       <option>L</option>
@@ -461,23 +461,27 @@ document.getElementById('addVariantButton').addEventListener('click', function (
                                     
                                       <img src="/images/cloud-upload-icon-sign-symbol-logo-vector.jpg" alt="Image Preview" id="preview1-${variantIndex}" class="image-preview" >
                                       <input class="form-control image-form" type="file" name="productImage${variantIndex}"  id="productImage1-${variantIndex}"  onchange="previewImage(this, 'preview1-${variantIndex}')" required>
-                                      
+                                       <button type="button" class="btn btn-outline-danger mt-2" onclick="openCroppingModal('preview1-${variantIndex}','productImage1-${variantIndex}')">Crop Image</button>
                                     
                                   </div>
                                   <div class="col-md-6">
                                     <img src="/images/cloud-upload-icon-sign-symbol-logo-vector.jpg" alt="Image Preview" id="preview2-${variantIndex}" class="image-preview">
+                                   
                                     <input class="form-control image-form" type="file" name="productImage${variantIndex}"  id="productImage2-${variantIndex}"  onchange="previewImage(this, 'preview2-${variantIndex}')" required>
-                                  </div>
+                                    <button type="button" class="btn btn-outline-danger mt-2" onclick="openCroppingModal('preview2-${variantIndex}','productImage2-${variantIndex}')">Crop Image</button>
+                                    </div>
                                 </div>
                                 <div class="row mt-5">
                                   <div class="col-md-6">
                                     <img src="/images/cloud-upload-icon-sign-symbol-logo-vector.jpg" alt="Image Preview" id="preview3-${variantIndex}" class="image-preview">
                                     <input class="form-control image-form" type="file" name="productImage${variantIndex}"  id="productImage3-${variantIndex}-image3"  onchange="previewImage(this, 'preview3-${variantIndex}')" required>
-                                  </div>
+                                    <button type="button" class="btn btn-outline-danger mt-2" onclick="openCroppingModal('preview3-${variantIndex}','productImage3-${variantIndex}')">Crop Image</button>
+                                    </div>
                                   <div class="col-md-6">
                                     <img src="/images/cloud-upload-icon-sign-symbol-logo-vector.jpg" alt="Image Preview" id="preview4-${variantIndex}" class="image-preview">
                                     <input class="form-control image-form" type="file" name="productImage${variantIndex}"  id="productImage4-${variantIndex}"  onchange="previewImage(this, 'preview4-${variantIndex}')" required>
-                                  </div>
+                                    <button type="button" class="btn btn-outline-danger mt-2" onclick="openCroppingModal('preview4-${variantIndex}','productImage4-${variantIndex}')">Crop Image</button>
+                                    </div>
                                 </div>
                                 <div class="col-md-12 text-end mt-2">
             <button type="button" class="btn btn-outline-danger remove-variant">remove</button>
@@ -493,6 +497,7 @@ document.getElementById('addVariantButton').addEventListener('click', function (
 
     variantSection.appendChild(newVariantRow); // Append the new variant row
 });
+
 
 
 </script>

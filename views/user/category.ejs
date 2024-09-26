@@ -24,7 +24,7 @@
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                         <li class="scroll-to-section"><a href="/user/products">Products</a></li>
                         <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-                        <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                        <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
                             <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                             <ul>
@@ -75,7 +75,7 @@
                         <div class="col-md-3 mt-4">
                             <div class="item">
                                 <div class="thumb">
-                                    <a href="/user/product?id=<%=element._id %>"><img style="width: 280px; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt=""></a>
+                                    <a href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"><img style="width: 280px; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt=""></a>
                                 </div>
                                 <div class="down-content">
                                     <h4><%= element.product_name %></h4>
@@ -109,15 +109,21 @@
 
  </section>
 <!-- ------------pagination-------------- -->
- <div class="container mt-5">
+<div class="container mt-5">
     <nav aria-label="...">
         <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
+           <% for(let i =1;i<=totalPage;i++){ %>
+
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="/user/category?id=<%= category[0].category_id._id%>&page=<%= i %>"><%= i %></a>
+              </li>
+
+        <% } %>
+          
+         
+        <li class="page-item <%= currentPage === totalPage ? 'disabled' : '' %>">
+            <a class="page-link" href="/user/category?id=<%= category[0].category_id._id%>&page=<%= currentPage + 1 %>">></a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">></a></li>
         </ul>
       </nav>
  </div>

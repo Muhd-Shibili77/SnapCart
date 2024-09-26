@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const User = require("../model/userdb");
 const validator = require("validator");
 const nodemailer = require("nodemailer");
-const OTP = require("../model/otpdb");
+const OTP = require('../model/otpdb')
 const Product = require('../model/productDB')
 const Category = require('../model/categoryDB')
 const Brand = require('../model/brandDB')
@@ -21,35 +21,28 @@ const post_login = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-
   try {
-    
-    const userexist = await User.findOne({ email: email ,isAdmin:false});
-    if(!userexist){
-      return res.render('user/login',{blocked:'user not exist'})
-    }
-   if(userexist.isBlock){
-    res.render('user/login',{blocked:"you are blocked"})
-   }else{
-    if (userexist) {
+      const userexist = await User.findOne({ email: email, isAdmin: false });
+      if (!userexist) {
+          return res.json({ success: false, error: 'User does not exist' });
+      }
+      if (userexist.isBlock) {
+          return res.json({ success: false, error: 'You are blocked' });
+      }
+
       const passwordmatch = await bcrypt.compare(password, userexist.password);
       if (passwordmatch) {
-        
-        req.session.email = userexist.email;
-
-        res.redirect("/user/home");
+          req.session.email = userexist.email;
+          return res.status(200).json({ success: true, message: 'Successfully logged in' });
       } else {
-        res.render("user/login", { passNo: "incorrect password" });
+          return res.json({ success: false, error: 'Incorrect password' });
       }
-    } else {
-      res.render("user/login", { notexist: "Email not found" });
-    }
-   }
-    
   } catch (err) {
-    console.log("error in login ", err);
+      console.log("Error in login: ", err);
+      return res.json({ success: false, error: 'Server error. Please try again later.' });
   }
 };
+
 
 const get_signup = (req, res) => {
   if (req.session.email) {
@@ -92,61 +85,79 @@ const sendOtp = async (email, otp) => {
 };
 
 const post_signup = async (req, res) => {
+ 
   if (req.session.email) {
-    res.redirect("/user/home");
-  } else {
-    const data = {
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      password: req.body.password,
-    };
-    const otp = genarateOTP();
-try{
-  const existphone = await User.findOne({ phone: data.phone }); //checking the user is exist or not
-  const existemail = await User.findOne({ email: data.email }); //checking the user is exist or not
-  const a = validator.trim(data.name);
-  const b = validator.trim(data.phone);
-  
-  if (validator.isEmpty(a)) {
-    res.render("user/signup", { Emptyname: "Cannot be Empty" });
-  } else if (validator.isEmpty(b)) {
-    res.render("user/signup", { Emptyphone: "Cannot be Empty" });
-  } else {
-    if (existemail) {
-      res.render("user/signup", { existemail: "This email already exist" }); //if user exist show this on signup page
-    } else if (existphone) {
-      res.render("user/signup", {
-        existphone: "This phone number already exist",
-      }); //if user exist show this on signup page
-    } else {
-      const salt = 10; //number of salts
-      const hashedpassword = await bcrypt.hash(data.password, salt); //hashing the password
-      data.password = hashedpassword; //replacing normal password into hashed password
-      req.session.data=data
-      // const userData = await User.insertMany(data); // inserting data to database
-      const otpmodel = new OTP({
-        email: data.email,
-        otp: otp,
-      });
-      req.session.tempemail =data.email
-        
-      console.log(req.session.tempemail)
-
-      await sendOtp(data.email, otp);
-      await otpmodel.save();
-      res.redirect("/user/otp");
-    }
+    return res.json({ success: false, message: "Already logged in." });
   }
-} catch(err){
-  console.error("Error during signup:", err);
-  res.render("user/signup", { error: "An error occurred. Please try again." });
-} 
-}
-}
+  
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    password: req.body.password,
+  };
+
+
+  const otp = genarateOTP();
+
+  try {
+    // Checking if phone or email already exists
+    const existPhone = await User.findOne({ phone: data.phone });
+    const existEmail = await User.findOne({ email: data.email });
+    
+    // Trim and validate fields
+    const trimmedName = validator.trim(data.name);
+    const trimmedPhone = validator.trim(data.phone);
+    
+    if (validator.isEmpty(trimmedName)) {
+      
+      
+      return res.json({ success: false, message: 'Name cannot be empty.' });
+    }
+
+    if (validator.isEmpty(trimmedPhone)) {
+     
+      return res.json({ success: false, message: 'Phone number cannot be empty.' });
+    }
+
+    if (existEmail) {
+     
+      return res.json({ success: false, message: 'This email already exists.' });
+    }
+
+    if (existPhone) {
+      
+      return res.json({ success: false, message: 'This phone number already exists.' });
+    }
+    
+    // Hashing password
+    const salt = 10;
+    const hashedPassword = await bcrypt.hash(data.password, salt);
+    data.password = hashedPassword;
+  
+    req.session.data = data;
+    
+    // Creating OTP model
+    const otpModel = new OTP({
+      email: data.email,
+      otp: otp,
+    });
+    req.session.tempEmail = data.email;
+   
+    await sendOtp(data.email, otp);
+    await otpModel.save();
+
+    return res.json({ success: true, message: 'OTP sent successfully.' });
+  } catch (err) {
+    console.error("Error during signup:", err);
+    return res.json({ success: false, message: 'An error occurred. Please try again.' });
+  }
+};
+
 
 const get_otp_verification = async (req, res) => {
   if (!req.session.email) {
+    
     res.render("user/otp");
   } else {
     res.redirect("/user/signup");
@@ -154,29 +165,46 @@ const get_otp_verification = async (req, res) => {
 };
 
 const post_otp_verification = async (req, res) => {
-  if (!req.session.email) {
-    const { otp1, otp2, otp3, otp4 } = req.body;
-    const otp = otp1 + otp2 + otp3 + otp4;
+  try {
+    const { otp } = req.body;
+    const email = req.session.tempEmail;
 
-    const email = req.session.tempemail;
-    const otpuse = await OTP.findOne({ email: email });
-    if(!otpuse){
-      res.render("user/otp", { err: "otp is expired" });
+    if (!email) {
+      return res.status(400).json({ success:false,error: "OTP expired. Please try again." });
     }
-    if (otpuse.otp == otp) {
-      // await User.updateOne({ email: email }, { $set: { isVerify: true } });
-      const data = req.session.data
-      console.log(data)
-      const userData = await User.insertMany(data)
-      console.log(userData)
-      console.log("signup successfull");
 
-      res.redirect("/user/login");
+    // Find the OTP in the database
+    const otpDoc = await OTP.findOne({ email });
+
+    if (otpDoc) {
+      // Check if OTP is correct
+      if (otpDoc.otp === otp) {
+        // Check if the user already exists
+        const userExists = await User.findOne({ email });
+
+        if (userExists) {
+          return res.status(400).json({ success:false,error: "Email already verified. Please signup again." });
+        }
+
+        // Save user data
+        const data = req.session.data;
+        await User.insertMany([data]); // Using array syntax to insert a single document
+        await OTP.deleteOne({ email });
+
+        // Clear session data
+        delete req.session.data;
+        delete req.session.tempEmail;
+
+        return res.status(200).json({ success:true, message: "OTP verified successfully. Signup completed!" });
+      } else {
+        return res.status(400).json({ success:false,error: "OTP is not correct" });
+      }
     } else {
-      res.render("user/otp", { err: "otp is not correct" });
+      return res.status(400).json({ success:false,error: "OTP not found or expired. Please resend OTP." });
     }
-  } else {
-    res.redirect("/user/signup");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error. Please try again later." });
   }
 };
 
@@ -184,38 +212,50 @@ const post_otp_verification = async (req, res) => {
 
 
 
+
 const resend_otp = async (req, res) => {
-  const email = req.session.tempemail;
-  console.log(req.session.tempemail+"this is from resemd ptp")
-  console.log("Starting OTP resend process for:", email);
+  if (!req.session.tempEmail) {
+    return res.redirect('/user/signup');
+}
 
-  try {
-      // Corrected to find the user by email
-      const user = await OTP.findOne({ email });
 
-      if (!user) {
-          console.log('User not found');
-          return res.redirect('/user/signup');
-      }
+const email = req.session.tempEmail;
+console.log(req.session.tempEmail + " this is from resend OTP");
+console.log("Starting OTP resend process for:", email);
 
-      const otp = genarateOTP(); // Assuming this function generates a new OTP
-      await OTP.findOneAndDelete({ email }); // Delete any existing OTPs for this user
+try {
+    
+    const userOtpRecord = await OTP.findOne({ email });
+    
+    if (!userOtpRecord) {
+      
+        return res.render("user/forgetOtp", { success:false,err: "email not found" });
+    }
 
-      // Create and save the new OTP
-      const otpModel = new OTP({
-          email: email,
-          otp: otp,
-      });
-      await otpModel.save();
+    
+    const otp = genarateOTP();
 
-      // Send the OTP to the user's email
-      await sendOtp(email, otp);
+   
+    await OTP.findOneAndDelete({ email });
 
-      res.redirect('/user/otp'); // Redirect to the OTP page
-  } catch (error) {
-      console.error('Error resending OTP:', error);
-      res.status(500).send('Server error. Please try again later.'); // Respond with an error status
-  }
+    
+    const newOtpRecord = new OTP({
+        email: email,
+        otp: otp,
+    });
+    
+    await newOtpRecord.save();
+
+    
+    await sendOtp(email, otp);
+   
+   
+    res.status(200).json({ success:true,message:'otp sented successfuly'})
+} catch (error) {
+    console.error('Error resending OTP:', error);
+    
+    res.status(500).send('Server error. Please try again later.');
+}
 };
 
 const get_home = async(req, res) => {
@@ -234,8 +274,17 @@ const get_home = async(req, res) => {
 
 const allProducts = async (req,res)=>{
   if(req.session.email){
+    const page = parseInt(req.query.page) || 1 
+    const limit = 8
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Product.countDocuments();
+    const totalPage = Math.ceil(totalProducts/limit)
+    let searchQuery;
     const product = await Product.find({isDelete:false})
-    res.render('user/products',{product})
+    .skip(skip)
+    .limit(limit);
+    res.render('user/products',{product,totalPage,currentPage:page,searchQuery})
   }else{
     res.redirect('/user/login')
   }
@@ -246,11 +295,16 @@ const singleProduct = async(req,res)=>{
     const proId = req.query.proId
     const varId = req.query.varId
     
+    
     const product = await Product.findOne({_id:proId}).populate('category_id')
     
     // Find the specific variant from the product using varId
-    const variant = product.variants.find(variant => variant._id.toString() === varId);
+
     
+    const variant = product.variants.find(variant => variant._id.toString() === varId);
+     
+
+
     const category = product.category_id;
     const relatableProduct = await Product.find({category_id:category})
     res.render('user/single-product',{product,relatableProduct,variant})
@@ -262,8 +316,19 @@ const singleProduct = async(req,res)=>{
 const category =async (req,res)=>{
   if(req.session.email){
     const id = req.query.id
+    const page = parseInt(req.query.page) || 1 
+    const limit = 8
+    const skip = (page - 1) * limit;
+    const totalProducts = await Product.find({category_id:id}).countDocuments();
+    const totalPage = Math.ceil(totalProducts/limit)
+
+
+   
     const category = await Product.find({category_id:id}).populate('category_id')
-    res.render('user/category',{category})
+    .skip(skip)
+    .limit(limit);
+    
+    res.render('user/category',{category ,totalPage,currentPage:page})
 
   }else{
     res.redirect('/user/login')
@@ -319,13 +384,14 @@ const userProfile =async (req,res)=>{
 const editProfile=async (req,res)=>{
   if(req.session.email){
     try{
-      const {userName,userId,email,phone }=req.body
-        const userExist = await User.findOne({email:email})
-        console.log(userExist)
-        if( userExist && userExist.email != email){
-          return res.status(400).json({ error: "email already exists" });
-        }
-      await User.findByIdAndUpdate(userId,{name:userName,email:email,phone:phone})
+      const {userName,userId,phone }=req.body
+        const PhoneExist = await User.findOne({phone:phone})
+        
+        if (PhoneExist && PhoneExist._id.toString() !== userId) {
+          return res.status(400).json({ error: "Phone number already exists." });
+      }
+
+      await User.findByIdAndUpdate(userId,{name:userName,phone:phone})
       res.redirect('/user/profile')
 
     }catch(error){
@@ -338,10 +404,20 @@ const editProfile=async (req,res)=>{
 
 const address= async (req,res)=>{
   if(req.session.email){
-   
+    
     const user = await User.findOne({email:req.session.email})
+    const page = parseInt(req.query.page) || 1 
+    const limit = 3
+    const skip = (page - 1) * limit;
+    const totalProducts = await Address.find({userId:user._id}).countDocuments();
+    const totalPage = Math.ceil(totalProducts/limit)
+
+    
     const address = await Address.find({userId:user._id})
-    res.render('user/address',{address})
+    .skip(skip)
+    .limit(limit);
+
+    res.render('user/address',{address,totalPage,currentPage:page})
   }else{
     res.redirect('/user/login')
   }
@@ -352,13 +428,13 @@ const add_address = async (req,res)=>{
     try{
 
       const user = await User.findOne({email:req.session.email})
-      const {fullName,address,zipCode,phone,city,state,country}=req.body
+      const {fullName,address,pincode,phone,city,state,country}=req.body
       const userId = user._id
   
       const newAddress = new Address({
         fullName:fullName,
         streetAddress:address,
-        zipCode:zipCode,
+        pincode:pincode,
         phone:phone,
         city:city,
         state:state,
@@ -381,9 +457,10 @@ const add_address = async (req,res)=>{
 const edit_address= async (req,res)=>{
     if(req.session.email){
       try{
-        const {userId,fullName,address,zipCode,phone,city,state,country} =req.body
+        const {userId,fullName,address,pincode,phone,city,state,country} =req.body
+       
         
-        await Address.findByIdAndUpdate(userId,{fullName:fullName,streetAddress:address,zipCode:zipCode,phone:phone,city:city,state:state,country:country})
+        await Address.findByIdAndUpdate(userId,{fullName:fullName,streetAddress:address,pincode:pincode,phone:phone,city:city,state:state,country:country})
         res.status(200).json({message:"edit address successfully"})
       }catch(error){
         res.status(500).json({message:'something went wrong while editing the address'})
@@ -395,8 +472,7 @@ const edit_address= async (req,res)=>{
 
 const delete_address = async (req,res)=>{
     const {addressId} = req.body
-    console.log(req.body)
-    console.log(addressId);
+    
     
     try{  
        await Address.findByIdAndDelete(addressId)
@@ -416,38 +492,37 @@ const password = async (req,res)=>{
   }
 }
 
-const changePassword = async (req,res)=>{
-  if(req.session.email){
-    try{
-      const {oldPassword,newPassword }= req.body
-      
-      
-      
-      const user = await User.findOne({email:req.session.email})
-     
-      
-      const passwordMatch = await bcrypt.compare(oldPassword,user.password)
-      
-  
-      if(!passwordMatch){
-        return res.render('user/changePassword',{ noPass:'incorrect password',success:false })
+const changePassword = async (req, res) => {
+  if (req.session.email) {
+      try {
+          const { oldPass, newPass } = req.body;
+
+          const user = await User.findOne({ email: req.session.email });
+
+          if (!user) {
+              return res.status(404).json({ success: false, message: 'User not found' });
+          }
+
+          const passwordMatch = await bcrypt.compare(oldPass, user.password);
+
+          if (!passwordMatch) {
+              return res.status(400).json({ success: false, message: 'Incorrect current password' });
+          }
+
+          const newHashedPassword = await bcrypt.hash(newPass, 10);
+
+          await User.updateOne({ email: req.session.email }, { $set: { password: newHashedPassword } });
+
+          res.status(200).json({ success: true, message: 'Password updated successfully' });
+      } catch (error) {
+          console.error('Error in updating password', error);
+          res.status(500).json({ success: false, message: 'Error in updating password', error });
       }
-      
-      
-      const newHashedPassword = await bcrypt.hash(newPassword, 10);
-      
-      
-      const a = await User.updateOne({email:req.session.email},{$set:{password:newHashedPassword}})
-        console.log('password changed')
-       res.render('user/changePassword',{ success:true })
-    }catch(error){
-      res.status(500).json({message:'error in updating password',error})
-    }
-    
-  }else{
-    res.redirect('/user/login')
+  } else {
+      res.redirect('/user/login');
   }
 }
+
 
 
 const forgetPassword= (req,res)=>{
@@ -456,13 +531,16 @@ const forgetPassword= (req,res)=>{
 
 const postForgetPassword = async(req,res)=>{
   const email = req.body.email
+
   if( typeof req.session.email != 'undefined' && email != req.session.email){
-    return res.render('user/forgerPassword',{emailExist:'email is not matching'})
+    return res.status(400).json({ error: 'Email does not match' });
   }
+
   const emailExist = await User.findOne({email:email})
   if(!emailExist){
-    return res.render('user/forgetPassword',{emailExist:'Email is not exist '})
+    return res.status(400).json({ error: 'Email does not exist' });
   }
+
   req.session.tempemail = email
   const otp = genarateOTP()
   const otpmodel = new OTP({
@@ -471,7 +549,7 @@ const postForgetPassword = async(req,res)=>{
   })
   await sendOtp(email,otp)
   await otpmodel.save();
-  res.redirect('/user/forgetOtp')
+  res.status(200).json({ message: 'OTP sent successfully' });
 
   
 }
@@ -484,155 +562,184 @@ const getForgetOtp = (req,res)=>{
   }
 }
 
-const postForgetOtp = async (req,res)=>{
+const postForgetOtp = async (req, res) => {
+  if (req.session.tempemail) {
+      const { otp } = req.body;
+      const email = req.session.tempemail;
+
+      
+      const otpuse = await OTP.findOne({ email: email });
+      if (!otpuse) {
+          return res.status(400).json({ error: 'OTP is expired' });
+      }
+
+      if (otpuse.otp === otp) {
+          await OTP.deleteOne({ email: email });
+          return res.status(200).json({ message: 'OTP verified successfully' }); 
+      } else {
+          return res.status(400).json({ error: 'Incorrect OTP' }); 
+      }
+  } else {
+      res.redirect('/user/forgetPassword');
+  }
+};
+
+
+const get_forgetChangePassword = async(req,res)=>{
   if(req.session.tempemail){
 
-    const { otp1, otp2, otp3, otp4 } = req.body;
-    const otp = otp1 + otp2 + otp3 + otp4;
-
-    const email = req.session.tempemail;
-    const otpuse = await OTP.findOne({ email: email });
-    if(!otpuse){
-      res.render("user/forgetOtp", { err: "otp is expired" });
-    }
-    if(otpuse.otp ===otp){
-      await OTP.deleteOne({ email: email });
-      res.render('user/changeForgetPassword')
-    }else{
-      res.render("user/forgetOtp", { err: "incorrect otp" });
-    }
-  
-  
-  }else{
-    res.redirect('/user/forgetPassword')
+    res.render('user/changeForgetPassword')
+  }else {
+      res.redirect('/user/forgetPassword');
   }
 }
 
-const forgetChangePassword = async (req,res)=>{
 
-  const {password,confromPassword}= req.body
-  const email = req.session.tempemail
-  if(password != confromPassword){
-    return res.render('user/changeForgetPassword',{noMatch:'password not match'})
-  }
-  const newHashedPassword = await bcrypt.hash(confromPassword, 10);
-  await  User.updateOne({email:email},{$set:{password:newHashedPassword}})
-  console.log('password changed successfulyy')
-  if(req.session.email){
-    return res.redirect('/user/password?success=true')
-  }else{
-    return res.redirect("/user/login?success=true");
-  }
-}
-
-const forgetResendOtp = async (req,res)=>{
+const post_forgetChangePassword = async (req, res) => {
+  const { password, conformPassword } = req.body; 
   const email = req.session.tempemail;
-  console.log(req.session.tempemail+"this is from resend otp")
+
+  
+  if (password !== conformPassword) {
+      return res.status(400).json({ success: false, message: 'Passwords do not match' });
+  }
+
+ 
+  const newHashedPassword = await bcrypt.hash(password, 10);
+  await User.updateOne({ email: email }, { $set: { password: newHashedPassword } });
+
+  console.log('Password changed successfully');
+
+ 
+  const redirectUrl = req.session.email ? '/user/password' : '/user/login';
+  
+  
+  return res.status(200).json({ success: true, redirectUrl });
+};
+
+
+
+const forgetResendOtp = async (req, res) => {
+  if (!req.session.tempemail) {
+      return res.redirect('/user/forgetPassword');
+  }
+
+  const email = req.session.tempemail;
+  console.log(req.session.tempemail + " this is from resend OTP");
   console.log("Starting OTP resend process for:", email);
 
   try {
-      // Corrected to find the user by email
-      const user = await OTP.findOne({ email });
+      
+      const userOtpRecord = await OTP.findOne({ email });
 
-      if (!user) {
+      if (!userOtpRecord) {
           
-          return res.render("user/forgetOtp", { err: "user not found " });
+          return res.render("user/forgetOtp", { err: "User not found" });
       }
 
-      const otp = genarateOTP(); // Assuming this function generates a new OTP
-      await OTP.findOneAndDelete({ email }); // Delete any existing OTPs for this user
+      
+      const otp = genarateOTP();
 
-      // Create and save the new OTP
-      const otpModel = new OTP({
+    
+      await OTP.findOneAndDelete({ email });
+
+      
+      const newOtpRecord = new OTP({
           email: email,
           otp: otp,
       });
-      await otpModel.save();
+      await newOtpRecord.save();
 
-      // Send the OTP to the user's email
+      
       await sendOtp(email, otp);
 
-      res.redirect('/user/forgetOtp'); // Redirect to the OTP page
+     
+      res.status(200).json({message:'otp sented successfuly'})
   } catch (error) {
       console.error('Error resending OTP:', error);
-      res.status(500).send('Server error. Please try again later.'); // Respond with an error status
+      
+      res.status(500).send('Server error. Please try again later.');
   }
-}
+};
 
 
-const search=async(req,res)=>{
-  if(req.session.email){
+
+const searchAndSort = async (req, res) => {
+  if (req.session.email) {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 8;
+    const skip = (page - 1) * limit;
     
-    const searchQuery  = req.query.query.trim()
-    try{
+    const searchQuery = req.query.query ? req.query.query.trim() : '';
+    const sort = req.query.sort || '';
 
-      const product = await Product.find({
-        product_name: { $regex: searchQuery, $options: 'i' }, // Correct usage of regex for search
-        isDelete: false // Assuming you want to exclude deleted products
-    });
-    res.render('user/products', { product });
+    let sortCriteria = {};
+
     
-    }catch(error){
-      console.log('Error occurred while searching:', error);
-      res.status(500).json({ success: false, message: 'An error occurred' });
-    }
-  }else{
-    res.redirect('/user/login')
-  }
-}
-
-
-
-const sort = async (req,res)=>{
-  if(req.session.email){
-    try{
-
-      const sort = req.query.sort || ''
-  
-      let sortCriteria = {}
-  
-      switch(sort){
-  
-        case 'popularity':
-                  sortCriteria = { popularity: -1 }; // Example: sort by popularity descending
-                  break;
-              case 'price_asc':
-                  sortCriteria = { 'variants.price': 1 }; // Price ascending
-                  break;
-              case 'price_desc':
-                  sortCriteria = { 'variants.price': -1 }; // Price descending
-                  break;
-              case 'ratings':
-                  sortCriteria = { ratings: -1 }; // Example: sort by ratings descending
-                  break;
-              case 'featured':
-                  sortCriteria = { featured: -1 }; // Example: sort by featured descending
-                  break;
-              case 'new_arrivals':
-                  sortCriteria = { createdAt: -1 }; // Example: sort by new arrivals (latest first)
-                  break;
-              case 'a_to_z':
-                  sortCriteria = { product_name: 1 }; // A to Z
-                  break;
-              case 'z_to_a':
-                  sortCriteria = { product_name: -1 }; // Z to A
-                  break;
-              default:
-                  sortCriteria = {}; // Default sorting (no sorting)
-                  break;
-          }
-          const product = await Product.find({isDelete:false}).sort(sortCriteria)
-          res.render('user/products', { product });
-    }catch(error){
-      console.log('Error occurred while sorting:', error);
-      res.status(500).json({ success: false, message: 'An error occurred' });
+    switch (sort) {
+      case 'popularity':
+        sortCriteria = { popularity: -1 };
+        break;
+      case 'price_asc':
+        sortCriteria = { 'variants.price': 1 };
+        break;
+      case 'price_desc':
+        sortCriteria = { 'variants.price': -1 };
+        break;
+      case 'ratings':
+        sortCriteria = { ratings: -1 };
+        break;
+      case 'featured':
+        sortCriteria = { featured: -1 };
+        break;
+      case 'new_arrivals':
+        sortCriteria = { createdAt: -1 };
+        break;
+      case 'a_to_z':
+        sortCriteria = { product_name: 1 };
+        break;
+      case 'z_to_a':
+        sortCriteria = { product_name: -1 };
+        break;
+      default:
+        sortCriteria = {};
+        break;
     }
 
+    try {
+     
+      const totalProducts = await Product.countDocuments({
+        product_name: { $regex: searchQuery, $options: 'i' },
+        isDelete: false,
+      });
 
-  }else{
-    res.redirect('/user/login')
+      const totalPage = Math.ceil(totalProducts / limit);
+
+    
+      const products = await Product.find({
+        product_name: { $regex: searchQuery, $options: 'i' }, 
+        isDelete: false, 
+      })
+        .sort(sortCriteria)
+        .skip(skip)
+        .limit(limit);
+
+      res.render('user/products', {
+        product: products,
+        totalPage,
+        currentPage: page,
+        searchQuery,
+        sort,
+      });
+    } catch (error) {
+      console.log('Error occurred while searching and sorting:', error);
+      res.status(500).json({ success: false, message: 'An error occurred' });
+    }
+  } else {
+    res.redirect('/user/login');
   }
-}
+};
+
 
 
 const user_logout=(req,res)=>{
@@ -674,8 +781,8 @@ module.exports = {
   postForgetPassword,
   getForgetOtp,
   postForgetOtp,
-  forgetChangePassword,
+  get_forgetChangePassword,
+  post_forgetChangePassword,
   forgetResendOtp,
-  search,
-  sort,
+  searchAndSort,
 }

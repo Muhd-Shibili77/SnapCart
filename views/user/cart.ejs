@@ -13,14 +13,14 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            
+
                             <li class="scroll-to-section"><a href="/user/home">Home</a></li>
                             <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
                             <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                             <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                             <li class="scroll-to-section"><a href="/user/products">Products</a></li>
                             <li class="scroll-to-section"><a href="#"><i class="bi bi-cart-fill"></i></a></li>
-                            <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                            <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                             <li class="submenu">
                                 <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                                 <ul>
@@ -51,16 +51,16 @@
 
     <!-- ----------cart area starts------------ -->
     <div class="table-area">
-<!-- ------------------breadcrumbs starts----------------- -->
+        <!-- ------------------breadcrumbs starts----------------- -->
         <div class="container">
             <ol class="breadcrumb breadcrumb-arrow">
                 <li><a href="/user/home">Home</a></li>
                 <li class="active"><span>
-                    cart
-                </span></li>     
+                        cart
+                    </span></li>
             </ol>
         </div>
-<!-- ------------------breadcrumbs ends----------------- -->
+        <!-- ------------------breadcrumbs ends----------------- -->
         <div class="container">
             <table class="table table-striped mt-5">
                 <thead>
@@ -142,6 +142,7 @@
 
             <div class="col-12">
                 <div class="cart-total-box p-3 border rounded w-25">
+
                     <h5 class="mb-4">Cart Total</h5>
                     <div class="d-flex justify-content-between">
                         <p class="text-dark mb-2">Subtotal:</p>
@@ -156,8 +157,13 @@
                         <p class="text-dark font-weight-bold">Total:</p>
                         <p class="text-dark font-weight-bold" id="cartTotal">$0.00</p>
                     </div>
-                    <a href="/cart/checkout"><button class="btn btn-dark btn-block mt-3">Proceed to
+                    <p class="text-danger">
+                        <%= locals.message ? message : null %>
+                    </p>
+                    <button type="button" onclick="checkout()"
+                            class="btn btn-dark btn-block mt-3">Proceed to
                             checkout</button></a>
+
                 </div>
             </div>
         </div>
@@ -178,7 +184,7 @@
 
             if (quantity < stock) {
 
-                if (quantity < 8) {
+                if (quantity < 5) {
 
                     quantity++;
                     quantityInput.value = quantity;
@@ -295,7 +301,7 @@
                         }
 
                     }).then((responce) => {
-                        
+
                         if (responce.ok) {
                             Swal.fire('Deleted!', 'The item has been deleted.', 'success')
                                 .then(() => {
@@ -313,6 +319,41 @@
             })
 
         }
+
+
+        async function checkout() {
+            try {
+                
+                const response = await fetch('/cart/checkout', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Proceed with checkout (you can redirect to a checkout page)
+                    window.location.href = '/cart/checkoutOrder';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'An error occurred. Please check your network connection.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
     </script>
 
 

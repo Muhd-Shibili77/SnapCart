@@ -14,7 +14,7 @@
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li class="scroll-to-section">
-                            <form class="form-inline my-2 my-lg-0  " style="width:350px;" method="get" action="/user/search" >
+                            <form class="form-inline my-2 my-lg-0  " style="width:350px;" method="get" action="/user/searchAndSort" >
                             <input class="form-control mr-sm-2" type="search"  name="query"  placeholder="Search..." aria-label="Search">
                             
                         </form>
@@ -25,7 +25,7 @@
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                         <li class="scroll-to-section"><a class="active">Products</a></li>
                         <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-                        <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                        <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
                             <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                             <ul>
@@ -75,8 +75,8 @@
                 <div class="container mt-2">
                     <div class="row">
                         <div class="col-lg-12">
-                            <form action="/user/sort" method="GET" class="form-inline">
-                                
+                            <form action="/user/searchAndSort" method="GET" class="form-inline">
+                                <input type="hidden" name="query" value="<%=searchQuery%>" />
                                 <select class="sort-input" name="sort" aria-label="Sort">
                                     <option value="">Sort By</option>
                                     <option value="popularity">Popularity</option>
@@ -167,12 +167,18 @@
  <div class="container mt-5">
     <nav aria-label="...">
         <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-          <li class="page-item active" aria-current="page">
-            <span class="page-link">1</span>
+           <% for(let i =1;i<=totalPage;i++){ %>
+
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="/user/products?page=<%= i %>"><%= i %></a>
+              </li>
+
+        <% } %>
+          
+         
+        <li class="page-item <%= currentPage === totalPage ? 'disabled' : '' %>">
+            <a class="page-link" href="/user/products?page=<%= currentPage + 1 %>">></a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">></a></li>
         </ul>
       </nav>
  </div>

@@ -21,7 +21,7 @@
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                         <li class="scroll-to-section"><a href="/user/Products">Products</a></li>
                         <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-                        <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+                        <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
                             <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                             <ul>
@@ -65,6 +65,8 @@
                 <h3>Order Details</h3>
                 <h6 class="mt-3"><strong>OrderId:</strong> <%=order.orderId %></h6>
                 <h6 class="mt-3"><strong>Order At:</strong> <%= new Date(order.placeAt).toLocaleDateString() %></h6>
+                <h6 class="mt-3"><strong>Estimate Delivery:</strong><%= new Date(new Date(order.placeAt).setDate(new Date(order.placeAt).getDate() + 7)).toLocaleDateString() %></h6>
+            </h6>
 
                 <div class="row">
                    
@@ -106,9 +108,9 @@
                 <h3>Delivery Address</h3>
                
                     <div class="address-info mt-3">
-                        <p><strong><%= order.address.fullName %></strong></p>
-                        <p><%= order.address.streetAddress %>, <%= order.address.city %></p>
-                        <p>Phone number: <%= order.address.phone %></p>
+                        <p><strong><%= order.address[0].fullName %></strong></p>
+                        <p><%= order.address[0].streetAddress %>, <%= order.address[0].city %></p>
+                        <p>Phone number: <%= order.address[0].phone %></p>
                     </div>
                     <h4 class="mt-5">payment method</h4>
                     <button class="btn btn-outline-success mt-3" disabled><%=order.paymentMethod %></button>
@@ -116,7 +118,7 @@
                      <button class=" mt-3 btn <% if (order.orderStatus === 'Pending') { %> btn-warning <% } %>
                         <% if (order.orderStatus === 'Processing') { %> btn-primary <% } %>
                         <% if (order.orderStatus === 'Shipped') { %> btn-info <% } %>
-                        <% if (order.orderStatus === 'Delivered') { %> btn-success <% } %>
+                        <% if (order.orderStatus === 'Delivered ') { %> btn-success <% } %>
                         <% if (order.orderStatus === 'Cancelled') { %> btn-danger <% } %>" disabled>
                         <%= order.orderStatus %>
                     </button>

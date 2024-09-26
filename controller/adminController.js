@@ -29,15 +29,16 @@ const post_admin_login = async (req, res) => {
         );
         if (passwordmatch) {
           req.session.isAdmin = true;
-          res.redirect("/admin/dashboard");
+           return res.json({ success:true,error: "Login successfull" });
         } else {
-          res.render("admin/admin-login", { passNo: "incorrect password" });
+          return  res.json({ success:false,error: "incorrect password" });
+         
         }
       } else {
-        res.render("admin/admin-login", { notadmin: "You are not admin" });
+       return  res.json({ success:false,error: "You are not admin" });
       }
     } else {
-      res.render("admin/admin-login", { notexist: "Email not found" });
+     return  res.json({ success:false,error: "Email not found" });
     }
   } catch (err) {
     console.log("error in login ", err);
@@ -57,8 +58,19 @@ const admin_dashboard = (req, res) => {
 
 const admin_users = async (req, res) => {
   if (req.session.isAdmin) {
-    const users = await User.find({ isAdmin: false });
-    res.render("admin/admin-users", { users });
+    const page = parseInt(req.query.page) || 1 
+    const limit = 10
+    const skip = (page - 1) * limit;
+    const totalProducts = await User.find({ isAdmin: false }).countDocuments();
+    const totalPage = Math.ceil(totalProducts/limit)
+
+
+
+    const users = await User.find({ isAdmin: false })
+    .skip(skip)
+    .limit(limit);
+
+    res.render("admin/admin-users", { users,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -107,8 +119,19 @@ const unblock_users = async (req, res) => {
 
 const admin_category = async (req, res) => {
   if (req.session.isAdmin) {
-    const cat = await Category.find();
-    res.render("admin/admin-catogries", { cat });
+
+    const page = parseInt(req.query.page) || 1 
+    const limit = 6
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Category.countDocuments();
+    const totalPage = Math.ceil(totalProducts/limit)
+
+    const cat = await Category.find()
+    .skip(skip)
+    .limit(limit);
+
+    res.render("admin/admin-catogries", { cat,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -121,23 +144,18 @@ const add_category = async (req, res) => {
     const cat = await Category.find();
 
     if (existCat) {
-      return res.render("admin/admin-catogries", {
-        existCat: "This category is already exist",
-        cat,
-      });
+      return res.json({success:false,error:'this category is already exist'})
     }
     const newCategory = new Category({
       category_name: categoryName,
     });
 
     await newCategory.save();
-    console.log("category added successfully");
-    res.redirect("/admin/category");
+    
+    res.json({success:true,message:'category added successfully'})
   } catch (error) {
     console.log("something went wrong while adding new category");
-    res
-      .status(500)
-      .json({ err: "something went wrong while adding new category" });
+    return res.json({ success:false, error: "something went wrong while adding new category" });
   }
 };
 
@@ -207,8 +225,20 @@ const edit_category = async (req, res) => {
 
 const admin_brand = async (req, res) => {
   if (req.session.isAdmin) {
-    const brand = await Brand.find();
-    res.render("admin/admin-brand", { brand });
+
+      const page = parseInt(req.query.page) || 1 
+      const limit = 6
+      const skip = (page - 1) * limit;
+  
+      const totalProducts = await Brand.countDocuments();
+      const totalPage = Math.ceil(totalProducts/limit)
+
+    const brand = await Brand.find()
+    .skip(skip)
+    .limit(limit);
+
+
+    res.render("admin/admin-brand", { brand,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -217,27 +247,23 @@ const admin_brand = async (req, res) => {
 const add_brand = async (req, res) => {
   try {
     const brandName = req.body.brandName;
+   
     const existbrand = await Brand.findOne({ brand_name: brandName });
     const brand = await Brand.find();
 
     if (existbrand) {
-      return res.render("admin/admin-brand", {
-        existbrand: "This category is already exist",
-        brand,
-      });
+      return res.json({success:false,error:'This category is already exist'})
     }
     const newbrand = new Brand({
       brand_name: brandName,
     });
 
     await newbrand.save();
-    console.log("brand added successfully");
-    res.redirect("/admin/brand");
+     res.json({success:true,message:'brand added successfully'})
+   
   } catch (error) {
-    console.log("something went wrong while adding new brand");
-    res
-      .status(500)
-      .json({ err: "something went wrong while adding new brand" });
+    return res
+      .json({success:false, error: "something went wrong while adding new brand" });
   }
 };
 
@@ -282,7 +308,7 @@ const edit_brand = async (req, res) => {
     try {
      
       const { brandId, brandName } = req.body;
-      console.log(req.body);
+      
 
       const brandExit = await Brand.findOne({ brand_name: brandName });
 
@@ -303,9 +329,22 @@ const edit_brand = async (req, res) => {
 
 const orders=async (req,res)=>{
   if(req.session.isAdmin){
-       const order = await Order.find().populate('address').populate('items.product').populate('user')
+
+    const page = parseInt(req.query.page) || 1 
+    const limit = 10
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Order.countDocuments();
+    const totalPage = Math.ceil(totalProducts/limit)
+
+
+       const order = await Order.find().populate('items.product')
+       .populate('user')
+       .sort({'orderId':-1})
+       .skip(skip)
+       .limit(limit)
         
-      res.render('admin/admin-orders',{order})
+      res.render('admin/admin-orders',{order,totalPage,currentPage:page })
   }else{
     
       res.redirect('/admin/login')
@@ -316,9 +355,13 @@ const update_orderStatus = async(req,res)=>{
   if(req.session.isAdmin){
     const {status,orderId} =req.body
     const orderInfo = await Order.findById(orderId)
-    console.log(orderInfo)
+    
     if(!orderInfo){
       return res.status(400).json({success:false,message:'order is not found '})
+    }
+
+    for(const item of orderInfo.items){
+      await Product.findOneAndUpdate({_id:item.product,'variants._id':item.variantId},{$inc:{'variants.$.stock':item.quantity}})
     }
     
     await Order.findByIdAndUpdate(orderId,{orderStatus:status})

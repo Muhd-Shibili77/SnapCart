@@ -70,12 +70,17 @@ const orderConfrom = async (req,res)=>{
         }
 
         
-        if(paymentMethod == 'cod'){
-            paymentMethod='Cash on Delivery'
-        }else{
-            paymentMethod='Bank Transfer'
-        }
+        paymentMethod = paymentMethod === 'cod' ? 'Cash on Delivery' : 'Bank Transfer';
         
+        const addressOrder =[{
+            fullName:address.fullName,
+            streetAddress:address.streetAddress,
+            pincode:address.pincode,
+            phone:address.phone,
+            city:address.city,
+            state:address.state,
+            country:address.country
+        }]
 
         const orderID = await generateOrderId()
         
@@ -83,7 +88,7 @@ const orderConfrom = async (req,res)=>{
         const order = new Order({
             orderId:orderID,
             user:user._id,
-            address:addressId,
+            address:addressOrder,
             items:orderedItems,
             paymentMethod,
             totalAmount,
@@ -118,7 +123,7 @@ const orderHistory = async (req,res)=>{
         
         const user = await User.findOne({email:req.session.email})
         
-        const order = await Order.find({user:user._id}).populate('items.product')
+        const order = await Order.find({user:user._id}).populate('items.product').sort({orderId:-1})
         
         
         
@@ -137,9 +142,15 @@ const orderCancel =async (req,res)=>{
             
             const order = await Order.findById(orderId)
             
+            
             if(!order){
               return   res.status(400).json({success:false,message:'order not found '})
             }
+
+            for(const item of order.items){
+                await Product.findOneAndUpdate({_id:item.product,'variants._id':item.variantId},{$inc:{'variants.$.stock':item.quantity}})
+            }
+
             await Order.findByIdAndUpdate(orderId,{orderStatus:'Cancelled'})
             res.status(200).json({success:true,message:'order cancelled succesfully'})
 
@@ -161,7 +172,7 @@ const orderDetails = async (req,res)=>{
         const orderId = req.query.orderId
         
         
-        const order = await Order.findOne({_id:orderId}).populate('items.product').populate('address')
+        const order = await Order.findOne({_id:orderId}).populate('items.product')
                
         res.render('user/orderDetails',{order})
     }else{
@@ -170,9 +181,7 @@ const orderDetails = async (req,res)=>{
 }
 
  
-// ==============admin========================
 
-// const orders =
 
 
 

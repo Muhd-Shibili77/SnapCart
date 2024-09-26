@@ -13,4 +13,6 @@ cartrouter.delete('/deleteCart',cartController.deleteCart)
 
 cartrouter.get('/checkout',cartController.cartCheckout)
 
+cartrouter.get('/checkoutOrder',cartController.cartCheckoutorder)
+
 module.exports = cartrouter

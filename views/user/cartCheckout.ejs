@@ -18,7 +18,7 @@
               <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
               <li class="scroll-to-section"><a href="/user/products">Products</a></li>
               <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-              <li class="scroll-to-section"><a href="#"><i class="bi bi-heart"></i></a></li>
+              <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
               <li class="submenu">
                 <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                 <ul>
@@ -125,9 +125,9 @@
 
 
                     <div class="col-sm-3 mb-3">
-                      <p class="mb-0">zipcode</p>
+                      <p class="mb-0">pincode</p>
                       <div class="form-outline">
-                        <input type="text" id="typeText" name="zipCode" class="form-control" />
+                        <input type="number" id="typeText" name="pincode" class="form-control" />
                       </div>
                     </div>
 
@@ -269,14 +269,190 @@
         console.error('Form not found!');
         return;
       }
-      const fullName = form.fullName.value;
-      const address = form.address.value;
-      const zipCode = form.zipCode.value;
-      const phone = form.phone.value;
-      const city = form.city.value;
-      const state = form.state.value;
-      const country = form.country.value;
+      const fullName = form.fullName.value.trim();
+      const address = form.address.value.trim();
+      const pincode = form.pincode.value.trim();
+      const phone = form.phone.value.trim();
+      const city = form.city.value.trim(); 
+      const state = form.state.value.trim();
+      const country = form.country.value.trim();
+      
+      if (!fullName) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Name is empty',
+          text: 'Name field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
 
+      if (fullName.length < 2 || fullName.length > 10) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Name Length',
+          text: 'Name must be between 2 and 10 characters.',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+      const nameRegex = /^[a-zA-Z\s\-]+$/;
+
+      if (!nameRegex.test(fullName)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Characters in Name',
+          text: 'Name should not contain numbers or special characters like *.',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+
+      if (!address) {
+        Swal.fire({
+          icon: 'error',
+          title: 'address is empty',
+          text: 'address field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
+
+
+      if (!/^[a-zA-Z0-9\s,\-]+$/.test(address)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Characters in address',
+          text: 'address should not contain numbers or special characters like *.',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+
+      if (!pincode) {
+        Swal.fire({
+          icon: 'error',
+          title: 'pincode is empty',
+          text: 'pincode field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
+
+      if (pincode.length !== 6) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid pincode',
+          text: 'pincode should contain 6 digits',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+      if (/^[0]+$/.test(pincode)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid pincode',
+          text: 'pincode not contain full zeros',
+          showConfirmButton: true
+        })
+        return
+      }
+
+
+      if (!phone) {
+        Swal.fire({
+          icon: 'error',
+          title: 'phone is empty',
+          text: 'phone field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
+
+      if (phone.length !== 10) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Phone',
+          text: 'phone should contain 10 digits',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+      if (/^[0]+$/.test(phone)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Phone',
+          text: 'Phone not contain full zeros',
+          showConfirmButton: true
+        })
+        return
+      }
+
+
+
+      if (!city) {
+        Swal.fire({
+          icon: 'error',
+          title: 'city is empty',
+          text: 'city field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
+
+      if (!nameRegex.test(city)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Characters in city',
+          text: 'city should not contain numbers or special characters like *.',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+      if (!state) {
+        Swal.fire({
+          icon: 'error',
+          title: 'state is empty',
+          text: 'state field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
+
+      if (!nameRegex.test(state)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Characters in state',
+          text: 'state should not contain numbers or special characters like *.',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+      if (!country) {
+        Swal.fire({
+          icon: 'error',
+          title: 'country is empty',
+          text: 'country field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return;
+      }
+      if (!nameRegex.test(country)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Characters in country',
+          text: 'country should not contain numbers or special characters like *.',
+          showConfirmButton: true
+        });
+        return;
+      }
 
 
       const responce = await fetch('/user/add_address', {
@@ -284,7 +460,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fullName, address, zipCode, phone, city, state, country })
+        body: JSON.stringify({ fullName, address, pincode, phone, city, state, country })
       })
 
 
@@ -301,7 +477,7 @@
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Failed to Delete',
+          title: 'Failed to Add ',
           text: 'Unable to add the address. Please try again later.',
           confirmButtonText: 'OK'
         });

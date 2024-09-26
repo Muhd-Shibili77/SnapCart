@@ -124,25 +124,25 @@
 
         <div id="message" class="alert"></div>
 
-        <form id="otpForm" action="/user/otp" method="post">
+        <form id="otpForm">
             <div class="d-flex justify-content-center gap-2 mb-5">
                 <input type="text" name="otp1" class="otp-input" id="otp1" maxlength="1" oninput="moveToNext(this, 'otp2')" onkeydown="moveToPrevious(event, 'otp1')" required>
                 <input type="text"  name="otp2" class="otp-input" id="otp2" maxlength="1" oninput="moveToNext(this, 'otp3')" onkeydown="moveToPrevious(event, 'otp1')" required>
                 <input type="text" name="otp3" class="otp-input" id="otp3" maxlength="1" oninput="moveToNext(this, 'otp4')" onkeydown="moveToPrevious(event, 'otp2')" required>
                 <input type="text" name="otp4" class="otp-input" id="otp4" maxlength="1" onkeydown="moveToPrevious(event, 'otp3')" required>
             </div>
-            <p class="text-danger"><%= locals.err?err:null%></p>
+           
 
-            <button type="submit" class="btn-dark">Verify OTP</button>
+            <button type="button" onclick="VerifyOTP()" class="btn-dark">Verify OTP</button>
         </form>
 
-        <form  action="/user/resendOtp" method="post" class="mt-3">
-            <button type="submit" class="btn">Resend OTP</button>
+        <form  class="mt-3" id="resendOTPForm" style="display: none;">
+            <button type="button" onclick="resendOTP()" class="btn">Resend OTP</button>
         </form>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Function to move focus to the next input field
     function moveToNext(current, nextFieldID) {
@@ -181,6 +181,7 @@
             clearInterval(timerInterval);
             $("#otpForm button[type='submit']").prop('disabled', true);
             showMessage('Time expired! Please request a new OTP.', 'danger');
+            $("#resendOTPForm").show();
         }
     }, 1000); // Update the timer every second
 
@@ -217,6 +218,116 @@
             showMessage(errorMessage, 'danger');
         });
 });
+
+
+async function VerifyOTP() {
+    const OTP1 = document.getElementById('otp1').value.trim();
+    const OTP2 = document.getElementById('otp2').value.trim();
+    const OTP3 = document.getElementById('otp3').value.trim();
+    const OTP4 = document.getElementById('otp4').value.trim();
+    const otp = OTP1 + OTP2 + OTP3 + OTP4;
+
+    if (!otp) {
+        Swal.fire({
+            icon: "error",
+            title: 'OTP is empty',
+            text: 'OTP field cannot be empty',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    try {
+        const response = await fetch('/user/otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ otp })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            
+            if (result.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: 'OTP Verified',
+                    text: result.message, 
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '/user/login'; 
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: 'Verification Failed',
+                    text: result.error, // Use result.message instead of result.error
+                    confirmButtonText: 'OK'
+                });
+            }
+        } else {
+            // Catch other errors like 500 server errors
+            const errorResult = await response.json();
+            Swal.fire({
+                icon: "error",
+                title: 'Error',
+                text: errorResult.error || 'An error occurred. Please try again later.',
+                confirmButtonText: 'OK'
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: 'Network Error',
+            text: 'An error occurred. Please check your network connection.',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+
+
+
+
+async function resendOTP() {
+    try {
+        const response = await fetch("/user/resendOtp", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const result = await response.json(); // Get the response body
+
+        if (response.ok && result.success) {
+            Swal.fire({
+                icon: "success",
+                title: 'OTP Resent',
+                text: 'A new OTP has been sent to your email.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: 'Error',
+                text: result.error || 'Failed to resend OTP. Please try again later.',
+                confirmButtonText: 'OK'
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: 'Network Error',
+            text: 'An error occurred. Please check your network connection.',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
 
 
 </script>

@@ -232,6 +232,9 @@ header
 }
 
 .header-area {
+
+  overflow: visible; 
+
   border-bottom: 3px dotted #eee;
   box-shadow: none;
   background-color: #fff;
@@ -287,6 +290,7 @@ header
   transition: all 0.3s ease 0s;
   position: relative;
   z-index: 999;
+  
 }
 
 .header-area .main-nav .nav li {
@@ -357,7 +361,7 @@ header
   opacity: 0;
   transform: translateY(+2em);
   visibility: hidden;
-  z-index: -1;
+  z-index: 9999;
   transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
 }
 
@@ -1735,15 +1739,16 @@ Single Product Page
   margin-top: 80px;
 }
 
-#product .left-images img {
+#product .left-images  img {
   
   width: 100%;
   height: 50vh;
   object-fit: cover;
   overflow: hidden;
   margin-right: 30px;
-  margin-bottom: 10px;
+  margin-bottom: 11px;
 }
+
 
 #product .right-content {
   position: relative;

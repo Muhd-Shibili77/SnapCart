@@ -55,13 +55,15 @@ userrouter.get('/forgetOtp',userController.getForgetOtp)
 
 userrouter.post('/forgetOtp',userController.postForgetOtp)
 
-userrouter.post('/passwordChange',userController.forgetChangePassword)
+userrouter.get('/passwordChange',userController.get_forgetChangePassword)
+
+userrouter.post('/passwordChange',userController.post_forgetChangePassword)
 
 userrouter.post('/forgetResendOtp',userController.forgetResendOtp)
 
-userrouter.get('/search',userController.search)
+userrouter.get('/searchAndSort',userController.searchAndSort)
 
-userrouter.get('/sort',userController.sort)
+// userrouter.get('/sort',userController.sort)
 
 userrouter.get("/logout",userController.user_logout);
 
