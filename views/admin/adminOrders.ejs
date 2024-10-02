@@ -1,0 +1,427 @@
+<%- include ('../partial/newAdminHeader')-%>
+
+ <!--  Body Wrapper -->
+ <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+ data-sidebar-position="fixed" data-header-position="fixed">
+ <!-- Sidebar Start -->
+ <aside class="left-sidebar">
+   <!-- Sidebar scroll-->
+   <div>
+     <div class="brand-logo d-flex align-items-center justify-content-between">
+       <a href="#" class="text-nowrap logo-img">
+         <img src="/images/SnapCart.png" width="150" style="margin-top: 2vh;" alt="" />
+       </a>
+       <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+         <i class="ti ti-x fs-8"></i>
+       </div>
+     </div>
+     <!-- Sidebar navigation-->
+     <nav class="sidebar-nav scroll-sidebar">
+       <ul id="sidebarnav">
+         <li class="nav-small-cap">
+           
+           
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/dashboard" aria-expanded="false">
+             <span>
+               <i class="ti ti-layout-dashboard"></i>
+             </span>
+             <span class="hide-menu">Dashboard</span>
+           </a>
+         </li>
+         
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/users" aria-expanded="false">
+             <span>
+               <i class="ti ti-user"></i>
+             </span>
+             <span class="hide-menu">Users</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/products" aria-expanded="false">
+             <span>
+              <i class="bi bi-box-seam"></i>
+             </span>
+             <span class="hide-menu">Products</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/offers" aria-expanded="false">
+             <span>
+              <i class="bi bi-gift"></i>
+             </span>
+             <span class="hide-menu">Offers</span>
+           </a>
+         </li>
+         <li class="sidebar-item selected">
+           <a class="sidebar-link active" href="/admin/orders" aria-expanded="false">
+             <span>
+              <i class="bi bi-cart2"></i>
+             </span>
+             <span class="hide-menu">Orders</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/category" aria-expanded="false">
+             <span>
+              <i class="ti ti-list"></i>
+
+             </span>
+             <span class="hide-menu">Categories</span>
+           </a>
+         </li>
+        
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/brand" aria-expanded="false">
+             <span>
+              <i class="ti ti-crown"></i>
+ 
+             </span>
+             <span class="hide-menu">Brands</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="#" aria-expanded="false">
+             <span>
+              <i class="ti ti-ticket"></i>
+
+
+             </span>
+             <span class="hide-menu">Coupon</span>
+           </a>
+         </li>
+        
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="#" aria-expanded="false">
+             <span>
+              <i class="bi bi-credit-card"></i>
+             </span>
+             <span class="hide-menu">Payment</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/logout" aria-expanded="false">
+             <span>
+              <i class="ti ti-login"></i>
+             </span>
+             <span class="hide-menu">Logout</span>
+           </a>
+         </li>
+       </ul>
+     </nav>
+   </div>
+  </aside>
+
+ <!--  Sidebar End -->
+
+ <div class="body-wrapper">
+
+    <!--  Header Start -->
+   <header class="app-header">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <ul class="navbar-nav">
+        <li class="nav-item d-block d-xl-none">
+          <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+            <i class="ti ti-menu-2"></i>
+          </a>
+        </li>
+       
+      </ul>
+      <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+          
+         <div class="">
+           <form class="  " style="width:350px;">
+           <input class="form-control search" type="search"    placeholder= "Search..." aria-label="Search">
+           </form>
+       </div>
+      
+         
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!--  Header End -->
+
+  <div class="container-fluid main-area">
+    <table class="table mt-5">
+        <thead>
+          <tr>
+            <th scope="col">orderId</th>
+            <th scope="col">userId</th>
+            <th scope="col">paymentType</th>
+            <th scope="col">order status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if(order && order.length> 0){ %>
+            <% order.forEach((element)=> { %>
+              <!-- Order Main Row -->
+              <tr class="order-row">
+                <td>
+                  <%= element.orderId %>
+                    <input type="hidden" value="<%= element._id %>" id="orderId">
+                </td>
+                <td>
+                  <%= element.user.name %>
+                </td>
+                <td>
+                  <%= element.paymentMethod %>
+                </td>
+                <td>
+                  <button class="btn <%= 
+                         element.orderStatus === 'Pending' ? 'btn-outline-warning' : 
+                         element.orderStatus === 'Processing' ? 'btn-outline-primary' : 
+                         element.orderStatus === 'Shipped' ? 'btn-outline-info' : 
+                         element.orderStatus === 'Delivered ' ? 'btn-outline-success' : 
+                         element.orderStatus === 'Cancelled' ? 'btn-outline-danger' : ''
+                         %>" disabled>
+                    <%= element.orderStatus %>
+                  </button>
+                </td>
+                <td>
+                  <% if(element.orderStatus != 'Cancelled' && element.orderStatus != 'Delivered ' ) { %>
+                    <button class="btn btn-outline-secondary toggle-details-btn"><i
+                        class="bi bi-info-circle-fill"></i></button>
+
+                        <button class="btn btn-outline-success edit-status-btn" data-order-id="<%=element._id %>" data-bs-toggle="modal" data-bs-target="#orderStatusModal">
+                          <i class="bi bi-pencil-square"></i></button>
+                    <% }else{ %>
+                       <button class="btn btn-outline-secondary toggle-details-btn"><i
+                          class="bi bi-info-circle-fill"></i></button>
+                      <% } %>
+
+
+                </td>
+              </tr>
+
+              <!-- Order Details Row -->
+              <tr class="order-details-row"
+                style="display: none;  padding-bottom: 30px;  position: relative;  z-index: 1;">
+                <td colspan="5">
+                  <div class="order-details-container">
+                    <h5>Order Details</h5>
+                    <table class="table table-bordered" style="margin-bottom: 50px;">
+                      <tbody>
+
+                        <% element.items.forEach(item=> { %>
+                          <% const variant=item.product.variants.find(v=>
+                            v._id.toString()===item.variantId.toString()) %>
+                            <tr>
+                              <div class="item-details">
+                                <td><img src="/<%= variant.images[0] %>" alt="Product Image"
+                                    style="width: 150px; height: 180px; object-fit: cover;"></td>
+                                <td>
+                                  <p><strong>Product:</strong>
+                                    <%= item.product.product_name %>
+                                  </p>
+                                  <p><strong>Color:</strong>
+                                    <%= variant.color %>
+                                  </p>
+                                  <p><strong>Size:</strong>
+                                    <%= variant.size %>
+                                  </p>
+                                  <p><strong>Quantity:</strong>
+                                    <%= item.quantity %>
+                                  </p>
+                                </td>
+                              </div>
+                              <td>
+                                <h5>Delivery Address</h5>
+                                <div class="address-info mt-3">
+                                  <p><strong>
+                                      <%= element.address[0].fullName %>
+                                    </strong></p>
+                                  <p>
+                                    <%= element.address[0].streetAddress %>,<%= element.address[0].city %>
+                                  </p>
+                                  <p>Phone number: <%= element.address[0].phone %>
+                                  </p>
+                                </div>
+                              </td>
+
+                            </tr>
+                            <% }) %>
+
+                      </tbody>
+                    </table>
+
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5" class="text-center">No orders available</td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+
+ </div>
+
+  <!-- ------------pagination-------------- -->
+
+
+
+  <div class="container mt-2"
+  style="background-color: transparent !important; display: flex; justify-content: center; margin-top: 40vh!important;">
+  <nav aria-label="...">
+    <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
+
+      <% if (currentPage !==1 && currentPage==totalPage) { %>
+        <li class="page-item">
+          <a class="page-link" href="/admin/products?page=<%= currentPage -1 %>">
+            << /a>
+        </li>
+        <% } %>
+
+
+          <% for(let i=1;i<=totalPage;i++){ %>
+
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+              <a class="page-link" href="/admin/orders?page=<%= i %>">
+                <%= i %>
+              </a>
+            </li>
+
+            <% } %>
+
+              <% if (currentPage !==totalPage) { %>
+                <li class="page-item">
+                  <a class="page-link" href="/admin/orders?page=<%= currentPage + 1 %>">></a>
+                </li>
+                <% } %>
+
+    </ul>
+  </nav>
+</div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="orderStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+ aria-hidden="true">
+ <div class="modal-dialog" role="document">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h5 class="modal-title" id="exampleModalLabel">Edit orderStatus</h5>
+
+       
+     </div>
+     <div class="modal-body">
+       <form id="editCategoryForm">
+         <input type="hidden" id="hiddenOrderId">
+
+         <div id="order-status">
+           <label for="order-status-select">Order Status:</label>
+           <select id="order-status-select" class="form-select">
+             <option value="Pending">Pending</option>
+             <option value="Processing">Processing</option>
+             <option value="Shipped">Shipped</option>
+             <option value="Delivered ">Delivered</option>
+             <option value="Cancelled">Cancelled</option>
+           </select>
+           <button class="btn btn-primary mt-2" type="button" onclick="changeStatus()">Update Status</button>
+         </div>
+
+
+       </form>
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+     </div>
+   </div>
+ </div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const toggleDetailsButtons = document.querySelectorAll('.toggle-details-btn');
+      const editbuttons = document.querySelectorAll('.edit-status-btn');
+
+      editbuttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const orderId = button.getAttribute('data-order-id');
+
+
+          document.getElementById('hiddenOrderId').value = orderId;
+        })
+      })
+
+      toggleDetailsButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+
+          const orderRow = button.closest('tr');
+
+          // Find the next sibling order details row
+          const orderDetailsRow = orderRow.nextElementSibling;
+
+          // Toggle the display of the order details row
+          if (orderDetailsRow && orderDetailsRow.classList.contains('order-details-row')) {
+            if (orderDetailsRow.style.display === 'none') {
+              orderDetailsRow.style.display = 'table-row';
+            } else {
+              orderDetailsRow.style.display = 'none';
+            }
+          }
+        });
+      });
+    });
+
+
+
+
+
+    async function changeStatus() {
+      try {
+        const status = document.getElementById('order-status-select').value
+        const orderId = document.getElementById('hiddenOrderId').value
+        const result = await Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to change this status?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, change it!',
+          cancelButtonText: 'Close!'
+        });
+        if (result.isConfirmed) {
+
+          const responce = await fetch('/admin/update_orderStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status, orderId })
+          })
+          if (responce.ok) {
+            Swal.fire('changed!', 'this order status is changed.', 'success');
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000)
+          } else {
+            Swal.fire('Error!', 'There was a problem updating the orderStatus.', 'error');
+          }
+
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+      }
+
+
+
+
+
+    }
+  </script>
+
+ <%- include ('../partial/newAdminfooter')-%>

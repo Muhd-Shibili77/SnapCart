@@ -27,7 +27,7 @@
                             <ul>
                                 <li><a href="/user/profile">My Account</a></li>
                                 <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="#">My Wallet</a></li>
+                                <li><a href="/user/wallet">My Wallet</a></li>
                                 <li><a href="/user/about">About Us</a></li>
                                 <li><a href="/user/contact">Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
@@ -115,7 +115,7 @@
                     <h4 class="mt-5">payment method</h4>
                     <button class="btn btn-outline-success mt-3" disabled><%=order.paymentMethod %></button>
                     <h3 class="mt-5">Order Status</h3>
-                     <button class=" mt-3 btn <% if (order.orderStatus === 'Pending') { %> btn-warning <% } %>
+                     <button style="margin-bottom: 20vh;" class=" mt-3 btn <% if (order.orderStatus === 'Pending') { %> btn-warning <% } %>
                         <% if (order.orderStatus === 'Processing') { %> btn-primary <% } %>
                         <% if (order.orderStatus === 'Shipped') { %> btn-info <% } %>
                         <% if (order.orderStatus === 'Delivered ') { %> btn-success <% } %>

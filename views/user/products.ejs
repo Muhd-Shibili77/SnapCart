@@ -1,4 +1,29 @@
 <%- include ("../partial/header" )-%>
+<style>
+    .original-price {
+        color: red !important;
+        /* Sets the text color to red */
+        font-size: 15px !important;
+        text-decoration: line-through;
+        /* Adds a strikethrough effect */
+        margin-right: 5px;
+        /* Adds space between original and offer price */
+    }
+
+    .thumb {
+        position: relative;
+    }
+
+    .offer-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+        border-radius: 50%;           
+        z-index: 1;
+        
+    }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
@@ -31,7 +56,7 @@
                             <ul>
                                 <li><a href="/user/profile">My Account</a></li>
                                 <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="#">My Wallet</a></li>
+                                <li><a href="/user/wallet">My Wallet</a></li>
                                 <li><a href="/user/about">About Us</a></li>
                                 <li><a href="/user/contact">Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
@@ -57,7 +82,7 @@
         <div class="row ">
             <div class="col-lg-12">
                 <div class="inner-content">
-                    <h2>View Our Range</h2>
+                    <a href="/user/products"><h2>View Our Range</h2></a>
                 </div>
             </div>
         </div>
@@ -66,122 +91,122 @@
 <!-- ***** Main Banner Area End ***** -->
  <!-- ------------ products -------------- -->
 
- <section>
+<section>
     <div class="container">
         <div class="d-flex align-items-center justify-content-between">
             <h1 class="text-center">Our Products</h1>
             <!-- Sorting Options Section -->
             <section>
-                <div class="container mt-2">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <form action="/user/searchAndSort" method="GET" class="form-inline">
-                                <input type="hidden" name="query" value="<%=searchQuery%>" />
-                                <select class="sort-input" name="sort" aria-label="Sort">
-                                    <option value="">Sort By</option>
-                                    <option value="popularity">Popularity</option>
-                                    <option value="price_asc">Price: Low to High</option>
-                                    <option value="price_desc">Price: High to Low</option>
-                                    <option value="ratings">Average Ratings</option>
-                                    <option value="featured">Featured</option>
-                                    <option value="new_arrivals">New Arrivals</option>
-                                    <option value="a_to_z">A - Z</option>
-                                    <option value="z_to_a">Z - A</option>
-                                </select>
-                                <button class="btn btn-outline-success ml-2" style="border-radius: 12px;" type="submit">Sort</button>
-                            </form>
-                        </div>
-                    </div>
+                <div class="mt-2">
+                    <form action="/user/searchAndSort" method="GET" class="form-inline">
+                        <input type="hidden" name="query" value="<%=searchQuery%>" />
+                        <select class="form-select sort-input" name="sort" aria-label="Sort">
+                            <option value="">Sort By</option>
+                            <option value="price_asc">Price: Low to High</option>
+                            <option value="price_desc">Price: High to Low</option>
+                            <option value="new_arrivals">New Arrivals</option>
+                            <option value="a_to_z">A - Z</option>
+                            <option value="z_to_a">Z - A</option>
+                        </select>
+                        <button class="btn btn-outline-success ms-2" style="border-radius: 12px;" type="submit">Sort</button>
+                    </form>
                 </div>
             </section>
         </div>
     </div>
-    
-    <div class="container mt-5 d-flex ">
+
+    <div class="container mt-5">
         <div class="row">
-            
             <% if (product.length === 0) { %>
                 <!-- Show message when no products are found -->
-                 <script>
-                     Swal.fire({
-                         icon: 'warning',
-                         title: 'Oops...',
-                         text: 'Product not found',
-                         confirmButtonText: 'OK'
-                     });
-
-                 </script>
-                  <!-- Show message when no products are found -->
-                   <div class="row">
-                       <div class="col-md-12 text-center">
-                           <div class="alert alert-warning">
-                               Product not found
-                           </div>
-                       </div>
-
-                   </div>
-
+                <script>
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Product not found',
+                        confirmButtonText: 'OK'
+                    });
+                </script>
+                <div class="col-md-12 text-center">
+                    <div class="alert alert-warning">
+                        Product not found
+                    </div>
+                </div>
             <% } else { %>
-
-                    <% product.forEach((element)=>{ %>
-                        <div class="col-md-3 mt-4">
-                            <div class="item">
-                                <div class="thumb">
+                <% product.forEach((element) => { %>
+                    <div class="col-6 col-md-4 col-lg-3 mt-4">
+                        <div class="item">
+                            <div class="thumb">
+                                <% if (element.variants[0].offer) { %>
+                                    <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
+                                        
                                     
-                                    <a href="/user/product?proId=<%=element._id %>&varId=<%= element.variants[0]._id %>"><img style="width: 280px; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt=""></a>
-                                </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars d-flex">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-half"></i></li>
-                                    </ul>
-                                </div>
+                                    <% } %>
+                                <a href="/user/product?proId=<%=element._id %>&varId=<%= element.variants[0]._id %>">
+                                    <img style="width: 100%; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt="">
+                                </a>
                             </div>
+                            <div class="down-content text-center">
+                                <h4><%= element.product_name %></h4>
+                                <%if(element.variants[0].offer){%>
+                                    <span class="original-price">INR <%= element.variants[0].price %></span>
+                                    <span>INR <%= element.variants[0].discount_price %></span>
+                                    <%}else{%>
+                                        <span>INR <%= element.variants[0].price %></span>
+                                        <%}%>
+                                <ul class="stars d-flex justify-content-center">
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-fill"></i></li>
+                                    <li><i class="bi bi-star-half"></i></li>
+                                </ul>
                             </div>
-                       <% }) %>
-                            <%}%>
-                               
-                                    
-                                 
-                                   
-                                   
-                                    
-                                    
-                                   
-
-
-
                         </div>
-                        </div>
-                        
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+    </div>
+</section>
 
- </section>
+<!-- ------------ pagination -------------- -->
 
- 
-<!-- ------------pagination-------------- -->
- <div class="container mt-5">
-    <nav aria-label="...">
-        <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-           <% for(let i =1;i<=totalPage;i++){ %>
 
-            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                <a class="page-link" href="/user/products?page=<%= i %>"><%= i %></a>
-              </li>
 
-        <% } %>
-          
-         
-        <li class="page-item <%= currentPage === totalPage ? 'disabled' : '' %>">
-            <a class="page-link" href="/user/products?page=<%= currentPage + 1 %>">></a>
-          </li>
-        </ul>
-      </nav>
- </div>
+
+ <div class="container mt-2"
+ style="background-color: transparent !important; display: flex; justify-content: center;">
+ <nav aria-label="...">
+   <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
+
+     <% if (currentPage !==1 && currentPage==totalPage) { %>
+       <li class="page-item">
+         <a class="page-link" href="/user/products?page=<%= currentPage -1 %>">
+           <</a>
+       </li>
+       <% } %>
+
+
+         <% for(let i=1;i<=totalPage;i++){ %>
+
+           <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+             <a class="page-link" href="/user/products?page=<%= i %>">
+               <%= i %>
+             </a>
+           </li>
+
+           <% } %>
+
+             <% if (currentPage !==totalPage) { %>
+               <li class="page-item">
+                 <a class="page-link" href="/admin/products?page=<%= currentPage + 1 %>">></a>
+               </li>
+               <% } %>
+
+   </ul>
+ </nav>
+</div>
 
 
 

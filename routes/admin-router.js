@@ -3,6 +3,7 @@ const adminrouter = express.Router();
 const upload = require("../config/multer");
 const adminController = require('../controller/adminController')
 const productController =require('../controller/productController')
+const offerController = require('../controller/offerController')
 
 adminrouter.get("/login",adminController.admin_login);
 
@@ -53,6 +54,24 @@ adminrouter.post("/restore_brand",adminController.restore_brand);
 adminrouter.post("/edit_brand",adminController.edit_brand);
 
 adminrouter.get("/orders",adminController.orders);
+
+adminrouter.get("/offers",offerController.offers);
+
+adminrouter.post("/addOffers",offerController.addOffers);
+
+adminrouter.post("/deleteOffer",offerController.deleteOffer);
+
+adminrouter.post("/restoreOffer",offerController.restoreOffer);
+
+adminrouter.post("/editOffers",offerController.editOffers);
+
+adminrouter.post("/updateProductOffer",offerController.updateProductOffer);
+
+adminrouter.post("/removeProductOffer",offerController.removeProductOffer);
+
+adminrouter.post("/updateCategoryOffer",offerController.updateCategoryOffer);
+
+adminrouter.post("/removeCategoryOffer",offerController.removeCategoryOffer);
 
 adminrouter.post('/update_orderStatus',adminController.update_orderStatus)
 

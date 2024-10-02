@@ -1,5 +1,29 @@
 <%- include ("../partial/header" )-%>
+<style>
+    .original-price {
+        color: red !important;
+        /* Sets the text color to red */
+        font-size: 15px !important;
+        text-decoration: line-through;
+        /* Adds a strikethrough effect */
+        margin-right: 5px;
+        /* Adds space between original and offer price */
+    }
 
+    .thumb {
+        position: relative;
+    }
+
+    .offer-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+        border-radius: 50%;           
+        z-index: 1;
+        
+    }
+</style>
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -30,7 +54,7 @@
                             <ul>
                                 <li><a href="/user/profile">My Account</a></li>
                                 <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="#">My Wallet</a></li>
+                                <li><a href="/user/wallet">My Wallet</a></li>
                                 <li><a href="/user/about">About Us</a></li>
                                 <li><a href="/user/contact">Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
@@ -75,11 +99,23 @@
                         <div class="col-md-3 mt-4">
                             <div class="item">
                                 <div class="thumb">
+                                    <% if (element.variants[0].offer) {%>
+                                    <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
+                                        <%}%>
                                     <a href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"><img style="width: 280px; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt=""></a>
                                 </div>
                                 <div class="down-content">
                                     <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
+                                    
+                                    <%if(element.variants[0].offer){%>
+                                        <span class="original-price">INR <%= element.variants[0].price %></span>
+                                        <span>INR <%= element.variants[0].discount_price %></span>
+                                        <%}else{%>
+                                            <span>INR <%= element.variants[0].price %></span>
+                                            <%}%>
+                                       
+                                            
+                                    
                                     <ul class="stars d-flex">
                                         <li><i class="bi bi-star-fill"></i></li>
                                         <li><i class="bi bi-star-fill"></i></li>

@@ -680,10 +680,55 @@ banner
 .main-banner .left-content .inner-content h4 {
   color: #fff;
   margin-top: -10px;
-  font-size: 52px;
+  font-size: 53px;
   font-weight: 700;
   margin-bottom: 20px;
 }
+
+@media (max-width: 575.98px) {
+  .main-banner .left-content .inner-content h4 {
+      font-size: 28px;
+      margin-top: 50px;
+      margin-bottom: 50px;
+  }
+}
+
+/* For medium devices (tablets, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .main-banner .left-content .inner-content h4 {
+      font-size: 35px;
+      margin-top: 80px;
+      margin-bottom: 60px;
+  }
+}
+
+/* For large devices (tablets and small desktops, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .main-banner .left-content .inner-content h4 {
+      font-size: 40px;
+      margin-top: 100px;
+      margin-bottom: 80px;
+  }
+}
+
+/* For extra large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .main-banner .left-content .inner-content h4 {
+      font-size: 45px;
+      margin-top: 120px;
+      margin-bottom: 90px;
+  }
+}
+
+/* For extra-extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .main-banner .left-content .inner-content h4 {
+      font-size: 50px;
+      margin-top: 150px;
+      margin-bottom: 100px;
+  }
+}
+
 
 .main-banner .left-content .inner-content span {
   font-size: 16px;
@@ -2668,8 +2713,7 @@ body{
  display: flex;
 }
 .form-email{
-  width: 90vh !important;
-  margin-left: 19vh !important;
+  
   background-color: #dfdede;
 }
 .table-area{
@@ -2700,3 +2744,4 @@ body{
 .bread{
   margin-top: 25vh;
 }
+

@@ -26,7 +26,7 @@
                                 <ul>
                                     <li><a href="/user/profile">My Account</a></li>
                                     <li><a href="/order/order_history">My Orders</a></li>
-                                    <li><a href="#">My Wallet</a></li>
+                                    <li><a href="/user/wallet">My Wallet</a></li>
                                     <li><a href="/user/about">About Us</a></li>
                                     <li><a href="/user/contact">Contact Us</a></li>
                                     <li><a href="/user/logout">Logout</a></li>
@@ -98,15 +98,16 @@
 
 
                                     <td class="d-flex">
-
+                                        <% const Productprice2 = variant.offer?variant.discount_price : variant.price %>
                                         <button class="btn btn-outline-secondary"
-                                            onclick="minus('<%= item._id %>','<%= variant.price %>')">-</button>
+                                            onclick="minus('<%= item._id %>','<%= Productprice2 %>')">-</button>
                                         <input type="number" name="quantity" class="form-control text-center mx-2"
                                             value="<%= item.quantity %>"
                                             style="width: 50px; background-color: #595959; color: white;"
                                             id="quantity_<%= item._id %>" min="0" readonly>
+                                            <% const Productprice1 = variant.offer?variant.discount_price : variant.price %>
                                         <button class="btn btn-outline-secondary"
-                                            onclick="plus('<%= item._id %>','<%= variant.price %>','<%= variant.stock %>')">+</button>
+                                            onclick="plus('<%= item._id %>','<%=Productprice1 %>','<%= variant.stock %>')">+</button>
 
                                     </td>
 
@@ -114,7 +115,8 @@
 
                                     <td class="text-end" id="price_<%=item._id %>">
                                         <p class="text-dark">
-                                            <% const subtotal=item.quantity * variant.price %>
+                                            <% const price = variant.offer ? variant.discount_price : variant.price %>
+                                            <% const subtotal=item.quantity * price %>
                                                 INR <%= subtotal.toFixed(2) %>
                                         </p>
                                     </td>
@@ -197,7 +199,7 @@
                 } else {
                     Swal.fire({
                         title: 'Maximum Quantity Reached',
-                        text: 'you can only add upto 8 items of the product ',
+                        text: 'you can only add upto 5 items of the product ',
                         icon: 'info',
                         confirmButtonText: 'OK'
                     })
@@ -338,8 +340,8 @@
                     window.location.href = '/cart/checkoutOrder';
                 } else {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
+                        icon: 'info',
+                        title: 'Empty Cart',
                         text: result.message,
                         confirmButtonText: 'OK'
                     });

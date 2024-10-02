@@ -1,0 +1,1124 @@
+<%- include ('../partial/newAdminHeader')-%>
+  <style>
+    .offer-card {
+      border: 1px solid #e2e6ea;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .offer-card:hover {
+      transform: scale(1.02);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .card-text {
+      font-size: 14px;
+      color: #6c757d;
+    }
+  </style>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="#" class="text-nowrap logo-img">
+            <img src="/images/SnapCart.png" width="150" style="margin-top: 2vh;" alt="" />
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+
+
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/dashboard" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/users" aria-expanded="false">
+                <span>
+                  <i class="ti ti-user"></i>
+                </span>
+                <span class="hide-menu">Users</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/products" aria-expanded="false">
+                <span>
+                  <i class="bi bi-box-seam"></i>
+                </span>
+                <span class="hide-menu">Products</span>
+              </a>
+            </li>
+            <li class="sidebar-item selected">
+              <a class="sidebar-link active" href="/admin/offers" aria-expanded="false">
+                <span>
+                  <i class="bi bi-gift"></i>
+                </span>
+                <span class="hide-menu">Offers</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/orders" aria-expanded="false">
+                <span>
+                  <i class="bi bi-cart2"></i>
+                </span>
+                <span class="hide-menu">Orders</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/category" aria-expanded="false">
+                <span>
+                  <i class="ti ti-list"></i>
+
+                </span>
+                <span class="hide-menu">Categories</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/brand" aria-expanded="false">
+                <span>
+                  <i class="ti ti-crown"></i>
+
+                </span>
+                <span class="hide-menu">Brands</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="#" aria-expanded="false">
+                <span>
+                  <i class="ti ti-ticket"></i>
+
+
+                </span>
+                <span class="hide-menu">Coupon</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="#" aria-expanded="false">
+                <span>
+                  <i class="bi bi-credit-card"></i>
+                </span>
+                <span class="hide-menu">Payment</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/admin/logout" aria-expanded="false">
+                <span>
+                  <i class="ti ti-login"></i>
+                </span>
+                <span class="hide-menu">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!--  Sidebar End -->
+
+    <div class="body-wrapper">
+
+      <!--  Header Start -->
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2"></i>
+              </a>
+            </li>
+
+          </ul>
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+
+
+
+              <div class="">
+                <form class="  " style="width:350px;">
+                  <input class="form-control search" type="search" placeholder="Search..." aria-label="Search">
+                </form>
+              </div>
+
+
+            </ul>
+            <div class="container-fluid main-area justify-content-end">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab"
+                          aria-controls="overview" aria-selected="true">Offer Management</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#products" role="tab"
+                          aria-selected="false">Products</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#category" role="tab"
+                          aria-selected="false">Categories</a>
+                      </li>
+                     
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </nav>
+      </header>
+      <!--  Header End -->
+      <div class="container-fluid main-area">
+        <div class="tab-content tab-content-basic">
+          <!-- Overview Tab -->
+
+
+          <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-9">
+                      <h4 class="card-title">Offer Management</h4>
+                      <p class="card-description">Manage Offer details and customize the discounts.</p>
+                    </div>
+                    <div class="col-lg-3 text-end">
+                      <button type="button" class="btn btn-outline-primary btn-icon-text" data-bs-toggle="modal"
+                        data-bs-target="#addOfferModal">
+                        Add New Offer
+                      </button>
+                    </div>
+                  </div>
+
+
+
+                  <!-- Offers in Card View -->
+                  <div class="row mt-4">
+                    <% if( typeof offer !='undefined' && offer.length>0 ){ %>
+
+                      <% offer.forEach((element)=>{ %>
+
+                        <div class="col-lg-4 mb-4">
+                          <div class="card offer-card shadow-sm">
+                            <div class="card-body">
+                              <h5 class="card-title">
+                                <%= element.offerName %>
+                              </h5>
+                              <p class="card-text">
+                                <strong>Discount:</strong>
+                                <%= element.offerPercentage %>%<br>
+                                  <strong>Start Date:</strong>
+                                  <%= new Date(element.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                    month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                    true }) %><br>
+                                    <strong>Expiry Date:</strong>
+                                    <%= new Date(element.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                      month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                      true }) %><br>
+                              </p>
+                              <div class="d-flex justify-content-between">
+
+                                <% if(element.isDelete){ %>
+                                  <button type="button" class="btn btn-secondary btn-sm"
+                                    onclick="restoreOffer('<%=element._id %>')">Restore</button>
+                                  <% }else{ %>
+                                    <button type="button" onclick="deleteOffer('<%= element._id %>')"
+                                      class="btn btn-danger btn-sm">Delete</button>
+                                    <button type="button" class="btn btn-outline-info btn-sm editBtn"
+                                      data-offer-Id="<%= element._id %>" data-offer-name="<%= element.offerName %>"
+                                      data-offer-percentage="<%= element.offerPercentage %>" data-offer-SDate=" <%= new Date(element.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                 month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                 true }) %>" data-offer-EDate="<%= (element.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                 month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                 true }) %>">
+                                      Edit
+                                    </button>
+                                    <% } %>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <% }) %>
+
+
+                          <% }else{ %>
+                            <div class="col-12 text-center mt-4">
+                              <h4 class="card-title">No offer available</h4>
+                            </div>
+                            <% } %>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content tab-content-basic">
+          <!-- Products Tab -->
+          <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <!-- Title and Description -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-lg-9">
+                      <h4 class="card-title mb-1">Product Offer Management</h4>
+                      <p class="card-description text-muted">Manage product offer details and discounts</p>
+                    </div>
+
+                  </div>
+
+                  <!-- Offers in Card View -->
+
+                  <div class="row mt-4">
+                    <% if(typeof products !='undefined' && products.length >0){ %>
+                       <% products.forEach((element)=>{ %>
+                        <% element.variants.forEach((variant)=>{ %>
+                          <div class="col-lg-4 mb-4">
+                            <div class="card offer-card shadow-sm">
+                              <div class="card-body">
+                                
+                                <p class="card-text">
+                                  <strong>Product Name:</strong><%= element.product_name %><br>
+                                 
+                                  <strong>Color:</strong><%= variant.color %><br>
+                                    
+                                     
+                                    
+                                <%  if(variant.offer){ %>
+                                    <strong>Discount:</strong><%= variant.offer.offerPercentage %>% <br>
+                                    <strong>Start Date:</strong><%=new Date(variant.offer.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                    month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                    true }) %><br>
+                                    <strong>Expiry Date:</strong><%= new Date(variant.offer.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                    month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                    true }) %>
+                                  <% }else{ %>
+                                    <strong>Discount:</strong>No discount <br>
+                                    <strong>Start Date:</strong>--/--/---- <br>
+                                    <strong>Expiry Date:</strong>--/--/----
+                                 <% } %>
+                              
+
+                                </p>
+                                <div class="d-flex justify-content-between">
+      
+                                  <div class="form-group mb-0">
+                                    <select class="form-select form-select-sm" onchange="updateProductOffer('<%= element._id %>', this.value, '<%= variant._id %>')">
+                                      <option>Select Offer</option>
+                                      <% offerSelect.forEach((offer) => { %>
+                                        <option value="<%= offer._id %>" <% if (variant.offer && variant.offer._id.toString() === offer._id.toString()) { %> selected  <% } %> >
+                                         
+                                         <%= offer.offerName %> - <%= offer.offerPercentage %>%</option>
+                                      <% }) %>
+                                    </select>
+                                  </div>
+                                  <%  if(variant.offer){ %>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="removeOffer('<%= element._id %>','<%=variant._id %>')">remove offer</button>
+                                    <% } %>
+                                 
+      
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        <% }) %>
+                        
+                       <% }) %>
+                    
+                     <% }else{ %>
+                      <div class="col-12 text-center mt-4">
+                        <h4 class="card-title">No product available</h4>
+                      </div>
+                 <%   } %>
+                    
+
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="tab-content tab-content-basic">
+          <!-- Products Tab -->
+          <div class="tab-pane fade" id="category" role="tabpanel" aria-labelledby="category">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <!-- Title and Description -->
+                  <div class="row align-items-center mb-3">
+                    <div class="col-lg-9">
+                      <h4 class="card-title mb-1">Category Offer Management</h4>
+                      <p class="card-description text-muted">Manage category offer details and discounts</p>
+                    </div>
+
+                  </div>
+
+                  <!-- Offers in Card View -->
+
+                  <div class="row mt-4">
+                   <% if(typeof category !='undefined' && category.length >0){ %>
+                     <% category.forEach((element)=>{ %>
+                        <div class="col-lg-4 mb-4">
+                          <div class="card offer-card shadow-sm">
+                            <div class="card-body">
+                              
+                              <p class="card-text">
+                                <strong>Category Name:</strong><%=element.category_name %><br>
+
+                                <%  if(element.offer){ %>
+                                  <strong>Discount:</strong><%= element.offer.offerPercentage %>% <br>
+                                  <strong>Start Date:</strong><%= new Date(element.offer.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                  month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                  true }) %> <br>
+                                  <strong>Expiry Date:</strong><%= new Date(element.offer.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
+                                  month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
+                                  true }) %>
+                                <% }else{ %>
+                                  <strong>Discount:</strong>No discount <br>
+                                  <strong>Start Date:</strong>--/--/---- <br>
+                                  <strong>Expiry Date:</strong>--/--/----
+                               <% } %>
+                               
+                              </p>
+                              <div class="d-flex justify-content-between">
+    
+                                <div class="form-group mb-0">
+                                  <select class="form-select form-select-sm" onchange="updateCategoryOffer('<%=element._id %>',this.value)">
+                                    <option value="">Select Offer</option>
+                                    <% offerSelect.forEach((offer)=>{ %>
+                                      <option value="<%= offer._id %>" <% if (element.offer && element.offer._id.toString() === offer._id.toString()) { %> selected  <% } %>>
+                                        <%= offer.offerName %> - <%=offer.offerPercentage%>%
+                                      </option>
+                                      
+                                    <% }) %>
+                                  </select>
+                                </div>
+                                <%  if(element.offer){ %>
+                                  <button type="button" class="btn btn-danger btn-sm"
+                                  onclick="removeCategoryOffer('<%= element._id %>','<%=element.offer._id%>')">remove offer</button>
+                                  <% } %>
+    
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                    <%  }) %>
+                 <%   }else{ %>
+                      <div class="col-12 text-center mt-4">
+                        <h4 class="card-title">No product available</h4>
+                      </div>
+                  <%  } %>
+                    
+                    </div>
+
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        
+
+
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+    </div>
+
+    <!-- Add Offer Modal -->
+    <div class="modal fade" id="addOfferModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCouponModalLabel">Add New Offer</h5>
+
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="offerName">Offer Name</label>
+                <input type="text" class="form-control" id="offerName" name="offerName" required>
+              </div>
+              <div class="form-group">
+                <label for="offerPercentage">Offer Percentage</label>
+                <input type="number" class="form-control" id="offerPercentage" name="offerPercentage" required>
+              </div>
+              <div class="form-group">
+                <label for="offerStartDate">Start Date</label>
+                <input type="datetime-local" class="form-control" id="offerStartDate" name="offerStartDate" required>
+              </div>
+              <div class="form-group">
+                <label for="offerEndDate">End Date</label>
+                <input type="datetime-local" class="form-control" id="offerEndDate" name="offerEndDate" required>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" onclick="AddOffer()">Add Offer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- edit Offer Modal -->
+    <div class="modal fade" id="editOfferModal" tabindex="-1" role="dialog" aria-labelledby="editOfferModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCouponModalLabel">edit Offer</h5>
+
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="offerName">Offer Name</label>
+                <input type="text" class="form-control" id="editOfferName" name="editOfferName" required>
+              </div>
+              <div class="form-group">
+                <label for="offerPercentage">Offer Percentage</label>
+                <input type="number" class="form-control" id="editOfferPercentage" name="editOfferPercentage" required>
+              </div>
+              <div class="form-group">
+                <label for="offerStartDate">Start Date</label>
+                <input type="datetime-local" class="form-control" id="editOfferStartDate" name="editOfferStartDate"
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="offerEndDate">End Date</label>
+                <input type="datetime-local" class="form-control" id="editOfferEndDate" name="editOfferEndDate"
+                  required>
+              </div>
+              <input type="hidden" id="editOfferId">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" onclick="EditOffer()">Add Offer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+      async function AddOffer() {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        const offerName = document.getElementById('offerName').value.trim()
+        const offerPercentage = parseFloat(document.getElementById('offerPercentage').value.trim())
+        const offerStartDate = document.getElementById('offerStartDate').value.trim()
+        const offerEndDate = document.getElementById('offerEndDate').value.trim()
+        const currentDate = new Date();
+        if (!offerName) {
+          Toast.fire({
+            icon: "error",
+            title: "offer name is empty"
+          });
+          return
+        }
+        if (offerName.length < 2) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Name Length",
+            text: 'Name must need minimum 2 characters.',
+          });
+          return
+        }
+        const nameRegex = /^[a-zA-Z\s\-]+$/;
+        if (!nameRegex.test(offerName)) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Characters in Name",
+            text: 'Name should not contain numbers or special characters.',
+          });
+          return
+        }
+
+
+        if (!offerPercentage) {
+          Toast.fire({
+            icon: "error",
+            title: "percentage is empty"
+          });
+          return
+        }
+
+        if (isNaN(offerPercentage)) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Percentage",
+            text: "Percentage must be a number.",
+          });
+          return;
+        }
+
+        if (offerPercentage < 1 || offerPercentage > 100) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid percentage",
+            text: 'Percentage not more than 100 and less than 0'
+          });
+          return
+        }
+        if (offerPercentage !== Math.floor(offerPercentage)) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Percentage Format",
+            text: "Percentage must be a whole number.",
+          });
+          return;
+        }
+
+
+        if (!offerStartDate) {
+          Toast.fire({
+            icon: "error",
+            title: "start date is empty"
+          });
+          return
+        }
+        if (offerStartDate < currentDate) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Start Date",
+            text: 'Start date cannot be in the past.',
+          });
+          return;
+        }
+
+        if (!offerEndDate) {
+          Toast.fire({
+            icon: "error",
+            title: "end date is empty"
+          });
+          return
+        }
+
+        if (offerEndDate <= offerStartDate) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid End Date",
+            text: 'End date must be after the start date.',
+          });
+          return;
+        }
+
+        try {
+          const responce = await fetch('/admin/addOffers', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ offerName, offerPercentage, offerStartDate, offerEndDate })
+          })
+
+
+          const result = await responce.json()
+          if (result.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Offer added',
+              text: result.message,
+              confirmButtonText: 'OK'
+            }).then(() => {
+              window.location.reload();
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'error occured',
+              text: result.error,
+              confirmButtonText: 'OK'
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Network Error',
+            text: 'An error occurred. Please check your network connection.',
+            confirmButtonText: 'OK'
+          });
+        }
+      }
+
+
+      async function deleteOffer(offerId) {
+        const result = await Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to Delete this offer?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, Delete it!',
+          cancelButtonText: 'Close!'
+        });
+        if (result.isConfirmed) {
+          const responce = await fetch('/admin/deleteOffer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ offerId })
+          })
+          if (response.ok) {
+            Swal.fire('deleted!', 'this offer is deleted.', 'success').then(() => {
+              location.reload(); // Reload the page
+            })
+          } else {
+            Swal.fire('Error!', 'Failed to delete offer.', 'error');
+          }
+        }
+
+      }
+      async function deleteOffer(offerId) {
+        const result = await Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to Delete this offer?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, Delete it!',
+          cancelButtonText: 'Close!'
+        });
+        if (result.isConfirmed) {
+          const responce = await fetch('/admin/deleteOffer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ offerId })
+          })
+          if (responce.ok) {
+            Swal.fire('deleted!', 'this offer is deleted.', 'success').then(() => {
+              location.reload()
+            })
+
+          } else {
+            Swal.fire('Error!', 'Failed to delete offer.', 'error');
+          }
+        }
+
+      }
+      async function restoreOffer(offerId) {
+        const result = await Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to restore this offer?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, restore it!',
+          cancelButtonText: 'Close!'
+        });
+        if (result.isConfirmed) {
+          const responce = await fetch('/admin/restoreOffer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ offerId })
+          })
+          if (responce.ok) {
+            Swal.fire('restored!', 'this offer is restored.', 'success').then(() => {
+              location.reload(); // Reload the page
+            })
+          } else {
+            Swal.fire('Error!', 'Failed to restore offer.', 'error');
+          }
+        }
+
+      }
+
+
+
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const editBtn = document.querySelectorAll('.editBtn')
+
+        editBtn.forEach((button) => {
+          button.addEventListener('click', async () => {
+           
+            
+            const offerName = button.getAttribute('data-offer-name')
+           
+            const offerPercentage = button.getAttribute('data-offer-percentage')
+            
+            const offerStartDate = button.getAttribute('data-offer-SDate')
+            const offerEndDate = button.getAttribute('data-offer-EDate')
+            const OfferId = button.getAttribute('data-offer-Id')
+            
+            const startDate = new Date(offerStartDate).toISOString().slice(0, 16);
+            const endDate = new Date(offerEndDate).toISOString().slice(0, 16);
+            
+            
+            document.getElementById('editOfferId').value = OfferId
+            document.getElementById('editOfferName').value = offerName
+            document.getElementById('editOfferPercentage').value = offerPercentage
+            document.getElementById('editOfferStartDate').value = startDate
+            document.getElementById('editOfferEndDate').value = endDate
+            $('#editOfferModal').modal('show')
+          })
+        })
+      })
+
+
+
+      async function EditOffer() {
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+
+
+        const editOfferName = document.getElementById('editOfferName').value.trim()
+
+        const editOfferPercentage = parseFloat(document.getElementById('editOfferPercentage').value.trim())
+        const editOfferStartDate = document.getElementById('editOfferStartDate').value.trim()
+        const editOfferEndDate = document.getElementById('editOfferEndDate').value.trim()
+        const editOfferId = document.getElementById('editOfferId').value
+        const currentDate = new Date();
+        if (!editOfferName) {
+          Toast.fire({
+            icon: "error",
+            title: "offer name is empty"
+          });
+          return
+        }
+        if (editOfferName.length < 2) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Name Length",
+            text: 'Name must need minimum 2 characters.',
+          });
+          return
+        }
+        const nameRegex = /^[a-zA-Z\s\-]+$/;
+        if (!nameRegex.test(editOfferName)) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Characters in Name",
+            text: 'Name should not contain numbers or special characters.',
+          });
+          return
+        }
+
+
+        if (!editOfferPercentage) {
+          Toast.fire({
+            icon: "error",
+            title: "percentage is empty"
+          });
+          return
+        }
+
+        if (isNaN(editOfferPercentage)) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Percentage",
+            text: "Percentage must be a number.",
+          });
+          return;
+        }
+
+        if (editOfferPercentage < 1 || editOfferPercentage > 100) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid percentage",
+            text: 'Percentage not more than 100 and less than 0'
+          });
+          return
+        }
+        if (editOfferPercentage !== Math.floor(editOfferPercentage)) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Percentage Format",
+            text: "Percentage must be a whole number.",
+          });
+          return;
+        }
+
+
+        if (!editOfferStartDate) {
+          Toast.fire({
+            icon: "error",
+            title: "start date is empty"
+          });
+          return
+        }
+        if (editOfferStartDate < currentDate) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid Start Date",
+            text: 'Start date cannot be in the past.',
+          });
+          return;
+        }
+
+        if (!editOfferEndDate) {
+          Toast.fire({
+            icon: "error",
+            title: "end date is empty"
+          });
+          return
+        }
+
+        if (editOfferEndDate <= editOfferStartDate) {
+          Toast.fire({
+            icon: "error",
+            title: "Invalid End Date",
+            text: 'End date must be after the start date.',
+          });
+          return;
+        }
+
+        try {
+          const responce = await fetch('/admin/editOffers', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ editOfferId, editOfferName, editOfferPercentage, editOfferStartDate, editOfferEndDate })
+          })
+
+
+          const result = await responce.json()
+          if (result.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Offer Edited',
+              text: result.message,
+              confirmButtonText: 'OK'
+            }).then(() => {
+              window.location.reload();
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'error occured',
+              text: result.error,
+              confirmButtonText: 'OK'
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Network Error',
+            text: 'An error occurred. Please check your network connection.',
+            confirmButtonText: 'OK'
+          });
+        }
+
+      }
+
+
+      async function updateProductOffer(productId,offerId,variantId){
+        try{
+          const responce = await fetch('/admin/updateProductOffer',{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({productId,offerId,variantId})
+        })
+        const result = await responce.json()
+        if(result.success){
+          Swal.fire({
+            icon:'success',
+            title:'offer updated',
+            text:result.message,
+            confirmButtonText:'OK'
+          }).then(()=>{
+            window.location.reload()
+          })
+        }else{
+          Swal.fire({
+            icon:'error',
+            title:'failed to update',
+            text:result.error,
+            confirmButtonText:'OK'
+          })
+        }
+        }catch(error){
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+       
+
+
+      } 
+      async function updateCategoryOffer(categoryId,offerId){
+        try{
+          const responce = await fetch('/admin/updateCategoryOffer',{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({categoryId,offerId})
+        })
+        const result = await responce.json()
+        if(result.success){
+          Swal.fire({
+            icon:'success',
+            title:'offer updated',
+            text:result.message,
+            confirmButtonText:'OK'
+          }).then(()=>{
+            window.location.reload()
+          })
+        }else{
+          Swal.fire({
+            icon:'error',
+            title:'failed to update',
+            text:result.error,
+            confirmButtonText:'OK'
+          })
+        }
+        }catch(error){
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+       
+
+
+      } 
+
+async function removeOffer(productId,variantId){
+  try{
+          const responce = await fetch('/admin/removeProductOffer',{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({productId,variantId})
+        })
+        const result = await responce.json()
+        if(result.success){
+          Swal.fire({
+            icon:'success',
+            title:'offer updated',
+            text:result.message,
+            confirmButtonText:'OK'
+          }).then(()=>{
+            window.location.reload()
+          })
+        }else{
+          Swal.fire({
+            icon:'error',
+            title:'failed to update',
+            text:result.error,
+            confirmButtonText:'OK'
+          })
+        }
+        }catch(error){
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+}
+
+async function removeCategoryOffer(categoryId,offerId){
+  try{
+          const responce = await fetch('/admin/removeCategoryOffer',{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({categoryId,offerId})
+        })
+        const result = await responce.json()
+        if(result.success){
+          Swal.fire({
+            icon:'success',
+            title:'offer updated',
+            text:result.message,
+            confirmButtonText:'OK'
+          }).then(()=>{
+            window.location.reload()
+          })
+        }else{
+          Swal.fire({
+            icon:'error',
+            title:'failed to update',
+            text:result.error,
+            confirmButtonText:'OK'
+          })
+        }
+        }catch(error){
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+}
+    </script>
+
+    <%- include ('../partial/newAdminfooter')-%>

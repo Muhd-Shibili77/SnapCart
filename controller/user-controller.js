@@ -7,6 +7,7 @@ const Product = require('../model/productDB')
 const Category = require('../model/categoryDB')
 const Brand = require('../model/brandDB')
 const Address = require('../model/AddressDB')
+const Wishlist = require('../model/wishlistDB')
 const axios = require('axios');
 
 const get_login = (req, res) => {
@@ -261,9 +262,26 @@ try {
 const get_home = async(req, res) => {
   if(req.session.email){
     const mensProduct = await Product.find({category_id:'66e01b1fb148f23cc19fa331'}).populate('category_id')
+    .populate({
+      path: 'variants.offer',
+      model: 'Offer',
+    })
+    
     const womensProduct = await Product.find({category_id:'66e18d806bf28e92c6d2e0ea'}).populate('category_id')
+    .populate({
+      path: 'variants.offer',
+      model: 'Offer',
+    })
     const kidsProduct = await Product.find({category_id:'66e18d856bf28e92c6d2e0f2'}).populate('category_id')
+    .populate({
+      path: 'variants.offer',
+      model: 'Offer',
+    })
     const accessoris = await Product.find({category_id:'66e2970551da17d55eb8ba49'}).populate('category_id')
+    .populate({
+      path: 'variants.offer',
+      model: 'Offer',
+    })
     res.render("user/home",{mensProduct,womensProduct,kidsProduct,accessoris});
 
   }else{
@@ -282,6 +300,10 @@ const allProducts = async (req,res)=>{
     const totalPage = Math.ceil(totalProducts/limit)
     let searchQuery;
     const product = await Product.find({isDelete:false})
+    .populate({
+      path:'variants.offer',
+      model:'Offer'
+    })
     .skip(skip)
     .limit(limit);
     res.render('user/products',{product,totalPage,currentPage:page,searchQuery})
@@ -294,9 +316,28 @@ const singleProduct = async(req,res)=>{
   if(req.session.email){
     const proId = req.query.proId
     const varId = req.query.varId
+    const user = await User.findOne({email:req.session.email})
+    const wishlist = await Wishlist.findOne({user_id:user._id})
     
     
-    const product = await Product.findOne({_id:proId}).populate('category_id')
+    let wishlistHeart = null;
+    let ProductInWishlist = false;
+
+  
+    if (wishlist && wishlist.items.length > 0) {
+      
+      wishlistHeart = wishlist.items.find(x => x.variantId.toString() === varId);
+      ProductInWishlist = wishlistHeart ? true : false; 
+    }
+    
+    
+    
+    
+
+    
+    
+
+    const product = await Product.findOne({_id:proId}).populate('category_id').populate('variants.offer')
     
     // Find the specific variant from the product using varId
 
@@ -307,7 +348,7 @@ const singleProduct = async(req,res)=>{
 
     const category = product.category_id;
     const relatableProduct = await Product.find({category_id:category})
-    res.render('user/single-product',{product,relatableProduct,variant})
+    res.render('user/single-product',{product,relatableProduct,variant,ProductInWishlist})
   }else{
     res.redirect('/user/login')
   }
@@ -325,6 +366,10 @@ const category =async (req,res)=>{
 
    
     const category = await Product.find({category_id:id}).populate('category_id')
+    .populate({
+      path:'variants.offer',
+      modal:'Offer'
+    })
     .skip(skip)
     .limit(limit);
     
@@ -677,20 +722,11 @@ const searchAndSort = async (req, res) => {
 
     
     switch (sort) {
-      case 'popularity':
-        sortCriteria = { popularity: -1 };
-        break;
       case 'price_asc':
         sortCriteria = { 'variants.price': 1 };
         break;
       case 'price_desc':
         sortCriteria = { 'variants.price': -1 };
-        break;
-      case 'ratings':
-        sortCriteria = { ratings: -1 };
-        break;
-      case 'featured':
-        sortCriteria = { featured: -1 };
         break;
       case 'new_arrivals':
         sortCriteria = { createdAt: -1 };
@@ -724,6 +760,8 @@ const searchAndSort = async (req, res) => {
         .skip(skip)
         .limit(limit);
 
+        
+
       res.render('user/products', {
         product: products,
         totalPage,
@@ -740,7 +778,13 @@ const searchAndSort = async (req, res) => {
   }
 };
 
-
+const userWallet = async (req,res)=>{
+  if(req.session.email){
+    res.render('user/wallet')
+  }else{
+    res.redirect('/user/login')
+  }
+}
 
 const user_logout=(req,res)=>{
     req.session.destroy((err) => {
@@ -785,4 +829,5 @@ module.exports = {
   post_forgetChangePassword,
   forgetResendOtp,
   searchAndSort,
+  userWallet,
 }

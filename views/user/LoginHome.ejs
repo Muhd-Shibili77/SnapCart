@@ -340,19 +340,18 @@
 
 
 <!-- ***** accessoies Area ends ***** -->
- <!-- ***** Best selling product starts ***** -->
-    
- <section class="section" id="bestSelling">
-    
+ <!-- ***** Best Selling Products Starts ***** -->
+
+<section class="section" id="bestSelling">
     <div class="container my-5">
-        <div class="section-heading">
+        <div class="section-heading text-center">
             <h2>Best Selling Products</h2>
-            
-        </div><br>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col d-flex">
+        </div>
+        <br>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="col">
                 <div class="product-card p-3">
-                    <img src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
+                    <img src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress" class="product-img card-img-top img-thumbnail" style="height: 40vh; object-fit: cover;">
                     <h4><%= womensProduct[0].product_name %></h4>
                     <p class="price">INR <%= womensProduct[0].variants[0].price %></p>
                     <p class="rating">★★★★★</p>
@@ -360,15 +359,15 @@
             </div>
             <div class="col">
                 <div class="product-card p-3">
-                    <img src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
+                    <img src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress" class="product-img card-img-top img-thumbnail" style="height: 40vh; object-fit: cover;">
                     <h4><%= mensProduct[0].product_name %></h4>
-                    <p class="price">INR <%= mensProduct[0].variants[0].price %></span></p>
+                    <p class="price">INR <%= mensProduct[0].variants[0].price %></p>
                     <p class="rating">★★★★☆</p>
                 </div>
             </div>
             <div class="col">
                 <div class="product-card p-3">
-                    <img src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
+                    <img src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress" class="product-img card-img-top img-thumbnail" style="height: 40vh; object-fit: cover;">
                     <h4><%= kidsProduct[0].product_name %></h4>
                     <p class="price">INR <%= kidsProduct[0].variants[0].price %></p>
                     <p class="rating">★★★★☆</p>
@@ -376,9 +375,9 @@
             </div>
             <div class="col">
                 <div class="product-card p-3">
-                    <img src="/<%= accessoris[0].variants[0].images[0]%>" alt="dress" style="height: 40vh; object-fit: cover;" class="product-img card-img-top img-thumbnail">
+                    <img src="/<%= accessoris[0].variants[0].images[0] %>" alt="dress" class="product-img card-img-top img-thumbnail" style="height: 40vh; object-fit: cover;">
                     <h4><%= accessoris[0].product_name %></h4>
-                    <p class="price">INR <%= accessoris[0].variants[0].price %></span></p>
+                    <p class="price">INR <%= accessoris[0].variants[0].price %></p>
                     <p class="rating">★★★★☆ (65)</p>
                 </div>
             </div>
@@ -388,7 +387,7 @@
 
 <section class="section" id="end">
     <div class="container my-5">
-        <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 text-center">
             <div class="col">
                 <div class="feature-card p-3">
                     <img src="/images/delivary.png" alt="Free and Fast Delivery">
@@ -412,10 +411,9 @@
             </div>
         </div>
     </div>
-    
-
 </section>
-    <!-- ***** Best selling product Ends ***** -->
+
+<!-- ***** Best Selling Products Ends ***** -->
 <!-- ***** Footer Start ***** -->
 <footer>
     <div class="container">

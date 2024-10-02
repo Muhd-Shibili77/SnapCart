@@ -1,0 +1,180 @@
+<%- include ("../partial/header" )-%>
+
+
+<style>
+    .wallet-card {
+      border-radius: 15px;
+      background: linear-gradient(135deg, #095b1d, #fafafa);
+      color: #fff;
+      padding: 30px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .wallet-card h4 {
+      margin-bottom: 20px;
+    }
+    .wallet-buttons .btn {
+      width: 100%;
+    }
+    .transaction-history {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .transaction-list {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+    .transaction-item .icon {
+      margin-right: 10px;
+    }
+    .wallet{
+        margin-top: 20vh;
+    }
+  </style>
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="logo">
+                            <img src="/images/SnapCart.png">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            
+                            <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+                            <li class="scroll-to-section"><a href="/user/products">Products</a></li>
+                            <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                            <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
+                            <li class="submenu">
+                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                                <ul>
+                                    <li><a href="/user/profile">My Account</a></li>
+                                    <li><a href="/order/order_history">My Orders</a></li>
+                                    <li><a href="/user/wallet">My Wallet</a></li>
+                                    <li><a href="/user/about">About Us</a></li>
+                                    <li><a href="/user/contact">Contact Us</a></li>
+                                    <li><a href="/user/logout">Logout</a></li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="wallet">
+
+   
+    <div class="container my-5">
+        <!-- Wallet Section -->
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="wallet-card">
+              <h4>Your Wallet</h4>
+              <p class="display-4">₹750.00</p>
+              <div class="d-flex justify-content-around wallet-buttons mt-4">
+                <button class="btn btn-light btn-lg text-success">Add Funds</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Transaction History -->
+        <div class="row justify-content-center mt-5">
+          <div class="col-md-8">
+            <h4 class="text-center mb-4">Transaction History</h4>
+            <div class="transaction-list">
+              <div class="transaction-item">
+                <span><i class="bi bi-arrow-down-circle-fill text-success icon"></i> Payment Received (Order #54321)</span>
+                <span class="text-success">+₹150.00</span>
+              </div>
+              <div class="transaction-item">
+                <span><i class="bi bi-arrow-up-circle-fill text-danger icon"></i> Funds Withdrawn</span>
+                <span class="text-danger">-₹75.00</span>
+              </div>
+              <div class="transaction-item">
+                <span><i class="bi bi-arrow-down-circle-fill text-success icon"></i> Added Funds</span>
+                <span class="text-success">+₹300.00</span>
+              </div>
+              <!-- Add more transaction items here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+       <!-- ***** Footer Start ***** -->
+       <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="first-item">
+                        <div class="logo">
+                            <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
+                        </div>
+                        <ul>
+
+                            <li><a href="#">SnapCart@company.com</a></li>
+                            <li><a href="#">+91 9048763044</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Shopping &amp; Categories</h4>
+                    <ul>
+                        <li><a href="#">Men’s Shopping</a></li>
+                        <li><a href="#">Women’s Shopping</a></li>
+                        <li><a href="#">Kid's Shopping</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Homepage</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Help &amp; Information</h4>
+                    <ul>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">FAQ's</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Tracking ID</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <%- include ("../partial/footer" )-%>

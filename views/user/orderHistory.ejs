@@ -61,7 +61,7 @@
                                 <ul>
                                     <li><a href="/user/profile">My Account</a></li>
                                     <li><a href="/order/order_history">My Orders</a></li>
-                                    <li><a href="#">My Wallet</a></li>
+                                    <li><a href="/user/wallet">My Wallet</a></li>
                                     <li><a href="/user/about">About Us</a></li>
                                     <li><a href="/user/contact">Contact Us</a></li>
                                     <li><a href="/user/logout">Logout</a></li>
@@ -81,7 +81,7 @@
     </header>
     <!-- ***** Header Area End ***** -->
 
-    <div class="table-area">
+<div class="table-area">
  <!-- ------------------breadcrumbs starts----------------- -->
  <div class="container">
     <ol class="breadcrumb breadcrumb-arrow">
@@ -92,91 +92,77 @@
     </ol>
 </div>
 <!-- ------------------breadcrumbs ends----------------- -->
-        <div class="container">
-            <table class="table table-striped mt-5">
-                <thead>
-                    <tr>
-                        <th scope="col" class="text-center align-middle">OrderID</th>
-                        <th scope="col" class="text-center align-middle">Product</th>
-                        <th scope="col" class="text-center align-middle">Net_Quantity</th>
-                        <th scope="col" class="text-center align-middle">Net_Amount</th>
-                        <th scope="col" class="text-center align-middle">Status</th>
-                        <th scope="col" class="text-center align-middle">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="OrderHistory">
-                    <% if(order && order.length> 0 ){ %>
-                        <% order.forEach((order)=>{%>
-                            
-                                <tr>
-                                <td class="text-center align-middle">
-                                    <%= order.orderId %>
-                                </td>
-                                <td>
-                                    <% order.items.forEach((item)=>{ %>
-                                     <% const variant = item.product.variants.find(a=>a._id.toString()=== item.variantId)%>
-                                     <img  class="orderImage" src="/<%= variant.images[0] %>">
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-striped mt-5">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center align-middle">OrderID</th>
+                    <th scope="col" class="text-center align-middle">Product</th>
+                    <th scope="col" class="text-center align-middle">Net_Quantity</th>
+                    <th scope="col" class="text-center align-middle">Net_Amount</th>
+                    <th scope="col" class="text-center align-middle">Status</th>
+                    <th scope="col" class="text-center align-middle">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="OrderHistory">
+                <% if(order && order.length > 0) { %>
+                    <% order.forEach((order) => { %>
+                        <tr>
+                            <td class="text-center align-middle">
+                                <%= order.orderId %>
+                            </td>
+                            <td>
+                                <% order.items.forEach((item) => { %>
+                                    <% const variant = item.product.variants.find(a => a._id.toString() === item.variantId) %>
+                                    <img class="orderImage" src="/<%= variant.images[0] %>" alt="<%= item.product.product_name %>">
                                     <span><%= item.product.product_name %></span><br>
                                     <span>Quantity: <%= item.quantity %></span><br>
                                     <span>Price: <%= item.price %></span><br><br>
-                                    
-                                    
-                                    <% }) %> 
-                                    
-                                </td>
-
-                                <td class="text-center align-middle">
-                                    <% let totalQuantity = order.items.reduce((total, item) => total + item.quantity, 0); %>
-                                    <%= totalQuantity %>
-                                </td>
-
-                                <td class="text-center align-middle">
-                                    <% let totalPrice = order.items.reduce((total, item) => total + item.price, 0); %>
-                                    <%= totalPrice * totalQuantity %>
-                                </td>
-                                
-                               
-                                
-                                <td class="text-center align-middle
+                                <% }) %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <% let totalQuantity = order.items.reduce((total, item) => total + item.quantity, 0); %>
+                                <%= totalQuantity %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <% let totalPrice = order.items.reduce((total, item) => total + item.price, 0); %>
+                                <%= totalPrice * totalQuantity %>
+                            </td>
+                            <td class="text-center align-middle
                                 <% if (order.orderStatus === 'Pending') { %> status-pending <% } %>
                                 <% if (order.orderStatus === 'Processing') { %> status-processing <% } %>
                                 <% if (order.orderStatus === 'Shipped') { %> status-shipped <% } %>
                                 <% if (order.orderStatus === 'Delivered ') { %> status-delivered <% } %>
                                 <% if (order.orderStatus === 'Cancelled') { %> status-cancelled <% } %>">
-                                    <%= order.orderStatus %>
-                                </td>
-                                <td class="text-center align-middle">
-                                   <%  if(order.orderStatus != 'Cancelled' && order.orderStatus != 'Delivered '){ %>
+                                <%= order.orderStatus %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <% if(order.orderStatus != 'Cancelled' && order.orderStatus != 'Delivered ') { %>
                                     <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-success">Details</a>
-                                    <a onclick="cancelOrder('<%=order._id %>')" class="btn btn-outline-danger">cancel order</a>
-                                   <% }else{ %>
-                                    <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-success">Details</a>
-                                    <% } %>
-                                </td>
-                            </tr>
-                                
-
-
-                              
-                                    <% }) %>
-
-
-                                       
-
-
-
-
-
-                                        <% }else{ %>
-                                            <tr>
-                                                <td colspan="6" class="text-center text-muted"> No item found </td>
-                                            </tr>
-
-
-                                            <% } %>
-
-                </tbody>
-            </table>
+                                    <a onclick="cancelOrder('<%=order._id %>')" class="btn btn-outline-danger">Cancel Order</a>
+                                <% } else { %>
+                                    <% if(order.orderStatus === 'Delivered '){%>
+                                        <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-success">Details</a>
+                                        <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-primary">Return</a>
+                                        <%}else{%>
+                                            <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-success">Details</a>
+                                            <%}%>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No item found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

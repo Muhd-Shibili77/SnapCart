@@ -20,7 +20,7 @@ const admin_products = async (req, res) => {
       .limit(limit);
       
 
-    res.render("admin/admin-products", { product,totalPage,currentPage:page });
+    res.render("admin/adminProducts", { product,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -30,7 +30,7 @@ const add_products = async (req, res) => {
   if (req.session.isAdmin) {
     const category = await Category.find();
     const brand = await Brand.find();
-    res.render("admin/admin-add_product", { category, brand });
+    res.render("admin/adminAddProduct", { category, brand });
   } else {
     res.redirect("/admin/login");
   }
@@ -52,7 +52,7 @@ const post_add_products = async (req, res) => {
       const existProduct = await Product.findOne({ product_name: productName });
 
       if (existProduct) {
-        return res.render("admin/admin-add_product", {
+        return res.render("admin/adminAddProduct", {
           exist: "Product already exists",
         });
       }
@@ -177,7 +177,7 @@ const get_edit_products = async (req, res) => {
       .populate("category_id")
       .populate("brand_id");
 
-    res.render("admin/admin-edit_product", { product, category, brand });
+    res.render("admin/adminEditProduct", { product, category, brand });
   } else {
     res.redirect("/admin/login");
   }
@@ -246,6 +246,8 @@ const post_edit_products = async (req, res) => {
           stock: stock,
           color: color,
           images: variantImages,
+          offer: existingVariant.offer || null, 
+          discount_price: existingVariant.discount_price || null, 
         });
       }
 
@@ -277,7 +279,7 @@ const product_detail=async(req,res)=>{
         const id = req.query.id
         const product = await Product.findById(id).populate('category_id').populate('brand_id')
         
-        res.render('admin/admin-productDetails',{product})
+        res.render('admin/adminProductDetails',{product})
     }else{
         res.redirect('/admin/login')
     }

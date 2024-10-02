@@ -1,0 +1,206 @@
+<%- include ('../partial/newAdminHeader')-%>
+
+ <!--  Body Wrapper -->
+ <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+ data-sidebar-position="fixed" data-header-position="fixed">
+ <!-- Sidebar Start -->
+ <aside class="left-sidebar">
+   <!-- Sidebar scroll-->
+   <div>
+     <div class="brand-logo d-flex align-items-center justify-content-between">
+       <a href="#" class="text-nowrap logo-img">
+         <img src="/images/SnapCart.png" width="150" style="margin-top: 2vh;" alt="" />
+       </a>
+       <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+         <i class="ti ti-x fs-8"></i>
+       </div>
+     </div>
+     <!-- Sidebar navigation-->
+     <nav class="sidebar-nav scroll-sidebar">
+       <ul id="sidebarnav">
+         <li class="nav-small-cap">
+           
+           
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/dashboard" aria-expanded="false">
+             <span>
+               <i class="ti ti-layout-dashboard"></i>
+             </span>
+             <span class="hide-menu">Dashboard</span>
+           </a>
+         </li>
+         
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/users" aria-expanded="false">
+             <span>
+               <i class="ti ti-user"></i>
+             </span>
+             <span class="hide-menu">Users</span>
+           </a>
+         </li>
+         <li class="sidebar-item selected">
+           <a class="sidebar-link active" href="/admin/products" aria-expanded="false">
+             <span>
+              <i class="bi bi-box-seam"></i>
+             </span>
+             <span class="hide-menu">Products</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/offers" aria-expanded="false">
+             <span>
+              <i class="bi bi-gift"></i>
+             </span>
+             <span class="hide-menu">Offers</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/orders" aria-expanded="false">
+             <span>
+              <i class="bi bi-cart2"></i>
+             </span>
+             <span class="hide-menu">Orders</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/category" aria-expanded="false">
+             <span>
+              <i class="ti ti-list"></i>
+
+             </span>
+             <span class="hide-menu">Categories</span>
+           </a>
+         </li>
+        
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/brand" aria-expanded="false">
+             <span>
+              <i class="ti ti-crown"></i>
+ 
+             </span>
+             <span class="hide-menu">Brands</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="#" aria-expanded="false">
+             <span>
+              <i class="ti ti-ticket"></i>
+
+
+             </span>
+             <span class="hide-menu">Coupon</span>
+           </a>
+         </li>
+        
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="#" aria-expanded="false">
+             <span>
+              <i class="bi bi-credit-card"></i>
+             </span>
+             <span class="hide-menu">Payment</span>
+           </a>
+         </li>
+         <li class="sidebar-item">
+           <a class="sidebar-link" href="/admin/logout" aria-expanded="false">
+             <span>
+              <i class="ti ti-login"></i>
+             </span>
+             <span class="hide-menu">Logout</span>
+           </a>
+         </li>
+       </ul>
+     </nav>
+   </div>
+  </aside>
+
+ <!--  Sidebar End -->
+
+ <div class="body-wrapper">
+
+    <!--  Header Start -->
+   <header class="app-header">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <ul class="navbar-nav">
+        <li class="nav-item d-block d-xl-none">
+          <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+            <i class="ti ti-menu-2"></i>
+          </a>
+        </li>
+       
+      </ul>
+      <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+          
+         <div class="">
+           <form class="  " style="width:350px;">
+           <input class="form-control search" type="search"    placeholder= "Search..." aria-label="Search">
+           </form>
+       </div>
+      
+         
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!--  Header End -->
+
+  <div class="container-fluid main-area">
+    <div>
+        <h2><%= product.product_name %></h2>
+       
+        <p style="color: grey;" class="mt-4">  <span style="color: black; font-weight: 600;" >Highlights: </span><%= product.product_highlights %></p>
+        <p style="color:grey " class="mt-4"><span style="color:black; font-weight:600">Category: </span> <%= product.category_id.category_name %></p>
+        <p style="color:grey " class="mt-4"><span style="color:black; font-weight:600">Brand: </span> <%= product.brand_id.brand_name %></p>
+        <p style="color:grey " class="mt-4"><span style="color:black; font-weight:600">Description: </span> <%= product.product_description %></p>
+      </div>
+      <table class="table table-bordered table-hover mt-5">
+    <thead>
+        <tr>
+          <th scope="col">Sl</th>
+          <th scope="col">Color</th>
+          <th scope="col">Size</th>
+          <th scope="col">Price</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% product.variants.forEach((element,index) => { %>
+          <tr>
+             <th scope="row"><%= index+1 %></th>
+             <th><%= element.color %></th>
+             <th><%= element.size %></th>
+             <th><%= element.price %></th>
+             <th class="<%= element.stock > 0 ? 'text-success':'text-danger' %>">
+              <%= element.stock > 0 ? `${element.stock} In Stock ` : `Out of Stock ` %>
+            </th>
+             <th>
+              <img style="width: 50px; height: 50px; object-fit: cover;" src="/<%= element.images[0] %>" alt="">
+              <img style="width: 50px; height: 50px; object-fit: cover;" src="/<%= element.images[1] %>" alt="">
+              <img style="width: 50px; height: 50px; object-fit: cover;" src="/<%= element.images[2] %>" alt="">
+              <img style="width: 50px; height: 50px; object-fit: cover;" src="/<%= element.images[3] %>" alt="">
+            </th>
+          </tr>
+
+        <% }) %>
+       
+        
+      </tbody>
+  </table>
+  <div>
+    <a  href="/admin/products" type="button" class="btn btn-outline-danger"><i class="bi bi-backspace"></i>
+      Back </a>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+ </div>
+
+
+ <%- include ('../partial/newAdminfooter')-%>

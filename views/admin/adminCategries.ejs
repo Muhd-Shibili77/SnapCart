@@ -1,0 +1,570 @@
+<%- include ('../partial/newAdminHeader')-%>
+
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+data-sidebar-position="fixed" data-header-position="fixed">
+<!-- Sidebar Start -->
+<aside class="left-sidebar">
+  <!-- Sidebar scroll-->
+  <div>
+    <div class="brand-logo d-flex align-items-center justify-content-between">
+      <a href="#" class="text-nowrap logo-img">
+        <img src="/images/SnapCart.png" width="150" style="margin-top: 2vh;" alt="" />
+      </a>
+      <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+        <i class="ti ti-x fs-8"></i>
+      </div>
+    </div>
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav scroll-sidebar">
+      <ul id="sidebarnav">
+        <li class="nav-small-cap">
+          
+          
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/dashboard" aria-expanded="false">
+            <span>
+              <i class="ti ti-layout-dashboard"></i>
+            </span>
+            <span class="hide-menu">Dashboard</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/users" aria-expanded="false">
+            <span>
+              <i class="ti ti-user"></i>
+            </span>
+            <span class="hide-menu">Users</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/products" aria-expanded="false">
+            <span>
+             <i class="bi bi-box-seam"></i>
+            </span>
+            <span class="hide-menu">Products</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/offers" aria-expanded="false">
+            <span>
+             <i class="bi bi-gift"></i>
+            </span>
+            <span class="hide-menu">Offers</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/orders" aria-expanded="false">
+            <span>
+             <i class="bi bi-cart2"></i>
+            </span>
+            <span class="hide-menu">Orders</span>
+          </a>
+        </li>
+        <li class="sidebar-item selected">
+          <a class="sidebar-link active" href="/admin/category" aria-expanded="false">
+            <span>
+             <i class="ti ti-list"></i>
+
+            </span>
+            <span class="hide-menu">Categories</span>
+          </a>
+        </li>
+       
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/brand" aria-expanded="false">
+            <span>
+             <i class="ti ti-crown"></i>
+
+            </span>
+            <span class="hide-menu">Brands</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#" aria-expanded="false">
+            <span>
+             <i class="ti ti-ticket"></i>
+
+
+            </span>
+            <span class="hide-menu">Coupon</span>
+          </a>
+        </li>
+       
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#" aria-expanded="false">
+            <span>
+             <i class="bi bi-credit-card"></i>
+            </span>
+            <span class="hide-menu">Payment</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/logout" aria-expanded="false">
+            <span>
+             <i class="ti ti-login"></i>
+            </span>
+            <span class="hide-menu">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+ </aside>
+
+<!--  Sidebar End -->
+
+<div class="body-wrapper">
+
+   <!--  Header Start -->
+  <header class="app-header">
+   <nav class="navbar navbar-expand-lg navbar-light">
+     <ul class="navbar-nav">
+       <li class="nav-item d-block d-xl-none">
+         <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+           <i class="ti ti-menu-2"></i>
+         </a>
+       </li>
+      
+     </ul>
+     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+       <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+         
+        <div class="">
+          <form class="  " style="width:350px;">
+          <input class="form-control search" type="search"    placeholder= "Search..." aria-label="Search">
+          </form>
+      </div>
+     
+        
+       </ul>
+     </div>
+   </nav>
+ </header>
+ <!--  Header End -->
+
+ <div class="container-fluid main-area">
+    <table class="table table-striped table-hover mt-5">
+        <thead>
+          <tr>
+            <th scope="col">category_id</th>
+            <th scope="col">category_name</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if(typeof cat !='undefined' && cat.length> 0 ) { %>
+            <% cat.forEach((category,index)=> { %>
+              <tr>
+                <th scope="row">
+                  <%= (currentPage-1) * 6 + index+1 %>
+                </th>
+                <td>
+                  <%= category.category_name %>
+                </td>
+                <td>
+                  <% if (category.isDeleted) { %>
+                    <button type="button" class="btn btn-outline-success restore-button"
+                      data-category-id="<%= category._id %>">RESTORE</button>
+
+                    <% } else { %>
+                      <button type="button" class="btn btn-outline-danger delete-button"
+                        data-category-id="<%= category._id %>">DELETE</button>
+                      <button type="button" class="btn btn-outline-secondary edit-button" 
+                         data-category-id="<%= category._id %>"
+                        data-category-name="<%= category.category_name %>">
+                        EDIT
+                      </button>
+                      <% } %>
+                </td>
+              </tr>
+              <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="6" class="text-center">No categories available</td>
+                  </tr>
+                  <% } %>
+        </tbody>
+      </table>
+
+      <form action="/admin/add_category" method="post">
+
+        <div class="add-category">
+
+          <input type="text" name="categoryName" id="newCategoryName" class="form-control" placeholder="Category Name" required>
+          <p class="text-danger">
+           
+          </p>
+          <button class="btn btn-outline-dark" style="width: 30vh; margin-top: 2vh;" type="button" onclick="addCategory()">
+            <i class="bi bi-plus-square"></i> Add Category
+          </button>
+        </div>
+      </form>
+
+
+
+ <!-- ------------pagination-------------- -->
+
+
+
+ <div class="container mt-2"
+ style="background-color: transparent !important; display: flex; justify-content: center; margin-top: 40vh!important;">
+ <nav aria-label="...">
+   <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
+
+     <% if (currentPage !==1 && currentPage==totalPage) { %>
+       <li class="page-item">
+         <a class="page-link" href="/admin/category?page=<%= currentPage -1 %>">
+           <</a>
+       </li>
+       <% } %>
+
+
+         <% for(let i=1;i<=totalPage;i++){ %>
+
+           <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+             <a class="page-link" href="/admin/category?page=<%= i %>">
+               <%= i %>
+             </a>
+           </li>
+
+           <% } %>
+
+             <% if (currentPage !==totalPage) { %>
+               <li class="page-item">
+                 <a class="page-link" href="/admin/category?page=<%= currentPage + 1 %>">></a>
+               </li>
+               <% } %>
+
+   </ul>
+ </nav>
+</div>
+
+
+ <!-- Edit Category Modal -->
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
+
+              
+            </div>
+            <div class="modal-body">
+              <form id="editCategoryForm">
+                <p>Category_name</p>
+
+                <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+
+                <input type="hidden" id="categoryId" name="categoryId">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="submitEditCategory()">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const deletebuttons = document.querySelectorAll(".delete-button")
+      const restorebuttons = document.querySelectorAll(".restore-button")
+      const editbuttons = document.querySelectorAll(".edit-button")
+
+      //deleting category
+
+      deletebuttons.forEach(button => {
+        button.addEventListener('click', async () => {
+          const catId = button.getAttribute("data-category-id");
+
+          if (!catId) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Category not found',
+              confirmButtonText: 'OK'
+            });
+            return
+          }
+
+          const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to Delete this category?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Delete!',
+            cancelButtonText: 'Close!'
+          });
+
+          if (result.isConfirmed) {
+            try {
+              const response = await fetch('/admin/delete_category', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ catId })
+              });
+
+              if (response.ok) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Category Deleted',
+                  text: 'The category has been successfully deleted.',
+                  confirmButtonText: 'OK'
+                }).then(() => {
+                  location.reload(); // Reload the page after confirmation
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Failed to Delete',
+                  text: 'Unable to delete the category. Please try again later.',
+                  confirmButtonText: 'OK'
+                });
+              }
+            } catch (error) {
+              console.error('Error while deleting category:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while deleting the category.',
+                confirmButtonText: 'OK'
+              });
+            }
+          }
+        });
+      });
+
+
+      //restoring category
+
+      restorebuttons.forEach(button => {
+        button.addEventListener('click', async () => {
+          const catId = button.getAttribute("data-category-id")
+          if (!catId) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Category not found',
+              confirmButtonText: 'OK'
+            });
+            return
+          }
+          const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to restore this category?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes,Restore!',
+            cancelButtonText: 'Close!'
+          });
+          if (result.isConfirmed) {
+            try {
+              const response = await fetch('/admin/restore_category', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ catId })
+              });
+
+              if (response.ok) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Category Restored',
+                  text: 'The category has been successfully restored.',
+                  confirmButtonText: 'OK'
+                }).then(() => {
+                  location.reload(); // Reload the page
+                })
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Failed to Restore',
+                  text: 'Unable to Restore the category. Please try again later.',
+                  confirmButtonText: 'OK'
+                });
+              }
+            } catch (error) {
+              console.error('Error while restoring category:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while restoring the category.',
+                confirmButtonText: 'OK'
+              });
+            }
+          }
+
+        });
+      });
+
+      //edit category
+
+      editbuttons.forEach(button => {
+        button.addEventListener('click', async () => {
+
+
+          const categoryId = button.getAttribute("data-category-id")
+          const categoryName = button.getAttribute("data-category-name")
+
+          //put into fields in modals
+          document.getElementById('categoryId').value = categoryId;
+          document.getElementById('categoryName').value = categoryName;
+
+          $('#exampleModal').modal('show')
+        })
+      });
+
+
+    })
+    async function submitEditCategory() {
+
+
+      const form = document.getElementById('editCategoryForm');
+      const categoryName = form.categoryName.value.trim();
+      const categoryId = form.categoryId.value.trim();
+
+
+      if (!categoryName) {
+        Swal.fire({
+          icon: "error",
+          title: 'categoryname is empty',
+          text: 'category name field cannot be empty',
+          confirmButtonText: 'OK'
+        })
+        return
+      }
+
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to edit this category?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes,Make changes!',
+        cancelButtonText: 'Close!'
+      });
+
+      if (result.isConfirmed) {
+        const responce = await fetch('/admin/edit_category', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ categoryId, categoryName })
+        })
+
+        if (responce.status === 400) {
+          const data = await responce.json()
+        
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: data.error,
+            confirmButtonText: 'OK'
+          });
+        } else if (responce.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Category Updated',
+            text: 'The category has been successfully updated.',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            location.reload();
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error while updating category',
+            confirmButtonText: 'OK'
+          });
+        }
+      }
+
+
+
+    }
+
+async function addCategory(){
+  const categoryName = document.getElementById('newCategoryName').value.trim()
+
+  if(!categoryName){
+    Swal.fire({
+      icon:'error',
+      title:'category name is empty',
+      text:'category name field is cannot be empty',
+      confirmButtonText:'OK'
+    })
+    return 
+  }
+  try {
+        const response = await fetch('/admin/add_category', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+
+          },
+          body: JSON.stringify({ categoryName })
+        })
+        
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success) {
+            Swal.fire({
+              icon: "success",
+              title: 'category added successfully',
+              text: result.message,
+              confirmButtonText: 'OK'
+            }).then(()=>{
+              window.location.reload()
+            })
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: 'adding Failed',
+              text: result.error,
+              confirmButtonText: 'OK'
+            });
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: 'Error',
+            text: 'An error occurred. Please try again later.',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: 'Network Error',
+          text: 'An error occurred. Please check your network connection.',
+          confirmButtonText: 'OK'
+        });
+      }
+}
+
+
+
+  </script>
+<%- include ('../partial/newAdminfooter')-%>

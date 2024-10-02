@@ -1,55 +1,82 @@
-<%- include ("../partial/header" )-%>    
+<%- include ("../partial/header" )-%>
+    <style>
+        .original-price {
+            color: red !important;
+            /* Sets the text color to red */
+            font-size: 15px !important;
+            text-decoration: line-through;
+            /* Adds a strikethrough effect */
+            margin-right: 5px;
+            /* Adds space between original and offer price */
+        }
+
+        .thumb {
+            position: relative;
+        }
+
+        .offer-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            border-radius: 50%;           
+            z-index: 1;
+            
+        }
+    </style>
     <!-- ***** Header Area Start ***** -->
-<header class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="#" class="logo">
-                        <img src="/images/SnapCart.png">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li class="scroll-to-section">
-                            <form class="form-inline my-2 my-lg-0  " style="width:350px;" method="get" action="/user/search">
-                            <input class="form-control mr-sm-2" type="search"  name="query"  placeholder="Search..." aria-label="Search">
-                            </form>
-                        </li> 
-                        <li class="scroll-to-section"><a href="#top" >Home</a></li>
-                        <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                        <li class="scroll-to-section"><a href="#women">Women's</a></li>
-                        <li class="scroll-to-section"><a href="#kids">Kid's</a></li>
-                        <li class="scroll-to-section"><a href="/user/products">Products</a></li>
-                        <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-                        <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
-                        <li class="submenu">
-                            <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
-                            <ul>
-                                <li><a href="/user/profile">My Account</a></li>
-                                <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="#">My Wallet</a></li>
-                                <li><a href="/user/about">About Us</a></li>
-                                <li><a>Contact Us</a></li>
-                                <li><a href="/user/logout">Logout</a></li>
-                                
-                            </ul>
-                        </li>
-                      
-                    </ul>        
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    
-                </nav>
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="logo">
+                            <img src="/images/SnapCart.png">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section">
+                                <form class="form-inline my-2 my-lg-0  " style="width:350px;" method="get"
+                                    action="/user/searchAndSort">
+                                    <input class="form-control mr-sm-2" type="search" name="query"
+                                        placeholder="Search..." aria-label="Search">
+                                </form>
+                            </li>
+                            <li class="scroll-to-section"><a href="#top">Home</a></li>
+                            <li class="scroll-to-section"><a href="#men">Men's</a></li>
+                            <li class="scroll-to-section"><a href="#women">Women's</a></li>
+                            <li class="scroll-to-section"><a href="#kids">Kid's</a></li>
+                            <li class="scroll-to-section"><a href="/user/products">Products</a></li>
+                            <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                            <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
+                            <li class="submenu">
+                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                                <ul>
+                                    <li><a href="/user/profile">My Account</a></li>
+                                    <li><a href="/order/order_history">My Orders</a></li>
+                                    <li><a href="/user/wallet">My Wallet</a></li>
+                                    <li><a href="/user/about">About Us</a></li>
+                                    <li><a>Contact Us</a></li>
+                                    <li><a href="/user/logout">Logout</a></li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<!-- ***** Header Area End ***** -->
-     <!-- ***** Main Banner Area Start ***** -->
-     <div class="main-banner" id="top">
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <!-- ***** Main Banner Area Start ***** -->
+    <div class="main-banner" id="top">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6">
@@ -59,7 +86,7 @@
                                 <h4>Find your perfect fit
                                     where style meets
                                     confidence</h4>
-                                
+
                                 <div class="main-border-button">
                                     <a href="/user/products">Purchase Now!</a>
                                 </div>
@@ -81,7 +108,8 @@
                                         <div class="hover-content">
                                             <div class="inner">
                                                 <h4>Women</h4>
-                                                <p>Elevate your wardrobe with our women's fashion collection, featuring chic and versatile pieces designed to empower your unique style</p>
+                                                <p>Elevate your wardrobe with our women's fashion collection, featuring
+                                                    chic and versatile pieces designed to empower your unique style</p>
                                                 <div class="main-border-button">
                                                     <a href="/user/category?id=66e18d806bf28e92c6d2e0ea">View More</a>
                                                 </div>
@@ -101,7 +129,9 @@
                                         <div class="hover-content">
                                             <div class="inner">
                                                 <h4>Men</h4>
-                                                <p>Step up your style game with our men's fashion selection, offering modern and classic pieces that redefine sophistication and comfort</p>
+                                                <p>Step up your style game with our men's fashion selection, offering
+                                                    modern and classic pieces that redefine sophistication and comfort
+                                                </p>
                                                 <div class="main-border-button">
                                                     <a href="/user/category?id=66e01b1fb148f23cc19fa331">View More</a>
                                                 </div>
@@ -121,7 +151,9 @@
                                         <div class="hover-content">
                                             <div class="inner">
                                                 <h4>Kids</h4>
-                                                <p>Discover the latest in kids' fashion with playful and comfortable clothing that combines style and fun for every little trendsetter.</p>
+                                                <p>Discover the latest in kids' fashion with playful and comfortable
+                                                    clothing that combines style and fun for every little trendsetter.
+                                                </p>
                                                 <div class="main-border-button">
                                                     <a href="/user/category?id=66e18d856bf28e92c6d2e0f2">View More</a>
                                                 </div>
@@ -141,7 +173,9 @@
                                         <div class="hover-content">
                                             <div class="inner">
                                                 <h4>Accessories</h4>
-                                                <p>Explore our collection of stylish accessories, including shoes, belts, and more, to complete your look with the perfect finishing touches</p>
+                                                <p>Explore our collection of stylish accessories, including shoes,
+                                                    belts, and more, to complete your look with the perfect finishing
+                                                    touches</p>
                                                 <div class="main-border-button">
                                                     <a href="/user/category?id=66e2970551da17d55eb8ba49">View More</a>
                                                 </div>
@@ -166,51 +200,79 @@
                 <div class="col-lg-6">
                     <div class="section-heading">
                         <h2>Men's Latest</h2>
-                       
+
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                       
-                        <a href="/user/category?id=<%= mensProduct[0].category_id._id %>" class="btn btn-outline-dark">View More</a>
+
+                        <a href="/user/category?id=<%= mensProduct[0].category_id._id %>"
+                            class="btn btn-outline-dark">View More</a>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="men-item-carousel">
                         <div class="owl-men-item owl-carousel">
                             <% mensProduct.forEach((element)=> { %>
-                            <div class="item">
-                                <div class="thumb">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="bi bi-suit-heart-fill"></i></a></li>
-                                            <li><a  onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')" href="#"><i class="bi bi-cart-plus-fill"></i></a></li>
+                                <div class="item">
+                                    <div class="thumb">
+                                        <% if (element.variants[0].offer) { %>
+                                            <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
+                                                
+                                            
+                                            <% } %>
+                                                <div class="hover-content">
+                                                    <ul>
+                                                        <li><a onclick="addToWishlist('<%=element._id %>','<%= element.variants[0]._id %>')"
+                                                                href="#"><i class="bi bi-suit-heart-fill"></i></a></li>
+                                                        <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')"
+                                                                href="#"><i class="bi bi-cart-plus-fill"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <a
+                                                    href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>">
+                                                    <img src="/<%= element.variants[0].images[0] %>" class="img-fluid"
+                                                        alt="Responsive product image">
+                                                </a>
+                                    </div>
+                                    <div class="down-content">
+                                        <h4>
+                                            <%= element.product_name %>
+                                        </h4>
+                                        <div class="d-flex">
+                                            <%if(element.variants[0].offer){%>
+                                                <span class="original-price">INR <%= element.variants[0].price %></span>
+                                                <span>INR <%= element.variants[0].discount_price %></span>
+                                                <%}else{%>
+                                                    <span>INR <%= element.variants[0].price %></span>
+                                                    <%}%>
+
+                                        </div>
+
+
+                                        <ul class="stars">
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
                                         </ul>
                                     </div>
-                                    <a href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"> <img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                                 </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        <% }); %>
-                           
+                                <% }); %>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
     <!-- ***** Men Area Ends ***** -->
     <!-- ***** Women Area Starts ***** -->
@@ -224,7 +286,8 @@
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                        <a href="/user/category?id=<%= womensProduct[0].category_id._id %>" class="btn btn-outline-dark">View More</a>
+                        <a href="/user/category?id=<%= womensProduct[0].category_id._id %>"
+                            class="btn btn-outline-dark">View More</a>
                     </div>
                 </div>
             </div>
@@ -235,29 +298,47 @@
                     <div class="women-item-carousel">
                         <div class="owl-women-item owl-carousel">
                             <% womensProduct.forEach((element)=> { %>
-                            <div class="item">
-                                <div class="thumb">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="bi bi-suit-heart-fill"></i></a></li>
-                                            <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')" href="#">><i class="bi bi-cart-plus-fill"></i></a></li>
+                                <div class="item">
+                                    <div class="thumb">
+                                        <% if (element.variants[0].offer) { %>
+                                            <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
+                                            <% } %>
+                                                <div class="hover-content">
+                                                    <ul>
+                                                        <li><a href="#"
+                                                                onclick="addToWishlist('<%=element._id %>','<%= element.variants[0]._id %>')"><i
+                                                                    class="bi bi-suit-heart-fill"></i></a></li>
+                                                        <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')"
+                                                                href="#"><i class="bi bi-cart-plus-fill"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <a
+                                                    href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>">
+                                                    <img src="/<%= element.variants[0].images[0] %>" alt=""></a>
+                                    </div>
+                                    <div class="down-content">
+                                        <h4>
+                                            <%= element.product_name %>
+                                        </h4>
+                                        <div class="d-flex">
+                                            <%if(element.variants[0].offer){%>
+                                                <span class="original-price">INR <%= element.variants[0].price %></span>
+                                                <span>INR <%= element.variants[0].discount_price %></span>
+                                                <%}else{%>
+                                                    <span>INR <%= element.variants[0].price %></span>
+                                                    <%}%>
+
+                                        </div>
+                                        <ul class="stars">
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-half"></i></li>
                                         </ul>
                                     </div>
-                                    <a href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"> <img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                                 </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-half"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        <% }); %>
+                                <% }); %>
 
                         </div>
                     </div>
@@ -278,7 +359,8 @@
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                        <a href="/user/category?id=<%= kidsProduct[0].category_id._id %>" class="btn btn-outline-dark">View More</a>
+                        <a href="/user/category?id=<%= kidsProduct[0].category_id._id %>"
+                            class="btn btn-outline-dark">View More</a>
                     </div>
                 </div>
             </div>
@@ -289,39 +371,57 @@
                     <div class="kid-item-carousel">
                         <div class="owl-kid-item owl-carousel">
                             <% kidsProduct.forEach((element)=> { %>
-                            <div class="item">
-                                <div class="thumb">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="bi bi-suit-heart-fill"></i></a></li>
-                                            <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')" href="#">><i class="bi bi-cart-plus-fill"></i></a></li>
+                                <div class="item">
+                                    <div class="thumb">
+                                        <% if (element.variants[0].offer) { %>
+                                            <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
+                                            <% } %>
+                                                <div class="hover-content">
+                                                    <ul>
+                                                        <li><a href="#"
+                                                                onclick="addToWishlist('<%=element._id %>','<%= element.variants[0]._id %>')"><i
+                                                                    class="bi bi-suit-heart-fill"></i></a></li>
+                                                        <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')"
+                                                                href="#"><i class="bi bi-cart-plus-fill"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <a
+                                                    href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"><img
+                                                        src="/<%= element.variants[0].images[0] %>" alt=""></a>
+                                    </div>
+                                    <div class="down-content">
+                                        <h4>
+                                            <%= element.product_name %>
+                                        </h4>
+                                        <div class="d-flex">
+                                            <%if(element.variants[0].offer){%>
+                                                <span class="original-price">INR <%= element.variants[0].price %></span>
+                                                <span>INR <%= element.variants[0].discount_price %></span>
+                                                <%}else{%>
+                                                    <span>INR <%= element.variants[0].price %></span>
+                                                    <%}%>
+
+                                        </div>
+                                        <ul class="stars">
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
                                         </ul>
                                     </div>
-                                    <a href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"><img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                                 </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <% }); %>
-                           
+                                <% }); %>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- ***** Kids Area Ends ***** -->
-    
+
     <!-- ***** accessoies Area starts ***** -->
 
     <section class="section" id="kids">
@@ -334,7 +434,8 @@
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                        <a href="/user/category?id=<%= accessoris[0].category_id._id %>" class="btn btn-outline-dark">View More</a>
+                        <a href="/user/category?id=<%= accessoris[0].category_id._id %>"
+                            class="btn btn-outline-dark">View More</a>
                     </div>
                 </div>
             </div>
@@ -345,30 +446,48 @@
                     <div class="kid-item-carousel">
                         <div class="owl-kid-item owl-carousel">
                             <% accessoris.forEach((element)=> { %>
-                            <div class="item">
-                                <div class="thumb">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="bi bi-suit-heart-fill"></i></a></li>
-                                            <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')" href="#">><i class="bi bi-cart-plus-fill"></i></a></li>
+                                <div class="item">
+                                    <div class="thumb">
+                                        <% if (element.variants[0].offer) { %>
+                                            <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
+                                            <% } %>
+                                                <div class="hover-content">
+                                                    <ul>
+                                                        <li><a href="#"
+                                                                onclick="addToWishlist('<%=element._id %>','<%= element.variants[0]._id %>')"><i
+                                                                    class="bi bi-suit-heart-fill"></i></a></li>
+                                                        <li><a onclick="addToCart('<%=element._id %>','<%= element.variants[0]._id %>')"
+                                                                href="#"><i class="bi bi-cart-plus-fill"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <a
+                                                    href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"><img
+                                                        src="/<%= element.variants[0].images[0] %>" alt=""></a>
+                                    </div>
+                                    <div class="down-content">
+                                        <h4>
+                                            <%= element.product_name %>
+                                        </h4>
+                                        <div class="d-flex">
+                                            <%if(element.variants[0].offer){%>
+                                                <span class="original-price">INR <%= element.variants[0].price %></span>
+                                                <span>INR <%= element.variants[0].discount_price %></span>
+                                                <%}else{%>
+                                                    <span>INR <%= element.variants[0].price %></span>
+                                                    <%}%>
+
+                                        </div>
+                                        <ul class="stars">
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
+                                            <li><i class="bi bi-star-fill"></i></li>
                                         </ul>
                                     </div>
-                                    <a href="/user/product?proId=<%= element._id %>&varId=<%=element.variants[0]._id %>"><img src="/<%= element.variants[0].images[0] %>" alt=""></a>
                                 </div>
-                                <div class="down-content">
-                                    <h4><%= element.product_name %></h4>
-                                    <span>INR <%= element.variants[0].price %></span>
-                                    <ul class="stars">
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                        <li><i class="bi bi-star-fill"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <% }); %>
-                           
+                                <% }); %>
+
                         </div>
                     </div>
                 </div>
@@ -383,83 +502,110 @@
 
 
 
-    <!-- ***** Best selling product starts ***** -->
-    
+    <!-- ***** Best Selling Products Starts ***** -->
+
     <section class="section" id="bestSelling">
-    
-    <div class="container my-5">
-        <div class="section-heading">
-            <h2>Best Selling Products</h2>
-            
-        </div><br>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col d-flex">
-                <div class="product-card p-3">
-                    <img src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
-                    <h4><%= womensProduct[0].product_name %></h4>
-                    <p class="price">INR <%= womensProduct[0].variants[0].price %></p>
-                    <p class="rating">★★★★★</p>
-                </div>
+        <div class="container my-5">
+            <div class="section-heading text-center">
+                <h2>Best Selling Products</h2>
             </div>
-            <div class="col">
-                <div class="product-card p-3">
-                    <img src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
-                    <h4><%= mensProduct[0].product_name %></h4>
-                    <p class="price">INR <%= mensProduct[0].variants[0].price %></span></p>
-                    <p class="rating">★★★★☆</p>
+            <br>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                <div class="col">
+                    <div class="product-card p-3">
+                        <a
+                            href="/user/product?proId=<%= womensProduct[0]._id %>&varId=<%=womensProduct[0].variants[0]._id %>"><img
+                                src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress"
+                                class="product-img card-img-top img-thumbnail"
+                                style="height: 40vh; object-fit: cover;"></a>
+                        <h4>
+                            <%= womensProduct[0].product_name %>
+                        </h4>
+                        <p class="price">INR <%= womensProduct[0].variants[0].price %>
+                        </p>
+                        <p class="rating">★★★★★</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="product-card p-3">
-                    <img src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress" style="height: 40vh; object-fit: cover;"  class="product-img card-img-top img-thumbnail">
-                    <h4><%= kidsProduct[0].product_name %></h4>
-                    <p class="price">INR <%= kidsProduct[0].variants[0].price %></p>
-                    <p class="rating">★★★★☆</p>
+                <div class="col">
+                    <div class="product-card p-3">
+                        <a
+                            href="/user/product?proId=<%= mensProduct[0]._id %>&varId=<%=mensProduct[0].variants[0]._id %>"><img
+                                src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress"
+                                class="product-img card-img-top img-thumbnail"
+                                style="height: 40vh; object-fit: cover;"></a>
+                        <h4>
+                            <%= mensProduct[0].product_name %>
+                        </h4>
+                        <p class="price">INR <%= mensProduct[0].variants[0].price %>
+                        </p>
+                        <p class="rating">★★★★☆</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="product-card p-3">
-                    <img src="/<%= accessoris[0].variants[0].images[0]%>" alt="dress" style="height: 40vh; object-fit: cover;" class="product-img card-img-top img-thumbnail">
-                    <h4><%= accessoris[0].product_name %></h4>
-                    <p class="price">INR <%= accessoris[0].variants[0].price %></span></p>
-                    <p class="rating">★★★★☆ (65)</p>
+                <div class="col">
+                    <div class="product-card p-3">
+                        <a
+                            href="/user/product?proId=<%= kidsProduct[0]._id %>&varId=<%=kidsProduct[0].variants[0]._id %>"><img
+                                src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress"
+                                class="product-img card-img-top img-thumbnail"
+                                style="height: 40vh; object-fit: cover;"></a>
+                        <h4>
+                            <%= kidsProduct[0].product_name %>
+                        </h4>
+                        <p class="price">INR <%= kidsProduct[0].variants[0].price %>
+                        </p>
+                        <p class="rating">★★★★☆</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="product-card p-3">
+                        <a
+                            href="/user/product?proId=<%= accessoris[0]._id %>&varId=<%=accessoris[0].variants[0]._id %>"><img
+                                src="/<%= accessoris[0].variants[0].images[0] %>" alt="dress"
+                                class="product-img card-img-top img-thumbnail"
+                                style="height: 40vh; object-fit: cover;"></a>
+                        <h4>
+                            <%= accessoris[0].product_name %>
+                        </h4>
+                        <p class="price">INR <%= accessoris[0].variants[0].price %>
+                        </p>
+                        <p class="rating">★★★★☆ (65)</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section" id="end">
-    <div class="container my-5">
-        <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
-            <div class="col">
-                <div class="feature-card p-3">
-                    <img src="/images/delivary.png" alt="Free and Fast Delivery">
-                    <h5>FREE AND FAST DELIVERY</h5>
-                    <p>Free delivery for all orders over $140</p>
+    <section class="section" id="end">
+        <div class="container my-5">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 text-center">
+                <div class="col">
+                    <div class="feature-card p-3">
+                        <img src="/images/delivary.png" alt="Free and Fast Delivery">
+                        <h5>FREE AND FAST DELIVERY</h5>
+                        <p>Free delivery for all orders over $140</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="feature-card p-3">
-                    <img src="/images/24by7.png" alt="24/7 Customer Service">
-                    <h5>24/7 CUSTOMER SERVICE</h5>
-                    <p>Friendly 24/7 customer support</p>
+                <div class="col">
+                    <div class="feature-card p-3">
+                        <img src="/images/24by7.png" alt="24/7 Customer Service">
+                        <h5>24/7 CUSTOMER SERVICE</h5>
+                        <p>Friendly 24/7 customer support</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="feature-card p-3">
-                    <img src="/images/Services.png" alt="Money Back Guarantee">
-                    <h5>MONEY BACK GUARANTEE</h5>
-                    <p>We return money within 30 days</p>
+                <div class="col">
+                    <div class="feature-card p-3">
+                        <img src="/images/Services.png" alt="Money Back Guarantee">
+                        <h5>MONEY BACK GUARANTEE</h5>
+                        <p>We return money within 30 days</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
+    </section>
 
-</section>
-    <!-- ***** Best selling product Ends ***** -->
-    
+    <!-- ***** Best Selling Products Ends ***** -->
+
+
     <!-- ***** Footer Start ***** -->
     <footer>
         <div class="container">
@@ -470,7 +616,7 @@
                             <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
                         </div>
                         <ul>
-                            
+
                             <li><a href="#">SnapCart@company.com</a></li>
                             <li><a href="#">+91 9048763044</a></li>
                         </ul>
@@ -503,32 +649,33 @@
                         <li><a href="#">Tracking ID</a></li>
                     </ul>
                 </div>
-    
+
             </div>
         </div>
     </footer>
-    
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         async function addToCart(product_id, variant_id) {
+            const quantity = 1
             try {
-                const response = await fetch(`/cart/addToCart?Product_id=${product_id}&variant_id=${variant_id}`, {
+                const response = await fetch(`/cart/addToCart`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ product_id, variant_id })
+                    body: JSON.stringify({ product_id, variant_id, quantity })
                 });
-    
+
                 const result = await response.json();
-    
+
                 if (result.success) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Added to cart',
                         showConfirmButton: false,
                         text: result.message,
-                        timer: 1500
+
                     }).then(() => {
                         location.reload();
                     });
@@ -551,9 +698,59 @@
                 });
             }
         }
+
+        async function addToWishlist(productId, variantId) {
+
+
+            try {
+                const response = await fetch(`/wishlist/toWishlist`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId, variantId })
+                })
+                const result = await response.json()
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to wishlist',
+                        showConfirmButton: true,
+                        text: result.message,
+                    })
+
+                } else {
+                    if (result.error == "product already in  wishlist") {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Already Added',
+                            text: result.error,
+                            showConfirmButton: true
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: result.error,
+                            showConfirmButton: true
+                        })
+                    }
+
+                }
+
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    showConfirmButton: true
+                });
+            }
+        }
     </script>
 
 
-    
 
-<%- include ("../partial/footer" )-%>
+
+    <%- include ("../partial/footer" )-%>

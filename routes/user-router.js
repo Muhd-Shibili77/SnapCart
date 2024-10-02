@@ -63,7 +63,9 @@ userrouter.post('/forgetResendOtp',userController.forgetResendOtp)
 
 userrouter.get('/searchAndSort',userController.searchAndSort)
 
-// userrouter.get('/sort',userController.sort)
+userrouter.get('/wallet',userController.userWallet)
+
+
 
 userrouter.get("/logout",userController.user_logout);
 

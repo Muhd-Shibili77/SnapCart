@@ -49,6 +49,7 @@
   .owl-carousel .owl-item img {
     height: 60vh;
     display: block;
+    object-fit: cover;
     width: 100%; }
   .owl-carousel .owl-nav.disabled,
   .owl-carousel .owl-dots.disabled {

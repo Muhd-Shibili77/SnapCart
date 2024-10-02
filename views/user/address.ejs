@@ -54,7 +54,7 @@
                 <ul>
                   <li><a href="#">My Account</a></li>
                   <li><a href="/order/order_history">My Orders</a></li>
-                  <li><a href="#">My Wallet</a></li>
+                  <li><a href="/user/wallet">My Wallet</a></li>
                   <li><a href="/user/about">About Us</a></li>
                   <li><a href="/user/contact">Contact Us</a></li>
                   <li><a href="/user/logout">Logout</a></li>
@@ -110,7 +110,7 @@
             <div class="add-adress d-flex justify-content-end">
               <button href="" class="btn btn-outline-dark " data-toggle="modal" data-target="#addressModal">Add
                 Address</button>
-  
+
             </div>
             <tbody>
               <% if(address.length>0 && typeof address != 'undefined' ) { %>
@@ -162,7 +162,7 @@
 
             </tbody>
           </table>
-         
+
 
 
 
@@ -322,24 +322,40 @@
 
 
   <!-- ------------pagination-------------- -->
-<div class="container mt-5">
-  <nav aria-label="...">
+
+
+
+  <div class="container mt-2" style="background-color: transparent !important; display: flex; justify-content: center;">
+    <nav aria-label="...">
       <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-         <% for(let i =1;i<=totalPage;i++){ %>
 
-          <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-              <a class="page-link" href="/user/address?page=<%= i %>"><%= i %></a>
-            </li>
+        <% if (currentPage !==1 && currentPage==totalPage) { %>
+          <li class="page-item">
+            <a class="page-link" href="/user/address?page=<%= currentPage -1 %>">
+              <</a>
+          </li>
+          <% } %>
 
-      <% } %>
-        
-       
-      <li class="page-item <%= currentPage === totalPage ? 'disabled' : '' %>">
-          <a class="page-link" href="/user/address?page=<%= currentPage + 1 %>">></a>
-        </li>
+
+            <% for(let i=1;i<=totalPage;i++){ %>
+
+              <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="/user/address?page=<%= i %>">
+                  <%= i %>
+                </a>
+              </li>
+
+              <% } %>
+
+                <% if (currentPage !==totalPage) { %>
+                  <li class="page-item">
+                    <a class="page-link" href="/user/address?page=<%= currentPage + 1 %>">></a>
+                  </li>
+                  <% } %>
+
       </ul>
     </nav>
-</div>
+  </div>
 
   <!-- ***** Footer Start ***** -->
   <footer>

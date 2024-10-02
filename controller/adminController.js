@@ -10,7 +10,7 @@ const admin_login = (req, res) => {
   if (req.session.isAdmin) {
     res.redirect("/admin/dashboard");
   } else {
-    res.render("admin/admin-login");
+    res.render("admin/adminLogin");
   }
 };
 
@@ -50,7 +50,7 @@ const admin_dashboard = (req, res) => {
     res.redirect("/user/home");
   }
   if (req.session.isAdmin) {
-    res.render("admin/admin-dashboard");
+    res.render("admin/adminDashboard");
   } else {
     res.redirect("/admin/login");
   }
@@ -70,7 +70,7 @@ const admin_users = async (req, res) => {
     .skip(skip)
     .limit(limit);
 
-    res.render("admin/admin-users", { users,totalPage,currentPage:page });
+    res.render("admin/adminUsers", { users,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -131,7 +131,7 @@ const admin_category = async (req, res) => {
     .skip(skip)
     .limit(limit);
 
-    res.render("admin/admin-catogries", { cat,totalPage,currentPage:page });
+    res.render("admin/adminCategries", { cat,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -238,7 +238,7 @@ const admin_brand = async (req, res) => {
     .limit(limit);
 
 
-    res.render("admin/admin-brand", { brand,totalPage,currentPage:page });
+    res.render("admin/adminBrands", { brand,totalPage,currentPage:page });
   } else {
     res.redirect("/admin/login");
   }
@@ -344,7 +344,7 @@ const orders=async (req,res)=>{
        .skip(skip)
        .limit(limit)
         
-      res.render('admin/admin-orders',{order,totalPage,currentPage:page })
+      res.render('admin/adminOrders',{order,totalPage,currentPage:page })
   }else{
     
       res.redirect('/admin/login')
@@ -372,6 +372,9 @@ const update_orderStatus = async(req,res)=>{
     res.redirect('/admin/login')
   }
 }
+
+
+
 
 const admin_logout = (req, res) => {
   req.session.destroy((err) => {
@@ -402,4 +405,5 @@ module.exports = {
   edit_brand,
   orders,
   update_orderStatus,
+
 };

@@ -93,7 +93,7 @@
                                 <ul>
                                     <li><a href="/user/profile">My Account</a></li>
                                     <li><a href="/order/order_history">My Orders</a></li>
-                                    <li><a href="#">My Wallet</a></li>
+                                    <li><a href="/user/wallet">My Wallet</a></li>
                                     <li><a href="/user/about">About Us</a></li>
                                     <li><a href="/user/contact">Contact Us</a></li>
                                     <li><a href="/user/logout">Logout</a></li>
@@ -187,8 +187,20 @@
                             <span class="badge bg-warning text-dark">4.5 ★</span>
                             <span>(150 Reviews)</span>
                         </div>
-                        <h4 class="text-primary">INR <%= variant.price %>
-                        </h4>
+                        <% if (variant.offer) { %>
+                            <button class="btn btn-outline-secondary btn-sm" style="text-decoration: line-through;" disabled>INR <%= variant.price %></button>
+                            <button class="btn btn-outline-danger" disabled>INR <%=variant.discount_price %></button>
+                            <button class="btn btn-danger " style="border-radius: 50%;" disabled><%= variant.offer.offerPercentage %>% off</button>
+                              
+                            
+                          <% } else { %>
+                            <h4 class="text-primary fw-bold">
+                              INR <%= variant.price %>
+                            </h4>
+                          <% } %>
+                          
+                       
+                        
                         <p>
                             <%= product.product_highlights %>
                         </p>
@@ -252,9 +264,17 @@
                                             onclick="addToCart('<%= product._id %>','<%= variant._id %>')">Add to
                                             cart</button>
                                     </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-outline-dark"><i class="bi bi-heart"></i></button>
-                                    </div>
+                                    <% if(ProductInWishlist) { %>
+                                        <div class="col-md-2">
+                                            <button type="button" onclick="addToWishlist('<%= product._id %>','<%= variant._id %>')" class="btn btn-outline-danger"><i class="bi bi-heart-fill"></i></button>
+                                        </div>
+                                    <% }else{ %>
+                                            <div class="col-md-2">
+                                                <button type="button" onclick="addToWishlist('<%= product._id %>','<%= variant._id %>')" class="btn btn-outline-dark"><i class="bi bi-heart"></i></button>
+                                            </div>
+                                    <% } %>
+
+                                    
                                 </div>
 
 
@@ -275,14 +295,7 @@
                             </div>
                         </div>
 
-                        <form action="" class="mt-5">
-                            <div class="input-group">
-                                <input type="text" id="email" name="email" class="borderless"
-                                    placeholder="Enter Coupon">
-                                <button type="submit" value="submit" class="btn btn-dark px-4 mt-4"
-                                    style="font-size: 0.9rem; margin-left: 250px;">Submit</button>
-                            </div>
-                        </form>
+                        
                     </div>
                 </div>
             </div>
@@ -291,7 +304,7 @@
 
 
     <!-- Related Items -->
-    <div class="section-heading">
+    <div class="section-heading mt-5">
         <h2 class="text-center">Related Products</h2>
     </div>
     <div class="container d-flex">
@@ -382,9 +395,17 @@
     <script>
         async function addToCart(product_id, variant_id) {
             const quantity = document.getElementById('quantity').value
-
+            if(quantity <=0){
+                Swal.fire({
+                    icon:'error',
+                    title:'Invalid quantity',
+                    text:'quantity must need more than zero',
+                    confirmButtonText:'OK'
+                })
+                return 
+            }
             try {
-                const response = await fetch(`/cart/addToCart?Product_id=${product_id}&variant_id=${variant_id}`, {
+                const response = await fetch(`/cart/addToCart`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -415,6 +436,56 @@
                     });
                 }
             } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    showConfirmButton: true
+                });
+            }
+        }
+
+        async function addToWishlist(productId,variantId){
+            
+            try{
+                const response = await fetch(`/wishlist/toWishlist`,{
+                    method:"POST",
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({productId,variantId})
+                })
+                const result = await response.json()
+                console.log(result)
+                if(result.success){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to wishlist',
+                        showConfirmButton: true,
+                        text: result.message,
+                    }).then(() => {
+                        location.reload();
+                    });
+                }else{
+                    if(result.error == "product already in  wishlist"){
+                        Swal.fire({
+                        icon: 'info',
+                        title: 'Already Added',
+                        text: result.error,
+                        showConfirmButton: true
+                    })
+                    }else{
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: result.error,
+                        showConfirmButton: true
+                    })
+                    }
+                   
+                }
+
+            }catch(error){
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',

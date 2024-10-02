@@ -11,12 +11,12 @@ const Brand = require("../model/brandDB");
 
 const generateOrderId = async ()=>{
 
-
     const prefix ='ORD'
     const latestOrder = await Order.findOne().sort({ orderId: -1 }).select('orderId');
     const latestId = latestOrder ? parseInt(latestOrder.orderId.replace(prefix, '')) : 0;
     const newId = latestId + 1;
     return `${prefix}${newId.toString().padStart(5, '0')}`;
+
 }
 
 
@@ -68,8 +68,7 @@ const orderConfrom = async (req,res)=>{
                 return res.status(400).json({success:false,message:'variant not found'})
             }
         }
-
-        
+      
         paymentMethod = paymentMethod === 'cod' ? 'Cash on Delivery' : 'Bank Transfer';
         
         const addressOrder =[{
@@ -96,37 +95,24 @@ const orderConfrom = async (req,res)=>{
         })
         
         
-
         await order.save()
-
         await Cart.findByIdAndDelete(cartId)
         res.status(200).json({success:true,message:'order is placed successfully '})
-
-
 
     }catch(error){
         console.error('error in ordering item',error)
         res.status(500).json({success:false,message:'an error occured,try again........'})
     }
    
-
-
-
-
-
-
 }
 
 
 const orderHistory = async (req,res)=>{
     if(req.session.email){
-        
-        const user = await User.findOne({email:req.session.email})
-        
+    
+        const user = await User.findOne({email:req.session.email}) 
         const order = await Order.find({user:user._id}).populate('items.product').sort({orderId:-1})
-        
-        
-        
+       
         res.render('user/orderHistory',{order})
 
     }else{
@@ -138,11 +124,8 @@ const orderHistory = async (req,res)=>{
 const orderCancel =async (req,res)=>{
     try{
         if(req.session.email){
-            const {orderId }=req.body
-            
-            const order = await Order.findById(orderId)
-            
-            
+            const {orderId }=req.body          
+            const order = await Order.findById(orderId)  
             if(!order){
               return   res.status(400).json({success:false,message:'order not found '})
             }
@@ -154,11 +137,9 @@ const orderCancel =async (req,res)=>{
             await Order.findByIdAndUpdate(orderId,{orderStatus:'Cancelled'})
             res.status(200).json({success:true,message:'order cancelled succesfully'})
 
-
         }else{
             res.redirect('/user/login')
         }
-
 
     }catch(error){
         console.log('Error occurred while deleting cart items:', error);
@@ -170,8 +151,6 @@ const orderCancel =async (req,res)=>{
 const orderDetails = async (req,res)=>{
     if(req.session.email){
         const orderId = req.query.orderId
-        
-        
         const order = await Order.findOne({_id:orderId}).populate('items.product')
                
         res.render('user/orderDetails',{order})
@@ -181,8 +160,6 @@ const orderDetails = async (req,res)=>{
 }
 
  
-
-
 
 
 
