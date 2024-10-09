@@ -1,7 +1,7 @@
 <%- include ("../partial/header" )-%>
 
 
-<style>
+  <style>
     .wallet-card {
       border-radius: 15px;
       background: linear-gradient(135deg, #095b1d, #fafafa);
@@ -10,171 +10,360 @@
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
+
     .wallet-card h4 {
       margin-bottom: 20px;
     }
+
     .wallet-buttons .btn {
       width: 100%;
     }
+
     .transaction-history {
       max-height: 400px;
       overflow-y: auto;
     }
+
     .transaction-list {
       background-color: #f9f9f9;
       border-radius: 10px;
       padding: 20px;
     }
+
     .transaction-item {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
       border-bottom: 1px solid #e0e0e0;
     }
+
     .transaction-item:last-child {
       border-bottom: none;
     }
+
     .transaction-item .icon {
       margin-right: 10px;
     }
-    .wallet{
-        margin-top: 20vh;
+
+    .wallet {
+      margin-top: 20vh;
     }
   </style>
 
-    <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="#" class="logo">
-                            <img src="/images/SnapCart.png">
-                        </a>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav">
-                            
-                            <li class="scroll-to-section"><a href="/user/home">Home</a></li>
-                            <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
-                            <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
-                            <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
-                            <li class="scroll-to-section"><a href="/user/products">Products</a></li>
-                            <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-                            <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
-                            <li class="submenu">
-                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
-                                <ul>
-                                    <li><a href="/user/profile">My Account</a></li>
-                                    <li><a href="/order/order_history">My Orders</a></li>
-                                    <li><a href="/user/wallet">My Wallet</a></li>
-                                    <li><a href="/user/about">About Us</a></li>
-                                    <li><a href="/user/contact">Contact Us</a></li>
-                                    <li><a href="/user/logout">Logout</a></li>
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+              <img src="/images/SnapCart.png">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
 
-                                </ul>
-                            </li>
+              <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+              <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+              <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+              <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+              <li class="scroll-to-section"><a href="/user/products">Products</a></li>
+              <li class="scroll-to-section">
+                <a href="/cart" class="d-flex align-items-center">
+                    <i class="bi bi-cart"></i>
+                    <!-- Badge for Cart Count next to the cart icon -->
+                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <%=cartCount%>
+                    </span>
+                </a>
+            </li>
+              <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
+              <li class="submenu">
+                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                <ul>
+                  <li><a href="/user/profile">My Account</a></li>
+                  <li><a href="/order/order_history">My Orders</a></li>
+                  <li><a href="/user/wallet">My Wallet</a></li>
+                  <li><a href="/user/about">About Us</a></li>
+                  <li><a href="/user/contact">Contact Us</a></li>
+                  <li><a href="/user/logout">Logout</a></li>
 
-                        </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
+                </ul>
+              </li>
 
-                    </nav>
-                </div>
-            </div>
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+
+          </nav>
         </div>
-    </header>
-    <!-- ***** Header Area End ***** -->
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
 
-    <div class="wallet">
+  <div class="wallet">
 
-   
+
     <div class="container my-5">
-        <!-- Wallet Section -->
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="wallet-card">
-              <h4>Your Wallet</h4>
-              <p class="display-4">₹750.00</p>
-              <div class="d-flex justify-content-around wallet-buttons mt-4">
-                <button class="btn btn-light btn-lg text-success">Add Funds</button>
-              </div>
-            </div>
-          </div>
-        </div>
-    
-        <!-- Transaction History -->
-        <div class="row justify-content-center mt-5">
-          <div class="col-md-8">
-            <h4 class="text-center mb-4">Transaction History</h4>
-            <div class="transaction-list">
-              <div class="transaction-item">
-                <span><i class="bi bi-arrow-down-circle-fill text-success icon"></i> Payment Received (Order #54321)</span>
-                <span class="text-success">+₹150.00</span>
-              </div>
-              <div class="transaction-item">
-                <span><i class="bi bi-arrow-up-circle-fill text-danger icon"></i> Funds Withdrawn</span>
-                <span class="text-danger">-₹75.00</span>
-              </div>
-              <div class="transaction-item">
-                <span><i class="bi bi-arrow-down-circle-fill text-success icon"></i> Added Funds</span>
-                <span class="text-success">+₹300.00</span>
-              </div>
-              <!-- Add more transaction items here -->
+      <!-- Wallet Section -->
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="wallet-card">
+            <h4>Your Wallet</h4>
+            <p class="display-4">₹<%=wallet.balanceAmount %>
+            </p>
+            <div class="d-flex justify-content-around wallet-buttons mt-4">
+              <button class="btn btn-light btn-lg text-success" type="button" data-toggle="modal"
+                data-target="#addFundsModal">Add Funds</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
+      <!-- Transaction History -->
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+          <h4 class="text-center mb-4">Transaction History</h4>
+          <div class="transaction-list">
 
-       <!-- ***** Footer Start ***** -->
-       <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="first-item">
-                        <div class="logo">
-                            <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
-                        </div>
-                        <ul>
-
-                            <li><a href="#">SnapCart@company.com</a></li>
-                            <li><a href="#">+91 9048763044</a></li>
-                        </ul>
+            <% if(wallet.wallet_history.length>0){ %>
+              <% wallet.wallet_history.forEach((transaction)=>{ %>
+                <div class="transaction-item">
+                  <% if (transaction.transactionType==='credited' ) { %>
+                    <span><i class="bi bi-arrow-down-circle-fill text-success icon"></i>
+                      <%= transaction.description %>
+                    </span>
+                    <span class="text-success">+₹<%= transaction.amount %></span>
+                    <% } else{ %>
+                      <span><i class="bi bi-arrow-up-circle-fill text-danger icon"></i>
+                        <%= transaction.description %>
+                      </span>
+                      <span class="text-danger">-₹<%= transaction.amount %></span>
+                      <% } %>
+                </div>
+                <% }); %>
+                  <% }else{ %>
+                    <div class="text-center text-muted">
+                      <p>No transactions found.</p>
                     </div>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Shopping &amp; Categories</h4>
-                    <ul>
-                        <li><a href="#">Men’s Shopping</a></li>
-                        <li><a href="#">Women’s Shopping</a></li>
-                        <li><a href="#">Kid's Shopping</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Useful Links</h4>
-                    <ul>
-                        <li><a href="#">Homepage</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Help &amp; Information</h4>
-                    <ul>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">FAQ's</a></li>
-                        <li><a href="#">Shipping</a></li>
-                        <li><a href="#">Tracking ID</a></li>
-                    </ul>
-                </div>
+                    <% } %>
 
-            </div>
+                      <!-- Add more transaction items here -->
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </div>
 
-    <%- include ("../partial/footer" )-%>
+
+  <!-- ***** Footer Start ***** -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="first-item">
+            <div class="logo">
+              <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
+            </div>
+            <ul>
+
+              <li><a href="#">SnapCart@company.com</a></li>
+              <li><a href="#">+91 9048763044</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <h4>Shopping &amp; Categories</h4>
+          <ul>
+            <li><a href="#">Men’s Shopping</a></li>
+            <li><a href="#">Women’s Shopping</a></li>
+            <li><a href="#">Kid's Shopping</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Homepage</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3">
+          <h4>Help &amp; Information</h4>
+          <ul>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">FAQ's</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Tracking ID</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal for Adding Funds -->
+  <div class="modal fade" id="addFundsModal" tabindex="-1" aria-labelledby="addFundsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addFundsModalLabel">Add Funds to Wallet</h5>
+
+        </div>
+        <div class="modal-body">
+          <form id="addFundsForm">
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount (₹)</label>
+              <input type="number" class="form-control" id="amount" required placeholder="Enter amount">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="confirmAddFundsBtn" onclick="AddFund()">Add Funds</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    async function AddFund() {
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+
+      const amount = document.getElementById('amount').value;
+
+      if (!amount) {
+        Toast.fire({
+          icon: "error",
+          title: "amount is empty"
+        });
+        return
+      }
+      if (isNaN(amount)) {
+        Toast.fire({
+          icon: "error",
+          title: "Invalid amount. Please enter a number."
+        });
+        return;
+      }
+      if (parseFloat(amount) <= 0) {
+        Toast.fire({
+          icon: "error",
+          title: "Amount must be greater than zero."
+        });
+        return;
+      }
+      const maxAmount = 1000000;
+      if (parseFloat(amount) > maxAmount) {
+        Toast.fire({
+          icon: "error",
+          title: `Amount cannot exceed ${maxAmount}.`
+        });
+        return;
+      }
+      try {
+        const response = await fetch('/wallet/addFund', {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          method: 'POST',
+          body: JSON.stringify({ amount })
+        });
+        if (response.ok) {
+          const result = await response.json()
+
+          
+
+          const options = {
+            key: 'rzp_test_O2YoMsBVi1iYWO',
+            amount: result.amount,
+            currency: result.currency,
+            name: 'Your wallet',
+            order_id: result.id,
+            description: "Adding fund to wallet",
+            handler: async function (response) {
+              try {
+              
+
+                
+                const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
+                
+                const responce = await fetch('/wallet/verifyPayment', {
+                  method: "POST",
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ razorpay_order_id, razorpay_payment_id, razorpay_signature, amount: result.amount })
+                })
+
+
+                const data = await responce.json();
+
+                if (data.success) {
+                  Swal.fire("Success", "Funds added successfully!", "success").then(() => {
+                    location.reload();  
+                  });
+                } else {
+                  Swal.fire("Error", "Payment verification failed. Please try again.", "error");
+                }
+
+
+              } catch (error) {
+                console.error('Error verifying payment:', error);
+                swal("Error", "An error occurred while verifying the payment. Please try again.", "error");
+              }
+
+            },
+
+
+            prefill: {
+              name: 'Shibili',
+              email: 'shibilishanu888@gmail.com',
+              contact: '9048840803'
+            },
+            theme: {
+              color: '#000000'
+            }
+          }
+
+          const razorpay = new Razorpay(options);
+          razorpay.open();
+
+
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'failed to create order',
+          })
+
+        }
+
+      } catch (error) {
+        console.error('Error adding funds:', error);
+        swal("Error", "An error occurred while adding funds. Please try again.", "error");
+      }
+
+
+
+
+    }
+  </script>
+  <%- include ("../partial/footer" )-%>

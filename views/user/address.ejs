@@ -47,14 +47,22 @@
               <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
               <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
               <li class="scroll-to-section"><a href="/user/products">Products</a></li>
-              <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+              <li class="scroll-to-section">
+                <a href="/cart" class="d-flex align-items-center">
+                    <i class="bi bi-cart"></i>
+                    <!-- Badge for Cart Count next to the cart icon -->
+                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <%=cartCount%>
+                    </span>
+                </a>
+            </li>
               <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
               <li class="submenu">
                 <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                 <ul>
                   <li><a href="#">My Account</a></li>
                   <li><a href="/order/order_history">My Orders</a></li>
-                  <li><a href="/user/wallet">My Wallet</a></li>
+                  <li><a href="/wallet">My Wallet</a></li>
                   <li><a href="/user/about">About Us</a></li>
                   <li><a href="/user/contact">Contact Us</a></li>
                   <li><a href="/user/logout">Logout</a></li>
@@ -96,7 +104,12 @@
 
                 <li>
                   <p class="fw-bold mt-4" style="font-weight: 800;">My Wishlist</p>
-                </li>
+                  <li><a href="/wishlist">List</a></li>
+              </li>
+                <li>
+                  <p class="fw-bold mt-4" style="font-weight: 800;">My Wallet</p>
+                  <li><a href="/wallet">wallet</a></li>
+              </li>
               </ul>
 
             </div>

@@ -37,14 +37,22 @@
                         <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                         <li class="scroll-to-section"><a href="/user/products">Products</a></li>
-                        <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                        <li class="scroll-to-section">
+                            <a href="/cart" class="d-flex align-items-center">
+                                <i class="bi bi-cart"></i>
+                                <!-- Badge for Cart Count next to the cart icon -->
+                                <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <%=cartCount%>
+                                </span>
+                            </a>
+                        </li>
                         <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
                             <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                             <ul>
                                 <li><a href="#">My Account</a></li>
                                 <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="/user/wallet">My Wallet</a></li>
+                                <li><a href="/wallet">My Wallet</a></li>
                                 <li><a href="/user/about">About Us</a></li>
                                 <li><a href="/user/contact">Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
@@ -83,6 +91,10 @@
                                 <p class="fw-bold mt-4" style="font-weight: 800;">My Wishlist</p>
                                 <li><a href="/wishlist">List</a></li>
                             </li>
+                            <li>
+                                <p class="fw-bold mt-4" style="font-weight: 800;">My Wallet</p>
+                                <li><a href="/wallet">wallet</a></li>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -106,6 +118,17 @@
                         <div class="col-md-8 offset-md-2">
                             <label class="labels">Email</label>
                             <input type="text" class="form-control" placeholder="" value="<%= user.email %>" disabled>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-8 offset-md-2">
+                            <label class="labels">Referal Code</label>
+                            <div class="d-flex">
+
+                            
+                            <input type="text" class="form-control" id="referralCode" value="<%= user.referalCode %>" disabled>
+                            <button class="btn btn-success ml-3" type="button" id="copyButton">Copy</button>
+                        </div>
                         </div>
                     </div>
                     <div class="row mt-4">
@@ -330,6 +353,34 @@
             });
         }
     }
+
+    document.getElementById('copyButton').addEventListener('click', function() {
+        const referralCode = document.getElementById('referralCode').value;
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        navigator.clipboard.writeText(referralCode).then(() => {
+            Toast.fire({
+            icon: "success",
+            title: "Referral code copied to clipboard!"
+          });
+            
+        }).catch(err => {
+            Toast.fire({
+            icon: "error",
+            title: "Failed to copy"
+          });
+            console.error('Failed to copy:', err);
+        });
+    })
 </script>
 
 <%- include('../partial/footer') -%>

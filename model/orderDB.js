@@ -60,6 +60,21 @@ const orderSchema = new mongoose.Schema({
         price:{
             type:Number,
             required:true
+        },
+        isReturnRequested: {
+            type: Boolean,
+            default: false
+        },
+        isAdminAcceptedReturn: {
+            type: String,
+            
+            enum: ['Pending', 'Accepted', 'Rejected']
+        },
+        reasonOfReturn: {
+            type: String
+        },
+        additionalReason: {
+            type: String
         }
     }],
     paymentMethod:{
@@ -67,9 +82,32 @@ const orderSchema = new mongoose.Schema({
         required:true,
         enum:['Cash on Delivery', 'Bank Transfer']
     },
+    razorpayOrderId: {
+        type: String,
+        default: null,
+        sparse: true
+    },
+    paymentStatus: {
+        type: String,
+        default: 'Pending',
+        enum: ['Pending', 'Paid', 'Failed'] 
+    },
     totalAmount:{
         type:Number,
         required:true
+    },
+    discountAmount: {  
+        type: Number,
+        default: 0
+    },
+    payableAmount: {
+        type: Number,
+        required: true
+    },
+    couponApplied: {  
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Coupon',
+        required: false
     },
     orderStatus:{
         type:String,

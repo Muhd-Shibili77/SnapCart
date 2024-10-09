@@ -83,7 +83,7 @@
            </a>
          </li>
          <li class="sidebar-item">
-           <a class="sidebar-link" href="#" aria-expanded="false">
+           <a class="sidebar-link" href="/admin/coupon" aria-expanded="false">
              <span>
               <i class="ti ti-ticket"></i>
 
@@ -93,14 +93,7 @@
            </a>
          </li>
         
-         <li class="sidebar-item">
-           <a class="sidebar-link" href="#" aria-expanded="false">
-             <span>
-              <i class="bi bi-credit-card"></i>
-             </span>
-             <span class="hide-menu">Payment</span>
-           </a>
-         </li>
+         
          <li class="sidebar-item">
            <a class="sidebar-link" href="/admin/logout" aria-expanded="false">
              <span>
@@ -153,6 +146,7 @@
             <th scope="col">userId</th>
             <th scope="col">paymentType</th>
             <th scope="col">order status</th>
+            <th scope="col"></th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -176,14 +170,24 @@
                          element.orderStatus === 'Pending' ? 'btn-outline-warning' : 
                          element.orderStatus === 'Processing' ? 'btn-outline-primary' : 
                          element.orderStatus === 'Shipped' ? 'btn-outline-info' : 
-                         element.orderStatus === 'Delivered ' ? 'btn-outline-success' : 
+                         element.orderStatus === 'Delivered' ? 'btn-outline-success' : 
                          element.orderStatus === 'Cancelled' ? 'btn-outline-danger' : ''
                          %>" disabled>
                     <%= element.orderStatus %>
                   </button>
                 </td>
                 <td>
-                  <% if(element.orderStatus != 'Cancelled' && element.orderStatus != 'Delivered ' ) { %>
+                  <%let returnrequest = false;
+                  element.items.forEach((item)=>{
+                   if( item.isAdminAcceptedReturn==='Pending'){
+                    returnrequest=true;
+                   }})%>
+                   <% if (returnrequest==true) {%>
+                    <button type="button" class="btn" style="border: 0cap;" disabled><i class="bi bi-bell" style="color: red;"></i></button>
+                    <%}%>
+                </td>
+                <td>
+                  <% if(element.orderStatus != 'Cancelled' && element.orderStatus != 'Delivered' ) { %>
                     <button class="btn btn-outline-secondary toggle-details-btn"><i
                         class="bi bi-info-circle-fill"></i></button>
 
@@ -227,6 +231,32 @@
                                   <p><strong>Quantity:</strong>
                                     <%= item.quantity %>
                                   </p>
+                                  <p><strong>Price:</strong> ₹<%= item.price.toFixed(2) %></p>
+                                  <button class="btn <%= 
+                                         element.orderStatus === 'Pending' ? 'btn-warning' : 
+                                         element.orderStatus === 'Processing' ? 'btn-primary' : 
+                                         element.orderStatus === 'Shipped' ? 'btn-info' : 
+                                         element.orderStatus === 'Delivered' ? 'btn-primary' : 
+                                         element.orderStatus === 'Cancelled' ? 'btn-danger' : ''
+                                         %>" disabled>
+                                    <%= element.orderStatus %>
+                                  </button>
+                                 <% if(item.isAdminAcceptedReturn==="Rejected" || item.isAdminAcceptedReturn==="Accepted"){ %>
+                                  <button class="mx-4 btn <%= item.isAdminAcceptedReturn === 'Rejected' ? 'btn-danger' : 'btn-secondary' %>" disabled><%= item.isAdminAcceptedReturn === 'Rejected' ? 'Request Rejected' : 'Request Accepted' %></button>
+
+                                 <% }else{ %>
+                                    <% if(item.isReturnRequested){ %>
+                                      <button class="btn btn-warning mx-4" 
+                                      data-item-id="<%=item._id %>" 
+                                      data-order-id="<%=element._id %>"
+                                      data-reason="<%=item.reasonOfReturn%>"
+                                      data-additonalReason = "<%=item.additionalReason%>"
+                                      data-bs-toggle="modal" data-bs-target="#retrunModal" >
+                                        Return Requested
+                                      </button>
+                                 <%  } %>
+                               <% } %>
+                                
                                 </td>
                               </div>
                               <td>
@@ -320,7 +350,7 @@
              <option value="Pending">Pending</option>
              <option value="Processing">Processing</option>
              <option value="Shipped">Shipped</option>
-             <option value="Delivered ">Delivered</option>
+             <option value="Delivered">Delivered</option>
              <option value="Cancelled">Cancelled</option>
            </select>
            <button class="btn btn-primary mt-2" type="button" onclick="changeStatus()">Update Status</button>
@@ -339,41 +369,91 @@
 
 </div>
 
+
+ <!-- Modal -->
+ <div class="modal fade" id="retrunModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+ aria-hidden="true">
+ <div class="modal-dialog" role="document">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h5 class="modal-title" id="exampleModalLabel">Return Request</h5>
+
+       
+     </div>
+     <div class="modal-body">
+      
+         <input type="hidden" id="hiddenOrderIdReturn">
+         <input type="hidden" id="hiddenItemId">
+         <div class="mb-4">
+          <div class="d-flex">
+              <strong>Reason:</strong>
+              <p id="reason" class="ml-2"></p>
+          </div>
+          <div class="d-flex mt-3">
+              <strong>Additional Reason:</strong>
+              <p id="Additional Reason" class="ml-2"></p>
+          </div>
+      </div>
+         
+
+
+       
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-success" onclick="Accept()">Accept Request</button>
+       <button type="button" class="btn btn-danger" onclick="Reject()">Reject Request</button>
+       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+     </div>
+   </div>
+ </div>
+</div>
+
+</div>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+  const toggleDetailsButtons = document.querySelectorAll('.toggle-details-btn');
+  const editbuttons = document.querySelectorAll('.edit-status-btn');
+  const returnButtons = document.querySelectorAll('[data-bs-target="#retrunModal"]');  
 
-      const toggleDetailsButtons = document.querySelectorAll('.toggle-details-btn');
-      const editbuttons = document.querySelectorAll('.edit-status-btn');
+  returnButtons.forEach((button) => {
+    button.addEventListener('click', () => {
 
-      editbuttons.forEach((button) => {
-        button.addEventListener('click', () => {
-          const orderId = button.getAttribute('data-order-id');
-
-
-          document.getElementById('hiddenOrderId').value = orderId;
-        })
-      })
-
-      toggleDetailsButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-
-          const orderRow = button.closest('tr');
-
-          // Find the next sibling order details row
-          const orderDetailsRow = orderRow.nextElementSibling;
-
-          // Toggle the display of the order details row
-          if (orderDetailsRow && orderDetailsRow.classList.contains('order-details-row')) {
-            if (orderDetailsRow.style.display === 'none') {
-              orderDetailsRow.style.display = 'table-row';
-            } else {
-              orderDetailsRow.style.display = 'none';
-            }
-          }
-        });
-      });
+      const reason = button.getAttribute('data-reason');
+      const additionalReason = button.getAttribute('data-additonalReason');  
+      const orderId = button.getAttribute('data-order-id')
+      const itemId = button.getAttribute('data-item-id')
+      
+      document.getElementById('hiddenOrderIdReturn').value=orderId
+      document.getElementById('hiddenItemId').value=itemId
+      document.getElementById('reason').textContent = reason;
+      document.getElementById('Additional Reason').textContent = additionalReason;
     });
+  });
+
+  editbuttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const orderId = button.getAttribute('data-order-id');
+      document.getElementById('hiddenOrderId').value = orderId;
+    });
+  });
+
+  toggleDetailsButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const orderRow = button.closest('tr');
+      const orderDetailsRow = orderRow.nextElementSibling;
+
+      if (orderDetailsRow && orderDetailsRow.classList.contains('order-details-row')) {
+        orderDetailsRow.style.display = orderDetailsRow.style.display === 'none' ? 'table-row' : 'none';
+      }
+    });
+  });
+});
+
 
 
 
@@ -416,11 +496,150 @@
         console.error('Error:', error);
         Swal.fire('Error!', 'There was a problem processing your request.', 'error');
       }
+    }
+
+    async function Reject(){
+      const orderId = document.getElementById('hiddenOrderIdReturn').value
+      const itemId = document.getElementById('hiddenItemId').value
+      if(!orderId){
+        Swal.fire({
+          icon:'error',
+          title:'orderId is empty',
+          confirmButtonText:'OK'
+        })
+        return
+      }
+      if(!itemId){
+        Swal.fire({
+          icon:'error',
+          title:'itemId is empty',
+          confirmButtonText:'OK'
+        })
+        return
+      }
 
 
+      const result = await Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to reject this request?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Close!'
+        });
+
+        try{
+          if(result.isConfirmed){
+          const responce = await fetch('/admin/rejectReturn', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderId, itemId })
+          })
+          const data = await responce.json()
+          if(responce.ok){
+            if(data.success){
+              Swal.fire({
+                   icon:'success',
+                   title:'Request updated',
+                   text:data.message,
+                   confirmButtonText:'OK'
+               }).then(()=>{
+                location.reload()
+               })
+            }else{
+              Swal.fire({
+                   icon:'error',
+                   title:'error in return request updation',
+                   text:data.error,
+                   confirmButtonText:'OK'
+               })
+            }
+          }else{
+            Swal.fire('Error!', 'Failed to reject the request', 'error');
+          }
+        }
+        
+        
+        }catch(error){
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+       
+    }
+
+    async function Accept(){
+      const orderId = document.getElementById('hiddenOrderIdReturn').value
+      const itemId = document.getElementById('hiddenItemId').value
+      if(!orderId){
+        Swal.fire({
+          icon:'error',
+          title:'orderId is empty',
+          confirmButtonText:'OK'
+        })
+        return
+      }
+      if(!itemId){
+        Swal.fire({
+          icon:'error',
+          title:'itemId is empty',
+          confirmButtonText:'OK'
+        })
+        return
+      }
 
 
+      const result = await Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to accept  this request?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Close!'
+        });
 
+        try{
+          if(result.isConfirmed){
+          const responce = await fetch('/admin/acceptReturn', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderId, itemId })
+          })
+          const data = await responce.json()
+          if(responce.ok){
+            if(data.success){
+              Swal.fire({
+                   icon:'success',
+                   title:'return request updated',
+                   text:data.message,
+                   confirmButtonText:'OK'
+               }).then(()=>{
+                location.reload();
+               })
+            }else{
+              Swal.fire({
+                   icon:'error',
+                   title:'error in return request updation',
+                   text:data.error,
+                   confirmButtonText:'OK'
+               })
+            }
+          }else{
+            Swal.fire('Error!', 'Failed to accept the request', 'error');
+          }
+        }
+        
+        
+        }catch(error){
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+       
     }
   </script>
 

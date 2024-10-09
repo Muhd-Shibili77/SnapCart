@@ -4,6 +4,7 @@ const upload = require("../config/multer");
 const adminController = require('../controller/adminController')
 const productController =require('../controller/productController')
 const offerController = require('../controller/offerController')
+const couponController = require('../controller/couponController')
 
 adminrouter.get("/login",adminController.admin_login);
 
@@ -74,6 +75,20 @@ adminrouter.post("/updateCategoryOffer",offerController.updateCategoryOffer);
 adminrouter.post("/removeCategoryOffer",offerController.removeCategoryOffer);
 
 adminrouter.post('/update_orderStatus',adminController.update_orderStatus)
+
+adminrouter.post('/rejectReturn',adminController.rejectReturn)
+
+adminrouter.post('/acceptReturn',adminController.acceptReturn)
+
+adminrouter.get('/coupon',couponController.coupon)
+
+adminrouter.post('/addCoupon',couponController.addCoupon)
+
+adminrouter.post('/editCoupon',couponController.editCoupon)
+
+adminrouter.post('/deleteCoupon',couponController.deleteCoupon)
+
+adminrouter.post('/downlodReport',adminController.downlodReport)
 
 adminrouter.get("/logout",adminController.admin_logout);
 

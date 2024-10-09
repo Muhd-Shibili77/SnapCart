@@ -26,9 +26,10 @@
 
                     </div>
                     <div class="input-group">
-
                         <input type="password" id="password" class="borderless" name="password" placeholder="Password" required>
-
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="referalCode" class="borderless" name="referalCode" placeholder="Referal code(optional)">
                     </div>
 
                     <div class="row pt-3">
@@ -66,10 +67,10 @@
             const email = document.getElementById('email').value.trim()
             const phone = document.getElementById('phone').value.trim()
             const password = document.getElementById('password').value.trim()
+            const referalCode = document.getElementById('referalCode').value
             const submit = document.getElementById('createAccount')
 
-            submit.innerText='submited'
-            submit.disabled = true
+           
             
 
 
@@ -171,14 +172,14 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ name, email, phone, password })
+                    body: JSON.stringify({ name, email, phone, password, referalCode })
                 });
 
                 const result = await response.json(); // Always parse the response as JSON
 
                 // Check the response status
                 if (response.ok) {
-                    // Show success SweetAlert
+                   if(result.success){
                     Swal.fire({
                         icon: 'success',
                         title: 'OTP sent',
@@ -187,6 +188,15 @@
                     }).then(() => {
                         window.location.href = '/user/otp' // Reload the page after closing the alert
                     });
+                   }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message,
+                        confirmButtonText: 'OK'
+                    });
+                   }
+                    
                 } else {
                     // Show specific SweetAlert based on error message
                     Swal.fire({

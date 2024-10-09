@@ -2,12 +2,26 @@ const User = require("../model/userdb");
 const Product = require("../model/productDB");
 const Category = require("../model/categoryDB");
 const Brand = require("../model/brandDB");
-const Cart = require("../model/wishlistDB");
+const Cart = require("../model/cartDb");
 const Wishlist = require("../model/wishlistDB");
 
 const wishlistGet = async (req, res) => {
   if (req.session.email) {
     const user = await User.findOne({ email: req.session.email });
+    
+    const cart = await Cart.findOne({ user: user._id }).populate(
+      "items.product"
+    );
+   
+
+    let cartCount=0;
+    if(cart){
+       cartCount  = cart.items.length;
+    }
+
+    
+    
+
     const wishlist = await Wishlist.findOne({ user_id: user._id })
     .populate({
       path: 'items.product',
@@ -20,9 +34,9 @@ const wishlistGet = async (req, res) => {
     
     if (wishlist && wishlist.items) {
       const products = wishlist.items.filter(item => !item.product.isDelete);
-      res.render("user/wishlist", { products });
+      res.render("user/wishlist", { products,cartCount });
     } else {
-      res.render("user/wishlist", { products: [] });
+      res.render("user/wishlist", { products: [],cartCount });
     }
   } else {
     res.redirect("/user/login");

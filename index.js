@@ -25,8 +25,10 @@ const googleAuth= require('./routes/google-router')
 const cartrouter = require('./routes/cart-router')
 const orderrouter = require('./routes/order-router')
 const wishlistrouter = require('./routes/wishlist-router')
+const walletrouter = require('./routes/wallet-router')
 const User = require('./model/userdb')
 const OTP= require("./model/otpdb")
+
 require('./config/auth')
 app.use(session({
     secret:process.env.SESSION_SECRET || 'secert',
@@ -54,6 +56,7 @@ app.use('/admin',adminrouter)
 app.use('/cart',cartrouter)
 app.use('/order',orderrouter)
 app.use('/wishlist',wishlistrouter)
+app.use('/wallet',walletrouter)
 
 
 

@@ -4,15 +4,26 @@ const Brand = require("../model/brandDB");
 const Product = require("../model/productDB");
 const Cart = require("../model/cartDb");
 const Address = require("../model/AddressDB");
+const Coupon = require('../model/couponDB')
 
 const cart = async (req, res) => {
   try {
     if (req.session.email) {
       const user = await User.findOne({ email: req.session.email });
-
+      
       const cart = await Cart.findOne({ user: user._id }).populate(
         "items.product"
       );
+      
+
+    let cartCount=0;
+    if(cart){
+       cartCount  = cart.items.length;
+    }
+
+    
+
+      
 
       if (cart && cart.items.length > 0) {
         for (let item of cart.items) {
@@ -27,7 +38,7 @@ const cart = async (req, res) => {
         }
       }
 
-      res.render("user/cart", { cart });
+      res.render("user/cart", { cart,cartCount });
     } else {
       res.redirect("/user/login");
     }
@@ -208,14 +219,23 @@ const cartCheckout = async (req, res) => {
   if (req.session.email) {
     
     const user = await User.findOne({ email: req.session.email });
+ 
+    
+   
     const cart = await Cart.findOne({ user: user._id })
     .populate("items.product");
-
+  
     if (cart && cart.items.length > 0) {
       for (let item of cart.items) {
         const variant = item.product.variants.find((a) => a._id.toString() === item.variantId);
         if (variant) {
           item.price = variant.price;
+        }
+        if(item.product.isDelete){
+          return res.json({
+            success: false,
+            message: "This product is currently unavailable",
+          });
         }
         if (variant.stock < item.quantity) {
           return res.json({
@@ -244,10 +264,19 @@ const cartCheckoutorder = async (req,res)=>{
     const address = await Address.find({ userId: user._id });
     const cart = await Cart.findOne({ user: user._id })
     .populate("items.product");
+    
+
+    let cartCount=0;
+    if(cart){
+       cartCount  = cart.items.length;
+    }
+
+    
+
     if(!cart){
       res.redirect('/user/home')
     }else{
-      res.render('user/cartCheckout',{address,cart})
+      res.render('user/cartCheckout',{address,cart,cartCount})
     }
   }else{
     res.redirect('/user/login')
@@ -255,4 +284,162 @@ const cartCheckoutorder = async (req,res)=>{
 }
 
 
-module.exports = { cart, add_to_cart, updateCart, deleteCart, cartCheckout ,cartCheckoutorder};
+
+const applyCoupon = async (req, res) => {
+  try {
+    if (req.session.email) {
+      const { couponCode } = req.body;
+      const user = await User.findOne({ email: req.session.email });
+      const coupon = await Coupon.findOne({ coupon_code: couponCode });
+      
+      if (!coupon) {
+        return res.json({ success: false, error: 'Coupon not found' });
+      }
+
+      // Check if the user has already used the coupon
+      const userHasUsedCoupon = coupon.users.some(
+        (couponUser) => couponUser.userId.toString() === user._id.toString() && couponUser.isBought === true
+      );
+
+      if (userHasUsedCoupon) {
+        return res.json({ success: false, error: 'You have already used this coupon' });
+      }
+
+      const now = new Date();
+      if (now < coupon.start_date || coupon.expiry_date < now) {
+        return res.json({ success: false, error: 'Coupon is expired' });
+      }
+
+      const cart = await Cart.findOne({ user: user._id }).populate('items.product');
+      if (!cart || cart.items.length === 0) {
+        return res.json({ success: false, error: 'Cart is empty' });
+      }
+
+      let cartTotal = 0;
+      for (let item of cart.items) {
+        const variant = item.product.variants.find(x => x._id.toString() === item.variantId);
+
+        if (!variant) {
+          return res.json({ success: false, error: 'Variant not found' });
+        }
+
+        const price = variant.offer ? variant.discount_price : variant.price;
+        if (variant) {
+          cartTotal += price * item.quantity;
+        }
+      }
+
+      if (cartTotal < coupon.min_purchase_amount) {
+        return res.json({
+          success: false,
+          error: `Minimum purchase amount for this coupon is ${coupon.min_purchase_amount}`
+        });
+      }
+      
+      
+      let discount = (cartTotal * coupon.discount) / 100;
+      discount = Math.min(discount, coupon.max_coupon_amount);
+      const subTotal = cartTotal - discount;
+     
+
+      res.json({ success: true, discount: discount, price: subTotal });
+      
+    } else {
+      res.redirect('/user/login');
+    }
+  } catch (error) {
+    console.log('Error occurred while applying coupon:', error);
+    return res.json({ success: false, error: 'An error occurred while applying the coupon' });
+  }
+};
+
+
+
+
+const applyCouponToUser = async (req, res) => {
+  try {
+    if (req.session.email) {
+      const { couponCode } = req.body;
+      const user = await User.findOne({ email: req.session.email });
+
+    
+      const coupon = await Coupon.findOne({ coupon_code: couponCode });
+
+      if (!coupon) {
+        return res.json({ success: false, error: 'Coupon not found' });
+      }
+
+        await Coupon.findOneAndUpdate(
+        { coupon_code: couponCode },
+        { $addToSet: { users: { userId: user._id } } },
+        { new: true, upsert: false }
+    );
+
+
+        return res.json({ success: true, message: 'Coupon applied successfully' });
+      
+    } else {
+      res.redirect('/user/login');
+    }
+  } catch (error) {
+    console.log('An error occurred while applying the coupon', error);
+    return res.json({ success: false, error: 'An error occurred while applying the coupon' });
+  }
+};
+
+
+
+
+
+const applyCouponFromUser = async (req, res) => {
+  try {
+    if (req.session.email) {
+      const { couponCode } = req.body;
+      const user = await User.findOne({ email: req.session.email });
+
+      // Check if the coupon exists and if the user has used it
+      const coupon = await Coupon.findOne({ coupon_code: couponCode });
+
+      if (!coupon) {
+        return res.json({ success: false, error: 'Coupon not found' });
+      }
+
+      
+
+      
+
+      
+      const result = await Coupon.findOneAndUpdate(
+        { coupon_code: couponCode, "users.userId": user._id },
+        {
+          $pull: { users: { userId: user._id } },
+        },
+        { new: true }
+      );
+
+      if (!result) {
+        return res.json({ success: false, error: 'Failed to remove coupon' });
+      }
+
+      return res.json({ success: true, message: 'Coupon removed successfully' });
+    } else {
+      res.redirect('/user/login');
+    }
+  } catch (error) {
+    console.error('An error occurred while removing the coupon:', error);
+    return res.json({ success: false, error: 'An error occurred while removing the coupon' });
+  }
+};
+
+
+module.exports = {
+   cart,
+   add_to_cart, 
+   updateCart, 
+   deleteCart, 
+   cartCheckout, 
+   cartCheckoutorder,
+   applyCoupon,
+   applyCouponToUser,
+   applyCouponFromUser
+  };

@@ -15,4 +15,10 @@ cartrouter.get('/checkout',cartController.cartCheckout)
 
 cartrouter.get('/checkoutOrder',cartController.cartCheckoutorder)
 
+cartrouter.post('/applyCoupon',cartController.applyCoupon)
+
+cartrouter.post('/applyCouponToUser',cartController.applyCouponToUser)
+
+cartrouter.post('/applyCouponFromUser',cartController.applyCouponFromUser)
+
 module.exports = cartrouter

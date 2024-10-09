@@ -1,138 +1,342 @@
 <%- include ('../partial/header') -%>
 
- <!-- ***** Header Area Start ***** -->
- <header class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="#" class="logo">
-                        <img src="/images/SnapCart.png">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                       
-                        
-                        <li class="scroll-to-section"><a href="/user/home">Home</a></li>
-                        <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
-                        <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
-                        <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
-                        <li class="scroll-to-section"><a href="/user/Products">Products</a></li>
-                        <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
-                        <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
-                        <li class="submenu">
-                            <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
-                            <ul>
-                                <li><a href="/user/profile">My Account</a></li>
-                                <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="/user/wallet">My Wallet</a></li>
-                                <li><a href="/user/about">About Us</a></li>
-                                <li><a href="/user/contact">Contact Us</a></li>
-                                <li><a href="/user/logout">Logout</a></li>
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="logo">
+                            <img src="/images/SnapCart.png">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
 
-                            </ul>
-                        </li>
 
-                    </ul>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
+                            <li class="scroll-to-section"><a href="/user/home">Home</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
+                            <li class="scroll-to-section"><a href="/user/Products">Products</a></li>
+                            <li class="scroll-to-section">
+                                <a href="/cart" class="d-flex align-items-center">
+                                    <i class="bi bi-cart"></i>
+                                    <!-- Badge for Cart Count next to the cart icon -->
+                                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <%=cartCount%>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
+                            <li class="submenu">
+                                <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
+                                <ul>
+                                    <li><a href="/user/profile">My Account</a></li>
+                                    <li><a href="/order/order_history">My Orders</a></li>
+                                    <li><a href="/wallet">My Wallet</a></li>
+                                    <li><a href="/user/about">About Us</a></li>
+                                    <li><a href="/user/contact">Contact Us</a></li>
+                                    <li><a href="/user/logout">Logout</a></li>
 
-                </nav>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- ***** Header Area End ***** -->
-<div class="order-details">
-    <!-- ------------------breadcrumbs starts----------------- -->
-    <div class="container">
-    <ol class="breadcrumb breadcrumb-arrow">
-       <li><a href="/user/home">Home</a></li>     
-       <li><a href="/order/order_history">My orders</a></li>     
-       <li class="active"><span>
-        order detials
-     </span></li>       
-    </ol>
-    </div>
-    <!-- ------------------breadcrumbs ends----------------- -->
-    <div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="order-summary">
-                <h3>Order Details</h3>
-                <h6 class="mt-3"><strong>OrderId:</strong> <%=order.orderId %></h6>
-                <h6 class="mt-3"><strong>Order At:</strong> <%= new Date(order.placeAt).toLocaleDateString() %></h6>
-                <h6 class="mt-3"><strong>Estimate Delivery:</strong><%= new Date(new Date(order.placeAt).setDate(new Date(order.placeAt).getDate() + 7)).toLocaleDateString() %></h6>
-            </h6>
+                                </ul>
+                            </li>
 
-                <div class="row">
-                   
-                        <div class="col-md-12">
-                            <table class="table table-bordered mt-4">
-                                
-                                <tbody>
-                                    <% order.items.forEach((item,index)=>{%>
-                                     <% const variant = item.product.variants.find(v=>v._id.toString()===item.variantId.toString()) %>
-                                  <tr>
-                                    <th scope="row" class="text-center align-middle"><%= index+1 %></th>
-                                    <td>
-                                        <img src="/<%=variant.images[0] %>"  style="width: 30vh; height: 30vh; object-fit: cover;" alt="">
-                                    </td>
-                                    <td>
-                                        <h5 class="mt-3"><strong><%= item.product.product_name %></strong></h5>
-                                        <h6 class="mt-2"><%= variant.color %> - <%= variant.size %></h6>
-                                        <h6 class="mt-2"> ₹ <%= variant.price %></h6>
-                                        <h6 class="mt-2"> <strong>Quantity:</strong> <%= item.quantity %></h6>
-                                        
-                                    </td>
-                                    
-                                  </tr>
-                                  <% }) %>
-                                 
-                                </tbody>
-                              </table>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
 
-                        </div>
-                       
-                    
-                    
+                    </nav>
                 </div>
             </div>
-    
         </div>
-        <div class="col-md-4">
-            <div class="address">
-                <h3>Delivery Address</h3>
-               
-                    <div class="address-info mt-3">
-                        <p><strong><%= order.address[0].fullName %></strong></p>
-                        <p><%= order.address[0].streetAddress %>, <%= order.address[0].city %></p>
-                        <p>Phone number: <%= order.address[0].phone %></p>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <div class="order-details">
+        <!-- ------------------breadcrumbs starts----------------- -->
+        <div class="container">
+            <ol class="breadcrumb breadcrumb-arrow">
+                <li><a href="/user/home">Home</a></li>
+                <li><a href="/order/order_history">My orders</a></li>
+                <li class="active"><span>
+                        order detials
+                    </span></li>
+            </ol>
+        </div>
+        <!-- ------------------breadcrumbs ends----------------- -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="order-summary">
+                        <h3>Order Details</h3>
+                        <div class="d-flex">
+                            <strong class="mt-1">OrderId:</strong>
+                            <h6 class="ml-2 " style="margin-top: 6px;" id="ProOrderId">
+                                <%=order.orderId %>
+                            </h6>
+                        </div>
+                        <h6 class="mt-3"><strong>Order At:</strong>
+                            <%= new Date(order.placeAt).toLocaleDateString() %>
+                        </h6>
+                        <h6 class="mt-3"><strong>Estimate Delivery:</strong>
+                            <%= new Date(new Date(order.placeAt).setDate(new Date(order.placeAt).getDate() +
+                                7)).toLocaleDateString() %>
+                        </h6>
+                        </h6>
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <table class="table table-bordered mt-4">
+
+                                    <tbody>
+                                        <% order.items.forEach((item,index)=>{%>
+                                            <% const variant=item.product.variants.find(v=>
+                                                v._id.toString()===item.variantId.toString()) %>
+                                                <tr>
+                                                    <th scope="row" class="text-center align-middle">
+                                                        <%= index+1 %>
+                                                    </th>
+                                                    <td>
+                                                        <img src="/<%=variant.images[0] %>"
+                                                            style="width: 30vh; height: 30vh; object-fit: cover;"
+                                                            alt="">
+                                                    </td>
+                                                    <td>
+                                                        <h5 class="mt-3" id="product_name"><strong>
+                                                                <%= item.product.product_name %>
+                                                            </strong></h5>
+                                                        <h6 class="mt-2" id="variant">
+                                                            <%= variant.color %> - <%= variant.size %>
+                                                        </h6>
+                                                        <h6 class="mt-2"> ₹ <%= variant.price %>
+                                                        </h6>
+                                                    
+                                                        <h6 class="mt-2"> <strong>Quantity:</strong>
+                                                            <%= item.quantity %>
+                                                        </h6>
+                                                        <% if(order.orderStatus==='Delivered' ){ %>
+                                                            
+                                                           <% if(item.isReturnRequested){ %>
+                                                            <% if(item.isAdminAcceptedReturn==="Rejected" || item.isAdminAcceptedReturn==="Accepted"){ %>
+                                                                <button class="mt-3 btn <%= item.isAdminAcceptedReturn === 'Rejected' ? 'btn-danger' : 'btn-secondary' %>" disabled><%= item.isAdminAcceptedReturn === 'Rejected' ? 'Request Rejected' : 'Request Accepted' %></button>
+                                                             <% }else{ %>
+                                                                <button class="btn btn-primary mt-3 returnBtn" disabled>Return Requested</button>
+                                                                <% } %>
+                                                                
+                                                           <% }else{ %>
+                                                                <button
+                                                                class="btn btn-outline-primary mt-3 returnBtn" data-item-id="<%=item._id %>">Return</button>
+                                                          <%  }  %>
+                                                            
+                                                            <% } %>
+                                                    </td>
+                                                    <% }) %>
+                                                </tr>
+
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+
+                        </div>
                     </div>
-                    <h4 class="mt-5">payment method</h4>
-                    <button class="btn btn-outline-success mt-3" disabled><%=order.paymentMethod %></button>
-                    <h3 class="mt-5">Order Status</h3>
-                     <button style="margin-bottom: 20vh;" class=" mt-3 btn <% if (order.orderStatus === 'Pending') { %> btn-warning <% } %>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="address">
+                        <h3>Delivery Address</h3>
+
+                        <div class="address-info mt-3">
+                            <p><strong>
+                                    <%= order.address[0].fullName %>
+                                </strong></p>
+                            <p>
+                                <%= order.address[0].streetAddress %>, <%= order.address[0].city %>
+                            </p>
+                            <p>Phone number: <%= order.address[0].phone %>
+                            </p>
+                        </div>
+                        <h4 class="mt-5">payment method</h4>
+                        <button class="btn btn-outline-success mt-3" disabled>
+                            <%=order.paymentMethod %>
+                        </button>
+                        <h3 class="mt-5">Order Status</h3>
+                        <button style="margin-bottom: 20vh;" class=" mt-3 btn <% if (order.orderStatus === 'Pending') { %> btn-warning <% } %>
                         <% if (order.orderStatus === 'Processing') { %> btn-primary <% } %>
                         <% if (order.orderStatus === 'Shipped') { %> btn-info <% } %>
-                        <% if (order.orderStatus === 'Delivered ') { %> btn-success <% } %>
+                        <% if (order.orderStatus === 'Delivered') { %> btn-success <% } %>
                         <% if (order.orderStatus === 'Cancelled') { %> btn-danger <% } %>" disabled>
-                        <%= order.orderStatus %>
+                            <%= order.orderStatus %>
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <!-- Return Modal with Enhanced Styling -->
+    <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title" id="returnModalLabel">
+                        <i class="bi bi-arrow-repeat"></i> Return Product
+                    </h5>
+                </div>
+                <!-- Corrected hidden field for OrderId -->
+                <input type="hidden" id="OrderId" value="">
+                <input type="hidden" id="itemId" value="">
+
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <div class="d-flex">
+                            <strong>Product:</strong>
+                            <p id="productName" class="ml-2"></p>
+                        </div>
+                        <div class="d-flex">
+                            <strong>Variant:</strong>
+                            <p id="variantName" class="ml-2"></p>
+                        </div>
+                    </div>
+
+                    <!-- Return Form -->
+                    <form id="returnForm">
+                        <div class="mb-4">
+                            <label for="returnReason" class="form-label">Reason for Return</label>
+                            <select class="form-select form-select-lg" id="returnReason" required>
+                                <option value="" disabled selected>Select reason</option>
+                                <option value="Defective product">Defective product</option>
+                                <option value="Wrong product delivered">Wrong product delivered</option>
+                                <option value="Product no longer needed">Product no longer needed</option>
+                                <option value="Found a better price elsewhere">Found a better price elsewhere</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="additionalReason" class="form-label">Additional Reason (optional)</label>
+                            <textarea class="form-control form-control-lg" id="additionalReason" rows="4"
+                                placeholder="Add any additional details..."></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Close
                     </button>
-                    
-                   
+                    <button type="button" class="btn btn-secondary" onclick="submitReturnRequest()">
+                        <i class="bi bi-check-circle"></i> Submit Return
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-       
-    
-    </div>
-</div>
 
 
 
 
-<%- include ('../partial/footer') -%>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const returnBtn = document.querySelectorAll('.returnBtn');
+
+            returnBtn.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const itemId = button.getAttribute('data-item-id')
+                    const product_name = document.getElementById('product_name').innerText;
+                    const variant = document.getElementById('variant').innerText;
+                    const orderId = document.getElementById('ProOrderId').innerText;
+
+
+                    document.getElementById('productName').innerText = product_name;
+                    document.getElementById('variantName').innerText = variant;
+                    document.getElementById('OrderId').value = orderId;
+                    document.getElementById('itemId').value = itemId;
+
+
+                    $('#returnModal').modal('show');
+                });
+            });
+        });
+
+        async function submitReturnRequest() {
+
+            const orderId = document.getElementById('OrderId').value;
+            const itemId = document.getElementById('itemId').value;
+            const reason = document.getElementById('returnReason').value;
+            const additionalReason = document.getElementById('additionalReason').value;
+
+            if (!reason) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Reason Required',
+                    text: 'Please select a reason for return.'
+                });
+                return;
+            }
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to return this order?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, return it!',
+                cancelButtonText: 'Close!'
+            });
+           
+            if (result.isConfirmed) {
+                const response = await fetch('/order/order_return', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderId, itemId, reason, additionalReason })
+                })
+
+                const resultData = await response.json()
+                if (resultData.success) {
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'return requested',
+                    text: resultData.message, 
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload(); 
+                });
+            }else if(resultData.error === 'Return request already submitted for this item'){
+                Swal.fire({
+                        icon: 'info',
+                        title: 'Failed return',
+                        text: resultData.error,
+                        confirmButtonText: 'OK'
+                    });
+            
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed return',
+                        text: resultData.error,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+
+
+
+        }
+    </script>
+
+    <%- include ('../partial/footer') -%>

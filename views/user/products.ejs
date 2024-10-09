@@ -1,13 +1,10 @@
-<%- include ("../partial/header" )-%>
+<%- include ("../partial/header")-%>
 <style>
     .original-price {
         color: red !important;
-        /* Sets the text color to red */
         font-size: 15px !important;
         text-decoration: line-through;
-        /* Adds a strikethrough effect */
         margin-right: 5px;
-        /* Adds space between original and offer price */
     }
 
     .thumb {
@@ -19,67 +16,85 @@
         top: 10px;
         right: 10px;
         color: white;
-        border-radius: 50%;           
+        border-radius: 50%;
         z-index: 1;
-        
+    }
+
+    .filter-sidebar {
+        background-color: #f8f9fa00;
+        padding: 20px;
+        border-radius: 10px;
+      
+        margin-top: 20px;
+    }
+    .filter{
+        margin-top: 20vh;
     }
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
                     <a href="#" class="logo">
                         <img src="/images/SnapCart.png">
                     </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li class="scroll-to-section">
-                            <form class="form-inline my-2 my-lg-0  " style="width:350px;" method="get" action="/user/searchAndSort" >
-                            <input class="form-control mr-sm-2" type="search"  name="query"  placeholder="Search..." aria-label="Search">
-                            
-                        </form>
-                        </li> 
-                        <li class="scroll-to-section"><a href="/user/home" >Home</a></li>
+                            <form class="form-inline my-2 my-lg-0" style="width:350px;" id="filterForm" method="get" action="/user/products">
+                                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search..." value="<%= search || '' %>">
+                                <input type="hidden" id="sortField" name="sort" value="<%= sort || '' %>">
+                                <input type="hidden" id="brand" name="brand" value="<%= brand || '' %>">
+                                <input type="hidden" id="category" name="category" value="<%= category || '' %>">
+                                <input type="hidden" id="priceRange" name="priceRange" value="<%= priceRange || '' %>">
+                                
+                            </form>
+                        </li>
+                        <li class="scroll-to-section"><a href="/user/home">Home</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                         <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                         <li class="scroll-to-section"><a class="active">Products</a></li>
-                        <li class="scroll-to-section"><a href="/cart"><i class="bi bi-cart"></i></a></li>
+                        <li class="scroll-to-section">
+                            <a href="/cart" class="d-flex align-items-center">
+                                <i class="bi bi-cart"></i>
+                                <!-- Badge for Cart Count next to the cart icon -->
+                                <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <%=cartCount%>
+                                </span>
+                            </a>
+                        </li>
                         <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                         <li class="submenu">
                             <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                             <ul>
                                 <li><a href="/user/profile">My Account</a></li>
                                 <li><a href="/order/order_history">My Orders</a></li>
-                                <li><a href="/user/wallet">My Wallet</a></li>
+                                <li><a href="/wallet">My Wallet</a></li>
                                 <li><a href="/user/about">About Us</a></li>
                                 <li><a href="/user/contact">Contact Us</a></li>
                                 <li><a href="/user/logout">Logout</a></li>
-                                
                             </ul>
                         </li>
-                      
-                    </ul>        
+                    </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
                     </a>
-                    
                 </nav>
             </div>
         </div>
     </div>
 </header>
 <!-- ***** Header Area End ***** -->
- 
- <!-- ***** Main Banner Area Start ***** -->
- <div class="page-heading about-page-heading" id="top">
+
+<!-- ***** Main Banner Area Start ***** -->
+<div class="page-heading about-page-heading" id="top">
     <div class="container">
-        <div class="row ">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="inner-content">
                     <a href="/user/products"><h2>View Our Range</h2></a>
@@ -89,18 +104,76 @@
     </div>
 </div>
 <!-- ***** Main Banner Area End ***** -->
- <!-- ------------ products -------------- -->
 
+<!-- Filter and Products Section -->
 <section>
-    <div class="container">
-        <div class="d-flex align-items-center justify-content-between">
-            <h1 class="text-center">Our Products</h1>
-            <!-- Sorting Options Section -->
-            <section>
-                <div class="mt-2">
-                    <form action="/user/searchAndSort" method="GET" class="form-inline">
-                        <input type="hidden" name="query" value="<%=searchQuery%>" />
-                        <select class="form-select sort-input" name="sort" aria-label="Sort">
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <!-- Filter Sidebar -->
+            <div class="col-lg-3 filter-sidebar">
+                <div class="filter">
+                    
+               
+                <h5>Filter By</h5>
+                <form action="/user/products" id="filterForm" method="GET" class="mt-5">
+                    <input type="hidden" name="search" value="<%= search || '' %>">
+                    <input type="hidden" name="sort" value="<%= sort || '' %>">
+                   
+                    <!-- Brand Filter -->
+                    <div class="form-group">
+                        <label for="brandFilter">Brand</label>
+                        <select class="form-select" name="brand" id="brandFilter">
+                            <option value="">All Brands</option>
+                          
+                            <% if (brands.length != 0) { %>
+                                <% brands.forEach((element) => { %>
+                                    <option value="<%= element.brand_name %>" <%= element.brand_name === selectedBrand ? 'selected' : '' %>>
+                                        <%= element.brand_name %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <!-- Category Filter -->
+                    <div class="form-group mt-3">
+                        <label for="categoryFilter">Category</label>
+                        <select class="form-select" name="category" id="categoryFilter">
+                            <option value="">All Categories</option>
+                            
+                            <% if (categoryes.length != 0) { %>
+                                <% categoryes.forEach((element) => { %>
+                                    <option value="<%= element.category_name %>" <%= element.category_name === selectedCategory ? 'selected' : '' %>>
+                                        <%= element.category_name %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                            
+                           
+                        </select>
+                    </div>
+                    <!-- Price Range Filter -->
+                    <div class="form-group mt-3">
+                        <label for="priceRangeFilter">Price Range</label>
+                        <select class="form-select" name="priceRange" id="priceRangeFilter">
+                            <option value="">Any Price</option>
+                            <option value="0-500" <%= "0-500" === selectedPrice ? 'selected' : '' %>>Under 500</option>
+                            <option value="500-1000" <%= "500-1000" === selectedPrice ? 'selected' : '' %>>500 to 1000</option>
+                            <option value="1000+" <%= "1000+" === selectedPrice ? 'selected' : '' %>>1000 and above</option>
+                        </select>
+                    </div>
+                    <!-- Filter Button -->
+                    <button class="btn btn-secondary mt-3" type="submit">Apply Filters</button>
+                </form>
+            </div>
+            </div>
+
+            <!-- Products Section -->
+            <div class="col-lg-9">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h1 >Our Products</h1>
+                    <!-- Sorting Options -->
+                  
+                        <select class="form-select sort-input" id="sortProducts" name="sort"  onchange="sortProducts()">
                             <option value="">Sort By</option>
                             <option value="price_asc">Price: Low to High</option>
                             <option value="price_desc">Price: High to Low</option>
@@ -108,152 +181,91 @@
                             <option value="a_to_z">A - Z</option>
                             <option value="z_to_a">Z - A</option>
                         </select>
-                        <button class="btn btn-outline-success ms-2" style="border-radius: 12px;" type="submit">Sort</button>
+                        
                     </form>
                 </div>
-            </section>
-        </div>
-    </div>
 
-    <div class="container mt-5">
-        <div class="row">
-            <% if (product.length === 0) { %>
-                <!-- Show message when no products are found -->
-                <script>
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops...',
-                        text: 'Product not found',
-                        confirmButtonText: 'OK'
-                    });
-                </script>
-                <div class="col-md-12 text-center">
-                    <div class="alert alert-warning">
-                        Product not found
+               
+                <!-- Products Grid -->
+<div class="row mt-4">
+    <% if (product.length === 0) { %>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Product not found',
+                confirmButtonText: 'OK'
+            });
+        </script>
+        <div class="col-md-12 text-center">
+            <div class="alert alert-warning">Product not found</div>
+        </div>
+    <% } else { %>
+        <% product.forEach((element) => { %>
+            <div class="col-6 col-md-4 col-lg-3 mt-4">
+                <div class="item">
+                    <div class="thumb">
+                        <% if (element.variants.offer) { %>
+                            <button class="offer-badge btn btn-danger" disabled>
+                                <%= element.variants.offer.offerPercentage %>% off
+                            </button>
+                        <% } %>
+                        <a href="/user/product?proId=<%= element._id %>&varId=<%= element.variants._id %>">
+                            <img style="width: 100%; height: 50vh; object-fit: cover;" src="/<%= element.variants.images[0] %>" alt="">
+                        </a>
+                    </div>
+                    <div class="down-content text-center">
+                        <h4><%= element.product_name %></h4>
+                        <% if (element.variants.offer) { %>
+                            <span class="original-price">INR <%= element.variants.price %></span>
+                            <span>INR <%= element.variants.discount_price %></span>
+                        <% } else { %>
+                            <span>INR <%= element.variants.price %></span>
+                        <% } %>
+                        <ul class="stars d-flex justify-content-center">
+                            <li><i class="bi bi-star-fill"></i></li>
+                            <li><i class="bi bi-star-fill"></i></li>
+                            <li><i class="bi bi-star-fill"></i></li>
+                            <li><i class="bi bi-star"></i></li>
+                            <li><i class="bi bi-star"></i></li>
+                        </ul>
                     </div>
                 </div>
-            <% } else { %>
-                <% product.forEach((element) => { %>
-                    <div class="col-6 col-md-4 col-lg-3 mt-4">
-                        <div class="item">
-                            <div class="thumb">
-                                <% if (element.variants[0].offer) { %>
-                                    <button class="offer-badge btn btn-danger" disabled><%= element.variants[0].offer.offerPercentage %>% off</button>
-                                        
-                                    
-                                    <% } %>
-                                <a href="/user/product?proId=<%=element._id %>&varId=<%= element.variants[0]._id %>">
-                                    <img style="width: 100%; height: 50vh; object-fit: cover;" src="/<%= element.variants[0].images[0] %>" alt="">
-                                </a>
-                            </div>
-                            <div class="down-content text-center">
-                                <h4><%= element.product_name %></h4>
-                                <%if(element.variants[0].offer){%>
-                                    <span class="original-price">INR <%= element.variants[0].price %></span>
-                                    <span>INR <%= element.variants[0].discount_price %></span>
-                                    <%}else{%>
-                                        <span>INR <%= element.variants[0].price %></span>
-                                        <%}%>
-                                <ul class="stars d-flex justify-content-center">
-                                    <li><i class="bi bi-star-fill"></i></li>
-                                    <li><i class="bi bi-star-fill"></i></li>
-                                    <li><i class="bi bi-star-fill"></i></li>
-                                    <li><i class="bi bi-star-fill"></i></li>
-                                    <li><i class="bi bi-star-half"></i></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                <% }) %>
-            <% } %>
-        </div>
-    </div>
-</section>
-
-<!-- ------------ pagination -------------- -->
-
-
-
-
- <div class="container mt-2"
- style="background-color: transparent !important; display: flex; justify-content: center;">
- <nav aria-label="...">
-   <ul class="pagination pagination-lg justify-content-center bg-dark-subtle">
-
-     <% if (currentPage !==1 && currentPage==totalPage) { %>
-       <li class="page-item">
-         <a class="page-link" href="/user/products?page=<%= currentPage -1 %>">
-           <</a>
-       </li>
-       <% } %>
-
-
-         <% for(let i=1;i<=totalPage;i++){ %>
-
-           <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-             <a class="page-link" href="/user/products?page=<%= i %>">
-               <%= i %>
-             </a>
-           </li>
-
-           <% } %>
-
-             <% if (currentPage !==totalPage) { %>
-               <li class="page-item">
-                 <a class="page-link" href="/admin/products?page=<%= currentPage + 1 %>">></a>
-               </li>
-               <% } %>
-
-   </ul>
- </nav>
+            </div>
+        <% }) %>
+    <% } %>
 </div>
 
+<!-- Centered Pagination -->
+<div class="d-flex justify-content-center mt-5 mb-5">
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-lg">
+            <% if (currentPage !== 1 && currentPage === totalPage) { %>
+                <li class="page-item">
+                    <a class="page-link" href="/user/products?page=<%= currentPage - 1 %>">&lt;</a>
+                </li>
+            <% } %>
 
+            <% for (let i = 1; i <= totalPage; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                    <a class="page-link" href="/user/products?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
 
-<!-- ***** Footer Start ***** -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="first-item">
-                    <div class="logo">
-                        <img src="/images/SnapCart.png" alt="hexashop ecommerce templatemo">
-                    </div>
-                    <ul>
-                        
-                        <li><a href="#">SnapCart@company.com</a></li>
-                        <li><a href="#">+91 9048763044</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <h4>Shopping &amp; Categories</h4>
-                <ul>
-                    <li><a href="#">Men’s Shopping</a></li>
-                    <li><a href="#">Women’s Shopping</a></li>
-                    <li><a href="#">Kid's Shopping</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3">
-                <h4>Useful Links</h4>
-                <ul>
-                    <li><a href="#">Homepage</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3">
-                <h4>Help &amp; Information</h4>
-                <ul>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">FAQ's</a></li>
-                    <li><a href="#">Shipping</a></li>
-                    <li><a href="#">Tracking ID</a></li>
-                </ul>
-            </div>
+            <% if (currentPage !== totalPage) { %>
+                <li class="page-item">
+                    <a class="page-link" href="/user/products?page=<%= currentPage + 1 %>">&gt;</a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
 
-        </div>
-    </div>
-</footer>
-<%- include ("../partial/footer" )-%>
+<script>
+    function sortProducts() {
+        const sortOption = document.getElementById('sortProducts').value;
+        document.getElementById('sortField').value = sortOption;
+        document.getElementById('filterForm').submit();
+    }
+</script>
+<%- include ("../partial/footer")-%>

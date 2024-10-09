@@ -12,6 +12,10 @@ const categorySchema = new mongoose.Schema({
     offer:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Offer'
+    },
+    saleCount:{
+        type:Number,
+        default:0
     }
    },{
       timestamps:true

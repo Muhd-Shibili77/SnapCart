@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    saleCount:{
+        type:Number,
+        default:0
+    },
     variants: [{
         price: {
             type: Number,
@@ -56,10 +60,11 @@ const productSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        images: [{ // Array to handle multiple images for each variant
+        images: [{ 
             type: String,
             required: false
         }]
+        
     }]
 }, {
     timestamps: true,

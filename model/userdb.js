@@ -20,6 +20,10 @@ const UserSchema = mongoose.Schema({
         type:String,
         
     },
+    referalCode:{
+        type:String,
+        
+    },
     isAdmin:{
         type:Boolean,
         default:false

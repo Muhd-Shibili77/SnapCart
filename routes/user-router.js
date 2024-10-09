@@ -1,6 +1,7 @@
 const express = require("express");
 const userrouter = express.Router();
 const userController = require('../controller/user-controller')
+const walletController = require('../controller/walletController')
 
 
 userrouter.use(userController.checkuser)
@@ -60,12 +61,6 @@ userrouter.get('/passwordChange',userController.get_forgetChangePassword)
 userrouter.post('/passwordChange',userController.post_forgetChangePassword)
 
 userrouter.post('/forgetResendOtp',userController.forgetResendOtp)
-
-userrouter.get('/searchAndSort',userController.searchAndSort)
-
-userrouter.get('/wallet',userController.userWallet)
-
-
 
 userrouter.get("/logout",userController.user_logout);
 

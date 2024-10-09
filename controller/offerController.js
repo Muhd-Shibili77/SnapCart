@@ -123,13 +123,20 @@ const deleteOffer = async (req, res) => {
 
       await Offer.findByIdAndUpdate(offerId, { isDelete: true });
       const products = await Product.find({ "variants.offer": offerId });
-
+      const categories = await Category.find({ offer: offerId });
       if (!products.length) {
         return res.json({
           success: false,
           error: "No products found with this offer",
         });
       }
+      if (!categories.length) {
+        return res.json({
+          success: false,
+          error: "No categories found with this offer",
+        });
+      }
+
 
       await Product.updateMany(
         { "variants.offer": offerId }, // Find products with variants having the offer
@@ -140,6 +147,16 @@ const deleteOffer = async (req, res) => {
           },
         }
       );
+      await Category.updateMany(
+        { offer: offerId }, 
+        {
+          $set: {
+            offer: null,
+          }
+        }
+      );
+   
+    
 
       res.json({ success: true, messgae: "offer successfully deleted" });
     } else {
@@ -185,7 +202,7 @@ const editOffers = async (req, res) => {
       const currentDate = new Date();
 
       if (!editOfferName) {
-        console.log(editOfferName);
+        
         return res.json({ success: false, error: "offer name is empty" });
       }
 

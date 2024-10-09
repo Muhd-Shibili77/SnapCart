@@ -19,14 +19,23 @@
                             <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
                             <li class="scroll-to-section"><a href="/user/home">Kid's</a></li>
                             <li class="scroll-to-section"><a href="/user/products">Products</a></li>
-                            <li class="scroll-to-section"><a href="#"><i class="bi bi-cart-fill"></i></a></li>
+                            <li class="scroll-to-section">
+                                <a href="#" class="d-flex align-items-center">
+                                    <i class="bi bi-cart-fill"></i>
+                                    <!-- Badge for Cart Count next to the cart icon -->
+                                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                        <%=cartCount%>
+                                    </span>
+                                </a>
+                            </li>
+                            
                             <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                             <li class="submenu">
                                 <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
                                 <ul>
                                     <li><a href="/user/profile">My Account</a></li>
                                     <li><a href="/order/order_history">My Orders</a></li>
-                                    <li><a href="/user/wallet">My Wallet</a></li>
+                                    <li><a href="/wallet">My Wallet</a></li>
                                     <li><a href="/user/about">About Us</a></li>
                                     <li><a href="/user/contact">Contact Us</a></li>
                                     <li><a href="/user/logout">Logout</a></li>
@@ -79,9 +88,10 @@
                                 <tr>
 
                                     <td class="text-center">
-                                        <a href="/user/product?id=<%=item.product._id %>"><img
-                                                src="/<%= variant.images[0] %>" alt="product image"
-                                                style="width: 80px; height: 100px; object-fit: cover;"></a>
+                                        <a href="/user/product?proId=<%= item.product._id %>&varId=<%= variant._id %>">
+                                            <img src="/<%= variant.images[0] %>" alt="product image" style="width: 80px; height: 100px; object-fit: cover;">
+                                        </a>
+                                        
                                     </td>
 
 
@@ -148,7 +158,7 @@
                     <h5 class="mb-4">Cart Total</h5>
                     <div class="d-flex justify-content-between">
                         <p class="text-dark mb-2">Subtotal:</p>
-                        <p class="text-dark mb-2" id="cartSubtotal">$0.00</p>
+                        <p class="text-dark mb-2" id="cartSubtotal">₹0.00</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p class="text-dark mb-2">Shipping:</p>
@@ -157,11 +167,9 @@
                     <hr>
                     <div class="d-flex justify-content-between">
                         <p class="text-dark font-weight-bold">Total:</p>
-                        <p class="text-dark font-weight-bold" id="cartTotal">$0.00</p>
+                        <p class="text-dark font-weight-bold" id="cartTotal">₹0.00</p>
                     </div>
-                    <p class="text-danger">
-                        <%= locals.message ? message : null %>
-                    </p>
+                    
                     <button type="button" onclick="checkout()"
                             class="btn btn-dark btn-block mt-3">Proceed to
                             checkout</button></a>
@@ -277,8 +285,8 @@
                 subtotal += price
 
             })
-            document.getElementById('cartSubtotal').textContent = `${subtotal.toFixed(2)}`
-            document.getElementById('cartTotal').textContent = `${subtotal.toFixed(2)}`
+            document.getElementById('cartSubtotal').textContent = `₹${subtotal.toFixed(2)}`
+            document.getElementById('cartTotal').textContent = `₹${subtotal.toFixed(2)}`
 
         }
         document.addEventListener('DOMContentLoaded', cartTotal);
@@ -339,6 +347,15 @@
                     // Proceed with checkout (you can redirect to a checkout page)
                     window.location.href = '/cart/checkoutOrder';
                 } else {
+                    if(result.message === "This product is currently unavailable"){
+                        Swal.fire({
+                            icon:'warning',
+                            title:'currently unavailable',
+                            text:result.message,
+                            confirmButtonText:'OK'
+                        })
+                        return
+                    }
                     Swal.fire({
                         icon: 'info',
                         title: 'Empty Cart',
