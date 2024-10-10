@@ -1,5 +1,50 @@
 <%- include ('../partial/newAdminHeader')-%>
 
+<style>
+  
+
+
+  .loader {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 64px;
+height: 64px;
+display: inline-block;
+}
+
+.loader::after {
+content: '';
+display: block;
+width: 64px;
+height: 64px;
+margin: 8px;
+border-radius: 50%;
+border: 6px solid #005b18;
+animation: ripple 1.2s infinite ease-in-out;
+}
+
+@keyframes ripple {
+0% {
+  transform: scale(0.1);
+  opacity: 1;
+}
+70% {
+  transform: scale(1);
+  opacity: 0.3;
+}
+100% {
+  transform: scale(1.5);
+  opacity: 0;
+}
+}
+
+
+
+</style>
+
+
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -377,6 +422,8 @@
               </div>
             </div>
           </div>
+
+          
           <div class="col-lg-8 d-flex align-items-stretch">
             <div class="card w-100">
               <div class="card-body p-4">
@@ -573,6 +620,7 @@
 
           </div>
         </div>
+        <div id="loader" class="loader" style="display: none;"></div>
 
         <!-- Modal for Date Range Selection for Report -->
         <div class="modal fade" id="dateSelectionModal" tabindex="-1" aria-labelledby="dateSelectionModalLabel"
@@ -640,8 +688,8 @@
           });
 
           document.getElementById("downloadReportBtn").addEventListener("click", async function () {
-
-            console.log('eko')
+            document.getElementById('loader').style.display = 'block';
+         
             const startDate = document.getElementById("reportStartDate").value;
             const endDate = document.getElementById("reportEndDate").value;
 
@@ -673,7 +721,7 @@
 
 
             try {
-    const response = await fetch("/admin/downlodReport", {
+    const response = await fetch("/admin/downloadReport", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -684,16 +732,14 @@
     if (response.ok) {
       const blob = await response.blob(); 
       const downloadUrl = window.URL.createObjectURL(blob); 
-
-      // Create a link element to trigger the download
       const downloadLink = document.createElement("a");
       downloadLink.href = downloadUrl;
-      downloadLink.download = `salesReport_${startDate}-${endDate}.pdf`; // Customize the filename
+      downloadLink.download = `salesReport_${startDate}-${endDate}.pdf`; 
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
 
-      // Revoke the object URL to free up memory
+      
       window.URL.revokeObjectURL(downloadUrl);
 
       // Close the modal after successful download
@@ -702,7 +748,7 @@
       if (modal) {
         modal.hide();
       } else {
-        $(modalElement).modal("hide"); // Fallback for Bootstrap 4
+        $(modalElement).modal("hide"); 
       }
     } else {
       const Data = await response.json();
@@ -724,7 +770,10 @@
       title: "Download Failed",
       text: "An error occurred while downloading the report. Please try again later.",
     });
-  }
+  } finally {
+       
+        document.getElementById('loader').style.display = 'none'; 
+    }
           })
         </script>
 

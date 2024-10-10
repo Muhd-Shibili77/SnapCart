@@ -114,7 +114,7 @@ const post_signup = async (req, res) => {
   const user = await User.findOne({ referalCode: referalCode });
   
   if (!user) {
-    return res.json({ success: false, message: "Invalid referal code" });
+    return res.json({ success: false, message: "Invalid user name" });
   }
   let wallet = await Wallet.findOne({ user: user._id });
   if (!wallet) {
@@ -338,7 +338,7 @@ const get_home = async (req, res) => {
     }
 
     const mensProduct = await Product.find({
-      category_id: "66e01b1fb148f23cc19fa331",
+      category_id: "66e01b1fb148f23cc19fa331",isDelete:false
     })
       .populate("category_id")
       .populate({
@@ -347,7 +347,7 @@ const get_home = async (req, res) => {
       });
 
     const womensProduct = await Product.find({
-      category_id: "66e18d806bf28e92c6d2e0ea",
+      category_id: "66e18d806bf28e92c6d2e0ea",isDelete:false
     })
       .populate("category_id")
       .populate({
@@ -355,7 +355,7 @@ const get_home = async (req, res) => {
         model: "Offer",
       });
     const kidsProduct = await Product.find({
-      category_id: "66e18d856bf28e92c6d2e0f2",
+      category_id: "66e18d856bf28e92c6d2e0f2",isDelete:false
     })
       .populate("category_id")
       .populate({
@@ -363,7 +363,7 @@ const get_home = async (req, res) => {
         model: "Offer",
       });
     const accessoris = await Product.find({
-      category_id: "66e2970551da17d55eb8ba49",
+      category_id: "66e2970551da17d55eb8ba49",isDelete:false
     })
       .populate("category_id")
       .populate({
@@ -487,7 +487,7 @@ let sortCriteria = {};
     }
     if (Object.keys(sortCriteria).length > 0) {
       pipeline.push({ $sort: sortCriteria });
-  }
+    }
 
 
 
@@ -575,10 +575,13 @@ const singleProduct = async (req, res) => {
       ProductInWishlist = wishlistHeart ? true : false;
     }
 
-    const product = await Product.findOne({ _id: proId })
+    const product = await Product.findOne({ _id: proId,isDelete:false })
       .populate("category_id")
       .populate("variants.offer");
-
+    
+      if(!product){
+        return res.redirect('/user/products')
+      }
     // Find the specific variant from the product using varId
 
     const variant = product.variants.find(

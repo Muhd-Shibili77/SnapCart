@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Overview Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .chart-container {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sales Overview</h1>
+
+    <div class="chart-container">
+        <canvas id="salesBarChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="salesPieChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="salesLineChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="salesRadarChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="salesDoughnutChart"></canvas>
+    </div>
+
+    <script>
+        // Bar Chart
+        const ctxBar = document.getElementById('salesBarChart').getContext('2d');
+        const salesBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Product A', 'Product B', 'Product C'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [120, 150, 90],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Pie Chart
+        const ctxPie = document.getElementById('salesPieChart').getContext('2d');
+        const salesPieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Product A', 'Product B', 'Product C'],
+                datasets: [{
+                    label: 'Sales Share',
+                    data: [120, 150, 90],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        // Line Chart
+        const ctxLine = document.getElementById('salesLineChart').getContext('2d');
+        const salesLineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April'],
+                datasets: [{
+                    label: 'Monthly Sales',
+                    data: [100, 200, 150, 300],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Radar Chart
+        const ctxRadar = document.getElementById('salesRadarChart').getContext('2d');
+        const salesRadarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Product A', 'Product B', 'Product C'],
+                datasets: [{
+                    label: 'Sales Performance',
+                    data: [80, 70, 90],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        // Doughnut Chart
+        const ctxDoughnut = document.getElementById('salesDoughnutChart').getContext('2d');
+        const salesDoughnutChart = new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Product A', 'Product B', 'Product C'],
+                datasets: [{
+                    label: 'Sales Distribution',
+                    data: [120, 150, 90],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+    </script>
+</body>
+</html>

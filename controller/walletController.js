@@ -25,7 +25,7 @@ const userWallet = async (req,res)=>{
         if (wallet && wallet.wallet_history) {
           wallet.wallet_history.sort((a, b) => new Date(b.date) - new Date(a.date));
         }
-        console.log(wallet)
+       
         if (!wallet) {
           wallet = new Wallet({
             user: user._id,

@@ -216,6 +216,11 @@
                     <label for="cod" class="form-check-label">Cash on Delivery <i class="bi bi-cash"></i></label>
                   </div>
                 <% } %>
+
+                <div class="form-check mt-2">
+                  <input type="radio" id="wallet" name="paymentMethod" value="Wallet" class="form-check-input">
+                  <label for="wallet" class="form-check-label">Wallet <i class="bi bi-wallet"></i></label>
+                </div>
                 
                
               </div>
@@ -224,7 +229,7 @@
                 <button class="btn btn-light text-primary border" onclick="applyCoupon()">Apply</button>
               </div>
 
-              <!-- Coupon details (initially hidden) -->
+             
               <div id="couponDetails" class="card border-light p-3 mb-3" style="display: none;">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
@@ -579,7 +584,11 @@
               confirmButtonText: 'OK'
             });
           }
-        } else {
+        } 
+
+
+
+         if(paymentMethod === 'bank') {
 
           const response = await fetch('/order/confrom_order_razorPay', {
             method: 'POST',
@@ -661,13 +670,6 @@
               });
             }
 
-
-
-
-
-
-
-
           } else {
             Swal.fire({
               icon: 'error',
@@ -676,10 +678,63 @@
               confirmButtonText: 'OK'
             });
           }
-
-
-
         }
+
+        if(paymentMethod === 'Wallet'){
+          const response = await fetch('/order/confrom_order_wallet', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ addressId, paymentMethod, cartId })
+          });
+
+          
+          if (response.ok) {
+            const result = await response.json()
+           
+            if(result.success){
+              Swal.fire({
+              icon: 'success',
+              title: 'Order Placed',
+              text: 'The order is successfully placed.',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              window.location.href = '/order/order_history';
+            });
+
+            }else{
+              if(result.message ==='not enough money in your wallet'){
+                Swal.fire({
+                     icon: 'info',
+                     title: 'insufficient money',
+                     text: result.message,
+                     confirmButtonText: 'OK'
+                     })
+                 return
+              }
+
+
+              Swal.fire({
+              icon: 'error',
+              title: 'Order Not Placed',
+              text: result.message,
+              confirmButtonText: 'OK'
+            })
+            }
+            
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Failed to Order',
+              text: 'Unable to place order. Please try again later.',
+              confirmButtonText: 'OK'
+            });
+          }
+        }
+
+
+
       } catch (error) {
         console.error('Error while placing order:', error);
         Swal.fire({

@@ -89,12 +89,18 @@ const add_to_cart = async (req, res) => {
         console.log("New cart created");
       }
 
+
       const existItemIndex = cart.items.findIndex(item => item.product.toString() === productId && item.variantId.toString() === variantId);
 
       let price = variant.offer ? variant.discount_price : variant.price; 
 
       if (existItemIndex > -1) {
        
+        if(cart.items[existItemIndex].quantity+quantity > 5 ){
+          return res.status(400).json({success:false,message:'you can only upto 5 quantity'})
+        }
+
+
         if (cart.items[existItemIndex].quantity + quantity > variant.stock) {
           console.log("Not enough stock available");
           return res.status(400).json({ success: false, message: "Not enough stock available" });
@@ -136,6 +142,15 @@ const updateCart = async (req, res) => {
   try {
     const { quantity } = req.body;
     const { id } = req.query;
+
+    if (!quantity) {
+      return res.json({success:false,messge:'quantity is empty'})
+  }
+  if (quantity <= 0) {
+      return res.json({success:false,message:'quantity must be postive number'})
+
+
+  }
 
     const cart = await Cart.findOne({ "items._id": id });
 

@@ -1,5 +1,56 @@
 <%- include ('../partial/header') -%>
 
+    <style>
+        .priceDetails {
+            width: 33vh;
+            height: 100%;
+
+        }
+
+        .progress-container {
+            display: none;
+        }
+
+     
+        .loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    display: inline-block;
+}
+
+.loader::after {
+    content: '';
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #005b18;
+    animation: ripple 1.2s infinite ease-in-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0.1);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+
+
+    </style>
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
@@ -24,7 +75,8 @@
                                 <a href="/cart" class="d-flex align-items-center">
                                     <i class="bi bi-cart"></i>
                                     <!-- Badge for Cart Count next to the cart icon -->
-                                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <span class="badge badge-pill badge-secondary"
+                                        style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                         <%=cartCount%>
                                     </span>
                                 </a>
@@ -84,72 +136,105 @@
                             <%= new Date(new Date(order.placeAt).setDate(new Date(order.placeAt).getDate() +
                                 7)).toLocaleDateString() %>
                         </h6>
-                        </h6>
+                        <% if(order.paymentStatus==='Paid' ){ %>
+                            <h6 class="mt-3"><strong>Invoice:</strong>
+                                <button class="btn btn-outline-dark ml-2" type="button" onclick="downloadInvoice('<%=order.orderId %>')"> <i class="bi bi-download"></i></button>
+                            </h6>
+                            <% } %>
+                                <h6><button class="btn btn-outline-secondary mt-3" onclick="toggleProgress()">Track
+                                        Order</button></h6>
+                                <div class="progress-container mt-3" id="progressContainer">
+                                    <div class="progress">
 
-                        <div class="row">
+                                        <div class="progress-bar" role="progressbar"
+                                            data-order-status="<%=order.orderStatus %>"
+                                            aria-valuenow="0"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style="width: 0%; background-color: #005b18; border-radius: 16px;">
+                                            0%
+                                        </div>
+                                    </div>
+                                    <p class="text-muted small mt-2">Order Status: <%=order.orderStatus %>
+                                    </p>
+                                </div>
 
-                            <div class="col-md-12">
-                                <table class="table table-bordered mt-4">
+                                <div class="row">
 
-                                    <tbody>
-                                        <% order.items.forEach((item,index)=>{%>
-                                            <% const variant=item.product.variants.find(v=>
-                                                v._id.toString()===item.variantId.toString()) %>
-                                                <tr>
-                                                    <th scope="row" class="text-center align-middle">
-                                                        <%= index+1 %>
-                                                    </th>
-                                                    <td>
-                                                        <img src="/<%=variant.images[0] %>"
-                                                            style="width: 30vh; height: 30vh; object-fit: cover;"
-                                                            alt="">
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="mt-3" id="product_name"><strong>
-                                                                <%= item.product.product_name %>
-                                                            </strong></h5>
-                                                        <h6 class="mt-2" id="variant">
-                                                            <%= variant.color %> - <%= variant.size %>
-                                                        </h6>
-                                                        <h6 class="mt-2"> ₹ <%= variant.price %>
-                                                        </h6>
-                                                    
-                                                        <h6 class="mt-2"> <strong>Quantity:</strong>
-                                                            <%= item.quantity %>
-                                                        </h6>
-                                                        <% if(order.orderStatus==='Delivered' ){ %>
-                                                            
-                                                           <% if(item.isReturnRequested){ %>
-                                                            <% if(item.isAdminAcceptedReturn==="Rejected" || item.isAdminAcceptedReturn==="Accepted"){ %>
-                                                                <button class="mt-3 btn <%= item.isAdminAcceptedReturn === 'Rejected' ? 'btn-danger' : 'btn-secondary' %>" disabled><%= item.isAdminAcceptedReturn === 'Rejected' ? 'Request Rejected' : 'Request Accepted' %></button>
-                                                             <% }else{ %>
-                                                                <button class="btn btn-primary mt-3 returnBtn" disabled>Return Requested</button>
-                                                                <% } %>
-                                                                
-                                                           <% }else{ %>
-                                                                <button
-                                                                class="btn btn-outline-primary mt-3 returnBtn" data-item-id="<%=item._id %>">Return</button>
-                                                          <%  }  %>
-                                                            
-                                                            <% } %>
-                                                    </td>
-                                                    <% }) %>
-                                                </tr>
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered mt-4">
+
+                                            <tbody>
+                                                <% order.items.forEach((item,index)=>{%>
+                                                    <% const variant=item.product.variants.find(v=>
+                                                        v._id.toString()===item.variantId.toString()) %>
+                                                        <tr>
+                                                            <th scope="row" class="text-center align-middle">
+                                                                <%= index+1 %>
+                                                            </th>
+                                                            <td>
+                                                                <img src="/<%=variant.images[0] %>"
+                                                                    style="width: 30vh; height: 30vh; object-fit: cover;"
+                                                                    alt="">
+                                                            </td>
+                                                            <td>
+                                                                <h5 class="mt-3" id="product_name"><strong>
+                                                                        <%= item.product.product_name %>
+                                                                    </strong></h5>
+                                                                <h6 class="mt-2" id="variant">
+                                                                    <%= variant.color %> - <%= variant.size %>
+                                                                </h6>
+                                                                <h6 class="mt-2"> ₹ <%= variant.price %>
+                                                                </h6>
+
+                                                                <h6 class="mt-2"> <strong>Quantity:</strong>
+                                                                    <%= item.quantity %>
+                                                                </h6>
+                                                                <% if(order.orderStatus==='Delivered' ){ %>
+
+                                                                    <% if(item.isReturnRequested){ %>
+                                                                        <% if(item.isAdminAcceptedReturn==="Rejected" ||
+                                                                            item.isAdminAcceptedReturn==="Accepted" ){
+                                                                            %>
+                                                                            <button
+                                                                                class="mt-3 btn <%= item.isAdminAcceptedReturn === 'Rejected' ? 'btn-danger' : 'btn-secondary' %>"
+                                                                                disabled>
+                                                                                <%= item.isAdminAcceptedReturn==='Rejected'
+                                                                                    ? 'Request Rejected'
+                                                                                    : 'Request Accepted' %>
+                                                                            </button>
+                                                                            <% }else{ %>
+                                                                                <button
+                                                                                    class="btn btn-primary mt-3 returnBtn"
+                                                                                    disabled>Return Requested</button>
+                                                                                <% } %>
+
+                                                                                    <% }else{ %>
+                                                                                        <button
+                                                                                            class="btn btn-outline-primary mt-3 returnBtn"
+                                                                                            data-item-id="<%=item._id %>">Return</button>
+                                                                                        <% } %>
+
+                                                                                            <% } %>
+                                                            </td>
+                                                            <% }) %>
+                                                        </tr>
 
 
-                                    </tbody>
-                                </table>
+                                            </tbody>
+                                        </table>
 
-                            </div>
+                                    </div>
 
 
 
-                        </div>
+                                </div>
                     </div>
 
                 </div>
                 <div class="col-md-4">
                     <div class="address">
+
                         <h3>Delivery Address</h3>
 
                         <div class="address-info mt-3">
@@ -162,7 +247,36 @@
                             <p>Phone number: <%= order.address[0].phone %>
                             </p>
                         </div>
-                        <h4 class="mt-5">payment method</h4>
+                        <div class="priceDetails">
+
+
+                            <h4 class="mt-4">Price details</h4>
+                            <div class="d-flex justify-content-between mt-3">
+                                <p class="mb-2">Total price:</p>
+                                <p class="mb-2" id="totalPrice">₹<%=order.totalAmount.toFixed(2)%>
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-2">Discount:</p>
+                                <p class="mb-2 text-danger" id="discountAmount">₹<%=order.discountAmount.toFixed(2)%>
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-2">Shipping cost:</p>
+                                <p class="mb-2">Free</p>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-2">Sub total:</p>
+                                <p class="mb-2 fw-bold" id="subTotal">₹<%=order.payableAmount.toFixed(2)%>
+                                </p>
+                            </div>
+                        </div>
+
+
+
+
+                        <h4 class="mt-4">payment method</h4>
                         <button class="btn btn-outline-success mt-3" disabled>
                             <%=order.paymentMethod %>
                         </button>
@@ -183,6 +297,7 @@
 
         </div>
     </div>
+      <div id="loader" class="loader" style="display: none;"></div>
 
 
 
@@ -210,6 +325,7 @@
                             <p id="variantName" class="ml-2"></p>
                         </div>
                     </div>
+                  
 
                     <!-- Return Form -->
                     <form id="returnForm">
@@ -249,8 +365,98 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
+async function downloadInvoice(orderId) {
+    document.getElementById('loader').style.display = 'block'; 
+
+    try {
+        const response = await fetch('/order/downloadInvoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderId })
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+
+          
+            const downloadLink = document.createElement("a");
+            downloadLink.href = downloadUrl;
+            downloadLink.download = `invoice${orderId}.pdf`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+           
+            window.URL.revokeObjectURL(downloadUrl);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to download',
+                text: 'Failed to download the invoice, please try again later.'
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while downloading the invoice.'
+        });
+    } finally {
+        document.getElementById('loader').style.display = 'none'; 
+    }
+}
+
+
+        function toggleProgress() {
+            const progressContainer = document.getElementById('progressContainer');
+            if (progressContainer.style.display === 'none' || progressContainer.style.display === '') {
+                progressContainer.style.display = 'block'; // Show the progress bar
+            } else {
+                progressContainer.style.display = 'none'; // Hide the progress bar
+            }
+        }
+
+
+
+
         document.addEventListener("DOMContentLoaded", () => {
             const returnBtn = document.querySelectorAll('.returnBtn');
+            const progressBars = document.querySelectorAll(".progress-bar");
+
+            progressBars.forEach(bar => {
+                const orderStatus = bar.getAttribute("data-order-status");
+                let progressPercentage = 0;
+                let barColor = "#005b18";
+
+                switch (orderStatus) {
+                    case 'Pending':
+                        progressPercentage = 25;
+                        break;
+                    case 'Processing':
+                        progressPercentage = 50;
+                        break;
+                    case 'Shipped':
+                        progressPercentage = 75;
+                        break;
+                    case 'Delivered':
+                        progressPercentage = 100;
+                        break;
+                    case 'Cancelled':
+                        progressPercentage = 100;
+                        barColor = "red";
+                        break;
+                    default:
+                        progressPercentage = 0;
+                }
+                bar.style.width = progressPercentage + "%";
+                bar.textContent = progressPercentage + '%'; // Update the percentage text
+                bar.setAttribute("aria-valuenow", progressPercentage);
+                bar.style.backgroundColor = barColor;
+            })
 
             returnBtn.forEach(button => {
                 button.addEventListener('click', async () => {
@@ -296,7 +502,7 @@
                 confirmButtonText: 'Yes, return it!',
                 cancelButtonText: 'Close!'
             });
-           
+
             if (result.isConfirmed) {
                 const response = await fetch('/order/order_return', {
                     method: 'POST',
@@ -309,22 +515,22 @@
                 const resultData = await response.json()
                 if (resultData.success) {
                     Swal.fire({
-                    icon: 'success',
-                    title: 'return requested',
-                    text: resultData.message, 
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload(); 
-                });
-            }else if(resultData.error === 'Return request already submitted for this item'){
-                Swal.fire({
+                        icon: 'success',
+                        title: 'return requested',
+                        text: resultData.message,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else if (resultData.error === 'Return request already submitted for this item') {
+                    Swal.fire({
                         icon: 'info',
                         title: 'Failed return',
                         text: resultData.error,
                         confirmButtonText: 'OK'
                     });
-            
-                }else{
+
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Failed return',

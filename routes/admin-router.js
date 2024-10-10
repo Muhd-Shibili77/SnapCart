@@ -88,7 +88,7 @@ adminrouter.post('/editCoupon',couponController.editCoupon)
 
 adminrouter.post('/deleteCoupon',couponController.deleteCoupon)
 
-adminrouter.post('/downlodReport',adminController.downlodReport)
+adminrouter.post('/downloadReport',adminController.downloadReport)
 
 adminrouter.get("/logout",adminController.admin_logout);
 

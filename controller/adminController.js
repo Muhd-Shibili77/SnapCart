@@ -7,8 +7,8 @@ const Order = require("../model/orderDB");
 const Coupon = require("../model/couponDB");
 const Wallet = require("../model/walletDB");
 const moment = require("moment");
-const pdf = require("html-pdf");
-
+const pdf = require("html-pdf-node");
+const fs = require('fs')
 const admin_login = (req, res) => {
   if (req.session.isAdmin) {
     res.redirect("/admin/dashboard");
@@ -187,7 +187,7 @@ const admin_category = async (req, res) => {
 const add_category = async (req, res) => {
   try {
     const categoryName = req.body.categoryName;
-    const existCat = await Category.findOne({ category_name: categoryName });
+    const existCat = await Category.findOne({ category_name: { $regex: new RegExp(`^${categoryName}$`, 'i') } });
     const cat = await Category.find();
 
     if (existCat) {
@@ -270,7 +270,7 @@ const edit_category = async (req, res) => {
   if (req.session.isAdmin) {
     try {
       const { categoryId, categoryName } = req.body;
-      const catExit = await Category.findOne({ category_name: categoryName });
+      const catExit = await Category.findOne({ category_name: { $regex: new RegExp(`^${categoryName}$`, 'i') } });
       if (catExit) {
         return res.status(400).json({ error: "Category already exists" });
       }
@@ -312,7 +312,7 @@ const add_brand = async (req, res) => {
   try {
     const brandName = req.body.brandName;
 
-    const existbrand = await Brand.findOne({ brand_name: brandName });
+    const existbrand = await Brand.findOne({ brand_name: { $regex: new RegExp(`^${brandName}$`,'i')} });
     const brand = await Brand.find();
 
     if (existbrand) {
@@ -382,7 +382,7 @@ const edit_brand = async (req, res) => {
     try {
       const { brandId, brandName } = req.body;
 
-      const brandExit = await Brand.findOne({ brand_name: brandName });
+      const brandExit = await Brand.findOne({ brand_name: { $regex: new RegExp(`^${brandName}$`,'i')} });
 
       if (brandExit) {
         return res.status(400).json({ error: "brand already exists" });
@@ -583,7 +583,7 @@ const rejectReturn = async (req, res) => {
   }
 };
 
-const downlodReport = async (req, res) => {
+const downloadReport = async (req, res) => {
   try{
 
 
@@ -786,27 +786,18 @@ const downlodReport = async (req, res) => {
           left: "0.3in",
         },
       };
-      
-
-    
-    pdf.create(html, options).toBuffer((err, buffer) => {
-      if (err) {
-        console.error("Error generating PDF:", err);
-        return res.status(500).send("Error generating PDF");
-      }
-
-      
+      const file = { content: html };
+      const pdfBuffer = await pdf.generatePdf(file, options);
+      const pdfFilePath = `./salesReport/salesReport.pdf`;
+      fs.writeFileSync(pdfFilePath, pdfBuffer);
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "attachment; filename=salesReport.pdf");
-      res.send(buffer); 
-    });
+      fs.createReadStream(pdfFilePath).pipe(res);
 
     }catch(error){
       console.error("Error generating sales report:", error);
       res.status(500).json({success:false, error: "An error occurred while generating the sales report" })
     }
-
-
 };
 
 const admin_logout = (req, res) => {
@@ -840,5 +831,5 @@ module.exports = {
   update_orderStatus,
   rejectReturn,
   acceptReturn,
-  downlodReport,
+  downloadReport,
 };

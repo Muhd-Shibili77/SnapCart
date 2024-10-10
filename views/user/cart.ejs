@@ -23,12 +23,13 @@
                                 <a href="#" class="d-flex align-items-center">
                                     <i class="bi bi-cart-fill"></i>
                                     <!-- Badge for Cart Count next to the cart icon -->
-                                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <span class="badge badge-pill badge-secondary"
+                                        style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                         <%=cartCount%>
                                     </span>
                                 </a>
                             </li>
-                            
+
                             <li class="scroll-to-section"><a href="/wishlist"><i class="bi bi-heart"></i></a></li>
                             <li class="submenu">
                                 <a href="javascript:;"><i class="bi bi-person-circle"></i></a>
@@ -89,9 +90,10 @@
 
                                     <td class="text-center">
                                         <a href="/user/product?proId=<%= item.product._id %>&varId=<%= variant._id %>">
-                                            <img src="/<%= variant.images[0] %>" alt="product image" style="width: 80px; height: 100px; object-fit: cover;">
+                                            <img src="/<%= variant.images[0] %>" alt="product image"
+                                                style="width: 80px; height: 100px; object-fit: cover;">
                                         </a>
-                                        
+
                                     </td>
 
 
@@ -108,16 +110,17 @@
 
 
                                     <td class="d-flex">
-                                        <% const Productprice2 = variant.offer?variant.discount_price : variant.price %>
-                                        <button class="btn btn-outline-secondary"
-                                            onclick="minus('<%= item._id %>','<%= Productprice2 %>')">-</button>
-                                        <input type="number" name="quantity" class="form-control text-center mx-2"
-                                            value="<%= item.quantity %>"
-                                            style="width: 50px; background-color: #595959; color: white;"
-                                            id="quantity_<%= item._id %>" min="0" readonly>
-                                            <% const Productprice1 = variant.offer?variant.discount_price : variant.price %>
-                                        <button class="btn btn-outline-secondary"
-                                            onclick="plus('<%= item._id %>','<%=Productprice1 %>','<%= variant.stock %>')">+</button>
+                                        <% const Productprice2=variant.offer?variant.discount_price : variant.price %>
+                                            <button class="btn btn-outline-secondary"
+                                                onclick="minus('<%= item._id %>','<%= Productprice2 %>')">-</button>
+                                            <input type="number" name="quantity" class="form-control text-center mx-2"
+                                                value="<%= item.quantity %>"
+                                                style="width: 50px; background-color: #595959; color: white;"
+                                                id="quantity_<%= item._id %>" min="0" readonly>
+                                            <% const Productprice1=variant.offer?variant.discount_price : variant.price
+                                                %>
+                                                <button class="btn btn-outline-secondary"
+                                                    onclick="plus('<%= item._id %>','<%=Productprice1 %>','<%= variant.stock %>')">+</button>
 
                                     </td>
 
@@ -125,9 +128,9 @@
 
                                     <td class="text-end" id="price_<%=item._id %>">
                                         <p class="text-dark">
-                                            <% const price = variant.offer ? variant.discount_price : variant.price %>
-                                            <% const subtotal=item.quantity * price %>
-                                                INR <%= subtotal.toFixed(2) %>
+                                            <% const price=variant.offer ? variant.discount_price : variant.price %>
+                                                <% const subtotal=item.quantity * price %>
+                                                    INR <%= subtotal.toFixed(2) %>
                                         </p>
                                     </td>
 
@@ -169,10 +172,9 @@
                         <p class="text-dark font-weight-bold">Total:</p>
                         <p class="text-dark font-weight-bold" id="cartTotal">₹0.00</p>
                     </div>
-                    
-                    <button type="button" onclick="checkout()"
-                            class="btn btn-dark btn-block mt-3">Proceed to
-                            checkout</button></a>
+
+                    <button type="button" onclick="checkout()" class="btn btn-dark btn-block mt-3">Proceed to
+                        checkout</button></a>
 
                 </div>
             </div>
@@ -191,6 +193,26 @@
         function plus(itemId, price, stock) {
             const quantityInput = document.getElementById(`quantity_${itemId}`)
             let quantity = parseInt(quantityInput.value);
+
+            if (!quantity) {
+                Swal.fire({
+                    title: 'Quantity is empty',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+            if (quantity <= 0) {
+                Swal.fire({
+                    title: 'Quantity must be a positive number',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+          
+          
+            }
+
 
             if (quantity < stock) {
 
@@ -228,7 +250,27 @@
 
             const quantityInput = document.getElementById(`quantity_${itemId}`)
             let quantity = parseInt(quantityInput.value);
-
+           
+            if (!quantity) {
+                Swal.fire({
+                    title: 'Quantity is empty',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+            if (quantity <= 0) {
+                Swal.fire({
+                    title: 'Quantity must be a positive number',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+          
+          
+            }
+          
+          
             if (quantity > 1) {
                 quantity--;
                 quantityInput.value = quantity;
@@ -251,6 +293,26 @@
         }
 
         function updateCart(id, quantity) {
+            if (!quantity) {
+                Swal.fire({
+                    title: 'Quantity is empty',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+                return
+            }
+            if (quantity <= 0) {
+                Swal.fire({
+                    title: 'Quantity must be a positive number',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+
+
+
             fetch(`/cart/updateCart?id=${id}`, {
                 method: 'POST',
                 headers: {
@@ -264,6 +326,11 @@
                     if (data.success) {
                         cartTotal()
                     } else {
+                        Swal.fire({
+                            icon:'error',
+                            title:'failed to update cart',
+                            text:data.message
+                        })
                         console.error('error while updating cart', data.message)
                     }
                 })
@@ -333,7 +400,7 @@
 
         async function checkout() {
             try {
-                
+
                 const response = await fetch('/cart/checkout', {
                     method: 'GET',
                     headers: {
@@ -342,17 +409,17 @@
                 });
 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     // Proceed with checkout (you can redirect to a checkout page)
                     window.location.href = '/cart/checkoutOrder';
                 } else {
-                    if(result.message === "This product is currently unavailable"){
+                    if (result.message === "This product is currently unavailable") {
                         Swal.fire({
-                            icon:'warning',
-                            title:'currently unavailable',
-                            text:result.message,
-                            confirmButtonText:'OK'
+                            icon: 'warning',
+                            title: 'currently unavailable',
+                            text: result.message,
+                            confirmButtonText: 'OK'
                         })
                         return
                     }

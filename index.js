@@ -64,7 +64,8 @@ app.use('/wallet',walletrouter)
 
 
 app.get('/',async(req,res)=>{
-    if(req.session.user){
+    if(req.session.email){
+        
         res.redirect('/user/home')
     }else if(req.session.isAdmin){
         res.redirect('/admin')
@@ -80,7 +81,7 @@ app.get('/',async(req,res)=>{
 
 app.use((req, res, next) => {
     res.render('partial/404')
-    // res.status(404).send('404 Not Found: The page you are looking for does not exist.');
+    
   });
 
 
