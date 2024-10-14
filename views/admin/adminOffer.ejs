@@ -226,12 +226,8 @@
                                 <%= element.offerPercentage %>%<br>
                                   <strong>Start Date:</strong>
                                   <%= new Date(element.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
-                                    month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
-                                    true }) %><br>
-                                    <strong>Expiry Date:</strong>
-                                    <%= new Date(element.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
-                                      month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
-                                      true }) %><br>
+                                    month: 'numeric' , year: 'numeric'}) %>
+                                    
                               </p>
                               <div class="d-flex justify-content-between">
 
@@ -243,11 +239,8 @@
                                       class="btn btn-danger btn-sm">Delete</button>
                                     <button type="button" class="btn btn-outline-info btn-sm editBtn"
                                       data-offer-Id="<%= element._id %>" data-offer-name="<%= element.offerName %>"
-                                      data-offer-percentage="<%= element.offerPercentage %>" data-offer-SDate=" <%= new Date(element.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
-                                 month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
-                                 true }) %>" data-offer-EDate="<%= (element.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
-                                 month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
-                                 true }) %>">
+                                      data-offer-percentage="<%= element.offerPercentage %>" data-offer-SDate="<%= new Date(element.offerStartDate).toISOString().slice(0, 10) %>"
+                                      ">
                                       Edit
                                     </button>
                                     <% } %>
@@ -311,14 +304,12 @@
                                     <strong>Discount:</strong><%= variant.offer.offerPercentage %>% <br>
                                     <strong>Start Date:</strong><%=new Date(variant.offer.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
                                     month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
-                                    true }) %><br>
-                                    <strong>Expiry Date:</strong><%= new Date(variant.offer.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
-                                    month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
                                     true }) %>
+                                    
                                   <% }else{ %>
                                     <strong>Discount:</strong>No discount <br>
                                     <strong>Start Date:</strong>--/--/---- <br>
-                                    <strong>Expiry Date:</strong>--/--/----
+                                    
                                  <% } %>
                               
 
@@ -398,14 +389,12 @@
                                   <strong>Discount:</strong><%= element.offer.offerPercentage %>% <br>
                                   <strong>Start Date:</strong><%= new Date(element.offer.offerStartDate).toLocaleString('en-GB', { day: 'numeric' ,
                                   month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
-                                  true }) %> <br>
-                                  <strong>Expiry Date:</strong><%= new Date(element.offer.offerEndDate).toLocaleString('en-GB', { day: 'numeric' ,
-                                  month: 'numeric' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , hour12:
                                   true }) %>
+                                  
                                 <% }else{ %>
                                   <strong>Discount:</strong>No discount <br>
                                   <strong>Start Date:</strong>--/--/---- <br>
-                                  <strong>Expiry Date:</strong>--/--/----
+                                  
                                <% } %>
                                
                               </p>
@@ -488,13 +477,10 @@
                 <input type="number" class="form-control" id="offerPercentage" name="offerPercentage" required>
               </div>
               <div class="form-group">
-                <label for="offerStartDate">Start Date</label>
-                <input type="datetime-local" class="form-control" id="offerStartDate" name="offerStartDate" required>
+                <label>Start Date</label>
+                <input type="date" class="form-control" id="offerStartDate" name="offerStartDate" required>
               </div>
-              <div class="form-group">
-                <label for="offerEndDate">End Date</label>
-                <input type="datetime-local" class="form-control" id="offerEndDate" name="offerEndDate" required>
-              </div>
+              
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-outline-primary" onclick="AddOffer()">Add Offer</button>
@@ -527,15 +513,11 @@
                 <input type="number" class="form-control" id="editOfferPercentage" name="editOfferPercentage" required>
               </div>
               <div class="form-group">
-                <label for="offerStartDate">Start Date</label>
-                <input type="datetime-local" class="form-control" id="editOfferStartDate" name="editOfferStartDate"
+                <label>Start Date</label>
+                <input type="date" class="form-control" id="editOfferStartDate" name="editOfferStartDate"
                   required>
               </div>
-              <div class="form-group">
-                <label for="offerEndDate">End Date</label>
-                <input type="datetime-local" class="form-control" id="editOfferEndDate" name="editOfferEndDate"
-                  required>
-              </div>
+              
               <input type="hidden" id="editOfferId">
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
@@ -566,7 +548,7 @@
         const offerName = document.getElementById('offerName').value.trim()
         const offerPercentage = parseFloat(document.getElementById('offerPercentage').value.trim())
         const offerStartDate = document.getElementById('offerStartDate').value.trim()
-        const offerEndDate = document.getElementById('offerEndDate').value.trim()
+        
         const currentDate = new Date();
         if (!offerName) {
           Toast.fire({
@@ -645,22 +627,9 @@
           return;
         }
 
-        if (!offerEndDate) {
-          Toast.fire({
-            icon: "error",
-            title: "end date is empty"
-          });
-          return
-        }
+       
 
-        if (offerEndDate <= offerStartDate) {
-          Toast.fire({
-            icon: "error",
-            title: "Invalid End Date",
-            text: 'End date must be after the start date.',
-          });
-          return;
-        }
+       
 
         try {
           const responce = await fetch('/admin/addOffers', {
@@ -668,7 +637,7 @@
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ offerName, offerPercentage, offerStartDate, offerEndDate })
+            body: JSON.stringify({ offerName, offerPercentage, offerStartDate })
           })
 
 
@@ -794,33 +763,31 @@
 
 
       document.addEventListener("DOMContentLoaded", () => {
-        const editBtn = document.querySelectorAll('.editBtn')
+  const editBtn = document.querySelectorAll('.editBtn');
 
-        editBtn.forEach((button) => {
-          button.addEventListener('click', async () => {
-           
-            
-            const offerName = button.getAttribute('data-offer-name')
-           
-            const offerPercentage = button.getAttribute('data-offer-percentage')
-            
-            const offerStartDate = button.getAttribute('data-offer-SDate')
-            const offerEndDate = button.getAttribute('data-offer-EDate')
-            const OfferId = button.getAttribute('data-offer-Id')
-            
-            const startDate = new Date(offerStartDate).toISOString().slice(0, 16);
-            const endDate = new Date(offerEndDate).toISOString().slice(0, 16);
-            
-            
-            document.getElementById('editOfferId').value = OfferId
-            document.getElementById('editOfferName').value = offerName
-            document.getElementById('editOfferPercentage').value = offerPercentage
-            document.getElementById('editOfferStartDate').value = startDate
-            document.getElementById('editOfferEndDate').value = endDate
-            $('#editOfferModal').modal('show')
-          })
-        })
-      })
+  editBtn.forEach((button) => {
+    button.addEventListener('click', async () => {
+
+      const offerName = button.getAttribute('data-offer-name');
+      const offerPercentage = button.getAttribute('data-offer-percentage');
+      const offerStartDate = button.getAttribute('data-offer-SDate');
+      const offerId = button.getAttribute('data-offer-Id');
+      console.log("Offer Start Date:", offerStartDate); 
+      
+      
+        
+      document.getElementById('editOfferStartDate').value = offerStartDate;
+      document.getElementById('editOfferId').value = offerId;
+      document.getElementById('editOfferName').value = offerName;
+      document.getElementById('editOfferPercentage').value = offerPercentage;
+      
+      // Show the modal
+      $('#editOfferModal').modal('show');
+    });
+  });
+});
+
+
 
 
 
@@ -843,7 +810,7 @@
 
         const editOfferPercentage = parseFloat(document.getElementById('editOfferPercentage').value.trim())
         const editOfferStartDate = document.getElementById('editOfferStartDate').value.trim()
-        const editOfferEndDate = document.getElementById('editOfferEndDate').value.trim()
+     
         const editOfferId = document.getElementById('editOfferId').value
         const currentDate = new Date();
         if (!editOfferName) {
@@ -923,22 +890,9 @@
           return;
         }
 
-        if (!editOfferEndDate) {
-          Toast.fire({
-            icon: "error",
-            title: "end date is empty"
-          });
-          return
-        }
+      
 
-        if (editOfferEndDate <= editOfferStartDate) {
-          Toast.fire({
-            icon: "error",
-            title: "Invalid End Date",
-            text: 'End date must be after the start date.',
-          });
-          return;
-        }
+      
 
         try {
           const responce = await fetch('/admin/editOffers', {
@@ -946,7 +900,7 @@
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ editOfferId, editOfferName, editOfferPercentage, editOfferStartDate, editOfferEndDate })
+            body: JSON.stringify({ editOfferId, editOfferName, editOfferPercentage, editOfferStartDate })
           })
 
 
@@ -1112,6 +1066,8 @@ async function removeCategoryOffer(categoryId,offerId){
           Swal.fire('Error!', 'There was a problem processing your request.', 'error');
         }
 }
+
+
     </script>
 
     <%- include ('../partial/newAdminfooter')-%>

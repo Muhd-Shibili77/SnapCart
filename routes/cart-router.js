@@ -1,7 +1,9 @@
 const express = require("express");
 const cartrouter = express.Router();
 const cartController = require('../controller/cartController')
+const userBlock = require('../middleware/userBlock')
 
+cartrouter.use(userBlock)
 
 cartrouter.get('/',cartController.cart)
 

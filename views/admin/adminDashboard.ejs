@@ -1,48 +1,48 @@
 <%- include ('../partial/newAdminHeader')-%>
 
-<style>
-  
+  <style>
+    .bg-secondary {
+      background-color: #005b18 !important;
+    }
 
+    .loader {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      display: inline-block;
+    }
 
-  .loader {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-width: 64px;
-height: 64px;
-display: inline-block;
-}
+    .loader::after {
+      content: '';
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid #005b18;
+      animation: ripple 1.2s infinite ease-in-out;
+    }
 
-.loader::after {
-content: '';
-display: block;
-width: 64px;
-height: 64px;
-margin: 8px;
-border-radius: 50%;
-border: 6px solid #005b18;
-animation: ripple 1.2s infinite ease-in-out;
-}
+    @keyframes ripple {
+      0% {
+        transform: scale(0.1);
+        opacity: 1;
+      }
 
-@keyframes ripple {
-0% {
-  transform: scale(0.1);
-  opacity: 1;
-}
-70% {
-  transform: scale(1);
-  opacity: 0.3;
-}
-100% {
-  transform: scale(1.5);
-  opacity: 0;
-}
-}
+      70% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
 
-
-
-</style>
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+  </style>
 
 
   <!--  Body Wrapper -->
@@ -138,7 +138,7 @@ animation: ripple 1.2s infinite ease-in-out;
               </a>
             </li>
 
-            
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="/admin/logout" aria-expanded="false">
                 <span>
@@ -275,14 +275,18 @@ animation: ripple 1.2s infinite ease-in-out;
                     <h5 class="card-title fw-semibold">Sales Overview</h5>
                   </div>
                   <div>
-                    <select class="form-select">
-                      <option value="1">March 2023</option>
-                      <option value="2">April 2023</option>
-                      <option value="3">May 2023</option>
-                      <option value="4">June 2023</option>
+                    <select class="form-select" id="chatSortSelect">
+
+                     <option value="" selected disabled>Sort by:</option>
+                      <option value="week">Week</option>
+                      <option value="month">Month</option>
+                      <option value="year">Year</option>
+
                     </select>
                   </div>
                 </div>
+                <input type="hidden" id="chartData" value='<%- JSON.stringify(data) %>'>
+
                 <div id="chart"></div>
               </div>
             </div>
@@ -296,35 +300,23 @@ animation: ripple 1.2s infinite ease-in-out;
                     <h5 class="card-title mb-9 fw-semibold">Yearly Breakup</h5>
                     <div class="row align-items-center">
                       <div class="col-8">
-                        <h4 class="fw-semibold mb-3">$36,358</h4>
-                        <div class="d-flex align-items-center mb-3">
-                          <span
-                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-up-left text-success"></i>
-                          </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
-                        </div>
+                        <h4 class="fw-semibold mb-3">₹<%=totalProfit%>
+                        </h4>
                         <div class="d-flex align-items-center">
                           <div class="me-4">
-                            <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
-                          </div>
-                          <div>
-                            <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
-                            <span class="fs-2">2023</span>
+                            <span class="round-8 bg-success rounded-circle me-2 d-inline-block"></span>
+                            <span class="fs-2">
+                              <%=new Date().getFullYear() %>
+                            </span>
                           </div>
                         </div>
                       </div>
-                      <div class="col-4">
-                        <div class="d-flex justify-content-center">
-                          <div id="breakup"></div>
-                        </div>
-                      </div>
+
                     </div>
                   </div>
                 </div>
               </div>
+
               <div class="col-lg-12">
                 <!-- Monthly Earnings -->
                 <div class="card">
@@ -332,32 +324,55 @@ animation: ripple 1.2s infinite ease-in-out;
                     <div class="row alig n-items-start">
                       <div class="col-8">
                         <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
-                        <h4 class="fw-semibold mb-3">$6,820</h4>
+                        <h4 class="fw-semibold mb-3">₹<%=monthlyProfit%>
+                        </h4>
                         <div class="d-flex align-items-center pb-1">
-                          <span
-                            class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-arrow-down-right text-danger"></i>
-                          </span>
-                          <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                          <p class="fs-3 mb-0">last year</p>
+
+                          <div class="me-4">
+                            <span class="round-8 bg-success rounded-circle me-2 d-inline-block"></span>
+                            <span class="fs-2">
+                              <%= new Date().toLocaleString('default', { month: 'short' }) %>
+                            </span>
+
+                          </div>
+
+
                         </div>
                       </div>
-                      <div class="col-4">
-                        <div class="d-flex justify-content-end">
-                          <div
-                            class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-currency-dollar fs-6"></i>
-                          </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <!-- today Breakup -->
+              <div class="card overflow-hidden">
+                <div class="card-body p-4">
+                  <h5 class="card-title mb-9 fw-semibold">Today Earnings</h5>
+                  <div class="row align-items-center">
+                    <div class="col-8">
+                      <h4 class="fw-semibold mb-3">₹<%=todayProfit%>
+                      </h4>
+                      <div class="d-flex align-items-center">
+                        <div class="me-4">
+                          <span class="round-8 bg-success rounded-circle me-2 d-inline-block"></span>
+                          <span class="fs-2">
+                            <%= new Date().toLocaleDateString('en-US', { weekday: 'short' }) %>
+                          </span>
                         </div>
                       </div>
                     </div>
+
                   </div>
-                  <div id="earning"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+
         <div class="row">
           <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card w-100">
@@ -365,65 +380,169 @@ animation: ripple 1.2s infinite ease-in-out;
                 <div class="mb-4">
                   <h5 class="card-title fw-semibold">Recent Transactions</h5>
                 </div>
-                <ul class="timeline-widget mb-0 position-relative mb-n5">
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment received from John Doe of $385.90</div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">10:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                        href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment was made of $64.95 to Michael</div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New sale recorded <a
-                        href="javascript:void(0)" class="text-primary d-block fw-normal">#ML-3467</a>
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">09:30 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                      <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">New arrival recorded
-                    </div>
-                  </li>
-                  <li class="timeline-item d-flex position-relative overflow-hidden">
-                    <div class="timeline-time text-dark flex-shrink-0 text-end">12:00 am</div>
-                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                      <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                    </div>
-                    <div class="timeline-desc fs-3 text-dark mt-n1">Payment Done</div>
-                  </li>
-                </ul>
+            
+
+                <% if (formattedTransactions ){ %>
+
+
+                  <ul class="timeline-widget mb-0 position-relative mb-n5">
+                    <li class="timeline-item d-flex position-relative overflow-hidden">
+                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                        <%=formattedTransactions[0].time %>
+                      </div>
+                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                        <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                      </div>
+                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
+                          formattedTransactions[0].payableAmount %> for order <%= formattedTransactions[0].orderId %>"
+                      </div>
+                    </li>
+                    <li class="timeline-item d-flex position-relative overflow-hidden">
+                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                        <%=formattedTransactions[1].time %>
+                      </div>
+                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                        <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
+                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                      </div>
+                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
+                          formattedTransactions[1].payableAmount %> for order <%= formattedTransactions[1].orderId %>"
+                      </div>
+                    </li>
+                    <li class="timeline-item d-flex position-relative overflow-hidden">
+                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                        <%=formattedTransactions[2].time %>
+                      </div>
+                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                        <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
+                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                      </div>
+                      <div class="timeline-desc fs-3 text-dark mt-n1">"Received ₹<%=
+                          formattedTransactions[2].payableAmount %> for order <%= formattedTransactions[2].orderId %>"
+                      </div>
+                    </li>
+                    <li class="timeline-item d-flex position-relative overflow-hidden">
+                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                        <%=formattedTransactions[3].time %>
+                      </div>
+                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                        <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
+                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                      </div>
+                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
+                          formattedTransactions[3].payableAmount %> for order <%= formattedTransactions[3].orderId %>"
+                      </div>
+                    </li>
+                    <li class="timeline-item d-flex position-relative overflow-hidden">
+                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                        <%=formattedTransactions[4].time %>
+                      </div>
+                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                        <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
+                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                      </div>
+                      <div class="timeline-desc fs-3 text-dark mt-n1 ">"Received ₹<%=
+                          formattedTransactions[4].payableAmount %> for order <%= formattedTransactions[4].orderId %>"
+                      </div>
+                    </li>
+                    <li class="timeline-item d-flex position-relative overflow-hidden">
+                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                        <%=formattedTransactions[5].time %>
+                      </div>
+                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                        <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
+                      </div>
+                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
+                          formattedTransactions[5].payableAmount %> for order <%= formattedTransactions[5].orderId %>"
+                      </div>
+                    </li>
+                  </ul>
+
+                  <%  }else{ %>
+
+                    <ul class="timeline-widget mb-0 position-relative mb-n5">
+                      <li class="timeline-item d-flex position-relative overflow-hidden">
+                        <div class="timeline-time text-dark flex-shrink-0 text-end">
+                         00:00
+                        </div>
+                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                          <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                        </div>
+                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
+                          No Transactions found
+                        </div>
+                      </li>
+                      <li class="timeline-item d-flex position-relative overflow-hidden">
+                        <div class="timeline-time text-dark flex-shrink-0 text-end">
+                          00:00
+                        </div>
+                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                          <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
+                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                        </div>
+                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
+                           No Transactions found
+                        </div>
+                      </li>
+                      <li class="timeline-item d-flex position-relative overflow-hidden">
+                        <div class="timeline-time text-dark flex-shrink-0 text-end">
+                          00:00
+                        </div>
+                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                          <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
+                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                        </div>
+                        <div class="timeline-desc fs-3 text-dark mt-n1">
+                           No Transactions found
+                        </div>
+                      </li>
+                      <li class="timeline-item d-flex position-relative overflow-hidden">
+                        <div class="timeline-time text-dark flex-shrink-0 text-end">
+                          00:00
+                        </div>
+                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                          <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
+                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                        </div>
+                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
+                           No Transactions found
+                        </div>
+                      </li>
+                      <li class="timeline-item d-flex position-relative overflow-hidden">
+                        <div class="timeline-time text-dark flex-shrink-0 text-end">
+                          00:00
+                        </div>
+                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                          <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
+                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                        </div>
+                        <div class="timeline-desc fs-3 text-dark mt-n1 ">
+                           No Transactions found
+                        </div>
+                      </li>
+                      <li class="timeline-item d-flex position-relative overflow-hidden">
+                        <div class="timeline-time text-dark flex-shrink-0 text-end">
+                          00:00
+                        </div>
+                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                          <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
+                        </div>
+                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
+                           No Transactions found
+                        </div>
+                      </li>
+                    </ul>
+
+
+                  <%  } %>
+                
               </div>
             </div>
           </div>
+             
 
-          
           <div class="col-lg-8 d-flex align-items-stretch">
             <div class="card w-100">
               <div class="card-body p-4">
@@ -439,28 +558,28 @@ animation: ripple 1.2s infinite ease-in-out;
                       </tr>
                     </thead>
                     <tbody>
-                     <% if(orders.length !=0){ %>
+                      <% if(orders.length !=0){ %>
                         <% orders.forEach(order=> { %>
-                        <tr>
-                          <td>
-                            <%= order.orderId %>
-                          </td>
-                          <td>
-                            <%= new Date(order.createdAt).toLocaleDateString() %>
-                          </td>
-                          <td>₹<%= order.totalAmount.toFixed(2) %>
-                          </td>
+                          <tr>
+                            <td>
+                              <%= order.orderId %>
+                            </td>
+                            <td>
+                              <%= new Date(order.createdAt).toLocaleDateString() %>
+                            </td>
+                            <td>₹<%= order.totalAmount.toFixed(2) %>
+                            </td>
 
-                        </tr>
-                        <% }) %>
-                     <% }else{ %>
-                        <tr>
-                          <td colspan="4" class="text-center ">
-                            no order found
-                          </td>
-                        </tr>
-                     <% } %>
-                     
+                          </tr>
+                          <% }) %>
+                            <% }else{ %>
+                              <tr>
+                                <td colspan="4" class="text-center ">
+                                  no order found
+                                </td>
+                              </tr>
+                              <% } %>
+
 
 
 
@@ -486,40 +605,40 @@ animation: ripple 1.2s infinite ease-in-out;
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        
-                        <th>Product Name</th>                                               
+
+                        <th>Product Name</th>
                         <th>Sale count</th>
 
                       </tr>
                     </thead>
                     <tbody>
-                    <%  if(bestSellingProduct.length !=0){ %>
-                      <% bestSellingProduct.forEach(item=> { %>
-                      
-                        <tr>
-                          <td>
-                            <%= item.product_name %>
-                          </td>
-                          <td>
-                            <%= item.saleCount %>
-                          </td>
-                        </tr>
-                        <% }) %>
-                     <% }else{ %>
-                        <tr>
-                          <td colspan="3" class="text-center">
-                            no product found
-                          </td>
-                        </tr>
-                     <% } %>
-                    
-                   
+                      <% if(bestSellingProduct.length !=0){ %>
+                        <% bestSellingProduct.forEach(item=> { %>
+
+                          <tr>
+                            <td>
+                              <%= item.product_name %>
+                            </td>
+                            <td>
+                              <%= item.saleCount %>
+                            </td>
+                          </tr>
+                          <% }) %>
+                            <% }else{ %>
+                              <tr>
+                                <td colspan="3" class="text-center">
+                                  no product found
+                                </td>
+                              </tr>
+                              <% } %>
+
+
 
 
 
                     </tbody>
                   </table>
-                 
+
 
                 </div>
               </div>
@@ -538,36 +657,40 @@ animation: ripple 1.2s infinite ease-in-out;
                       </tr>
                     </thead>
                     <tbody>
-                      <%  if(bestSellingProduct.length !=0){ %>
-                      <% const rowCount = 10; %>
-                      <% for (let i = 0; i < rowCount; i++) { %>
-                        <% if (bestSellingCategory[i]) { %>
-                          <tr>
-                            <td><%= bestSellingCategory[i].category_name %></td>
-                            <td><%= bestSellingCategory[i].saleCount %></td>
-                          </tr>
-                        <% } else { %>
-                          <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                          </tr>
-                        <% } %>
-                      <% } %>
-                      <% }else{ %>
-                        <tr>
-                          <td colspan="3" class="text-center">
-                            no product found
-                          </td>
-                        </tr>
-                     <% } %>
+                      <% if(bestSellingProduct.length !=0){ %>
+                        <% const rowCount=10; %>
+                          <% for (let i=0; i < rowCount; i++) { %>
+                            <% if (bestSellingCategory[i]) { %>
+                              <tr>
+                                <td>
+                                  <%= bestSellingCategory[i].category_name %>
+                                </td>
+                                <td>
+                                  <%= bestSellingCategory[i].saleCount %>
+                                </td>
+                              </tr>
+                              <% } else { %>
+                                <tr>
+                                  <td>&nbsp;</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                                <% } %>
+                                  <% } %>
+                                    <% }else{ %>
+                                      <tr>
+                                        <td colspan="3" class="text-center">
+                                          no product found
+                                        </td>
+                                      </tr>
+                                      <% } %>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          
-          
+
+
           <div class="col-lg-4">
             <div class="card w-100">
               <div class="card-body p-4">
@@ -578,36 +701,36 @@ animation: ripple 1.2s infinite ease-in-out;
                       <tr>
                         <th>Brand Name</th>
                         <th>Sale Count</th>
-                        
+
 
                       </tr>
                     </thead>
                     <tbody>
-                      <%  if(bestSellingBrand.length !=0){ %>
+                      <% if(bestSellingBrand.length !=0){ %>
                         <% bestSellingBrand.forEach(item=> { %>
-                        <tr>
-                          <td>
-                            <%= item.brand_name %>
-                          </td>
-                         
-                          <td>
-                            <%= item.saleCount  %>
-                          </td>
-
-                        </tr>
-                        <% }) %>
-                        <% }else{ %>
                           <tr>
-                            <td colspan="3" class="text-center">
-                              no product found
+                            <td>
+                              <%= item.brand_name %>
                             </td>
+
+                            <td>
+                              <%= item.saleCount %>
+                            </td>
+
                           </tr>
-                       <% } %>
+                          <% }) %>
+                            <% }else{ %>
+                              <tr>
+                                <td colspan="3" class="text-center">
+                                  no product found
+                                </td>
+                              </tr>
+                              <% } %>
 
 
                     </tbody>
                   </table>
-                 
+
 
                 </div>
               </div>
@@ -618,163 +741,218 @@ animation: ripple 1.2s infinite ease-in-out;
 
 
 
+      </div>
+    </div>
+    <div id="loader" class="loader" style="display: none;"></div>
+
+    <!-- Modal for Date Range Selection for Report -->
+    <div class="modal fade" id="dateSelectionModal" tabindex="-1" aria-labelledby="dateSelectionModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="dateSelectionModalLabel">Select Time Period</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label for="reportStartDate">Start Date:</label>
+            <input type="date" id="reportStartDate" class="form-control">
+            <label for="reportEndDate" class="mt-2">End Date:</label>
+            <input type="date" id="reportEndDate" class="form-control">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" id="downloadReportBtn" class="btn btn-primary">Download</button>
           </div>
         </div>
-        <div id="loader" class="loader" style="display: none;"></div>
+      </div>
+    </div>
 
-        <!-- Modal for Date Range Selection for Report -->
-        <div class="modal fade" id="dateSelectionModal" tabindex="-1" aria-labelledby="dateSelectionModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="dateSelectionModalLabel">Select Time Period</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <label for="reportStartDate">Start Date:</label>
-                <input type="date" id="reportStartDate" class="form-control">
-                <label for="reportEndDate" class="mt-2">End Date:</label>
-                <input type="date" id="reportEndDate" class="form-control">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="downloadReportBtn" class="btn btn-primary">Download</button>
-              </div>
-            </div>
-          </div>
-        </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const chatSortSelect = document.getElementById("chatSortSelect");
+        const sortSelect = document.getElementById("sortSelect");
+        const applyDateRangeButton = document.getElementById("applyDateRange");
+        const customDateInputs = document.getElementById("customDateInputs");
 
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-          document.addEventListener("DOMContentLoaded", () => {
-            const sortSelect = document.getElementById("sortSelect");
-            const customDateInputs = document.getElementById("customDateInputs");
-            const applyDateRangeButton = document.getElementById("applyDateRange");
+        function updateURL(paramKey, paramValue) {
+          const urlParams = new URLSearchParams(window.location.search);
 
-            sortSelect.addEventListener('change', () => {
-              const sortValue = sortSelect.value;
+          urlParams.set(paramKey, paramValue);
 
-              if (sortValue === "custom") {
-
-                customDateInputs.classList.remove("d-none");
-              } else {
-
-                customDateInputs.classList.add("d-none");
+          const newUrl = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`;
+          window.location.href = newUrl;
+        }
 
 
-                if (sortValue) {
-                  const currentUrl = window.location.origin + window.location.pathname;
-                  const newUrl = `${currentUrl}?sortStats=${sortValue}`;
-                  window.location.href = newUrl;
-                }
-              }
-            });
+        chatSortSelect.addEventListener('change', () => {
+          const chartSortValue = chatSortSelect.value;
+          if (chartSortValue) {
+            updateURL('chartSort', chartSortValue);
+          }
+        });
 
 
-            applyDateRangeButton.addEventListener('click', () => {
-              const startDate = document.getElementById("startDate").value;
-              const endDate = document.getElementById("endDate").value;
+        sortSelect.addEventListener('change', () => {
+          const sortValue = sortSelect.value;
 
-              if (startDate && endDate) {
-                const currentUrl = window.location.origin + window.location.pathname;
-                const newUrl = `${currentUrl}?sortStats=custom&startDate=${startDate}&endDate=${endDate}`;
-                window.location.href = newUrl;
-              } else {
-                alert("Please select both start and end dates.");
-              }
-            });
+          if (sortValue === "custom") {
+            customDateInputs.classList.remove("d-none");
+          } else {
+            customDateInputs.classList.add("d-none");
+            if (sortValue) {
+              updateURL('sortStats', sortValue);
+            }
+          }
+        });
+
+
+        applyDateRangeButton.addEventListener('click', () => {
+          const startDate = document.getElementById("startDate").value;
+          const endDate = document.getElementById("endDate").value;
+
+          if (startDate && endDate) {
+            updateURL('sortStats', `custom&startDate=${startDate}&endDate=${endDate}`);
+          } else {
+            alert("Please select both start and end dates.");
+          }
+        });
+      });
+
+
+      document.getElementById("downloadReportBtn").addEventListener("click", async function () {
+        document.getElementById('loader').style.display = 'block';
+
+        const startDate = document.getElementById("reportStartDate").value;
+        const endDate = document.getElementById("reportEndDate").value;
+
+        if (!startDate) {
+          Swal.fire({
+            icon: "error",
+            title: "startDate is empty",
+            text: "Select a start date first",
+          });
+          return;
+        }
+        if (!endDate) {
+          Swal.fire({
+            icon: "error",
+            title: "endDate is empty",
+            text: "Select a end date first",
+          });
+          return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+          Swal.fire({
+            icon: "error",
+            title: "Invalid Date",
+            text: "Start date must be before the end date.",
+          });
+          return;
+        }
+
+
+        try {
+          const response = await fetch("/admin/downloadReport", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ startDate, endDate }),
           });
 
-          document.getElementById("downloadReportBtn").addEventListener("click", async function () {
-            document.getElementById('loader').style.display = 'block';
-         
-            const startDate = document.getElementById("reportStartDate").value;
-            const endDate = document.getElementById("reportEndDate").value;
+          if (response.ok) {
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = downloadUrl;
+            downloadLink.download = `salesReport_${startDate}-${endDate}.pdf`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
 
-            if (!startDate) {
+
+            window.URL.revokeObjectURL(downloadUrl);
+
+            // Close the modal after successful download
+            const modalElement = document.getElementById("dateSelectionModal");
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+              modal.hide();
+            } else {
+              $(modalElement).modal("hide");
+            }
+          } else {
+            const Data = await response.json();
+            if (Data.error === "No orders found for the selected date range.") {
               Swal.fire({
-                icon: "error",
-                title: "startDate is empty",
-                text: "Select a start date first",
+                icon: "info",
+                title: "No Orders Found",
+                text: "There are no orders in the specified date range.",
+                confirmButtonText: "OK",
               });
               return;
             }
-            if (!endDate) {
-              Swal.fire({
-                icon: "error",
-                title: "endDate is empty",
-                text: "Select a end date first",
-              });
-              return;
-            }
+            throw new Error("Failed to download the report.");
+          }
+        } catch (error) {
+          console.error("Error downloading the report:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: "An error occurred while downloading the report. Please try again later.",
+          });
+        } finally {
 
-            if (new Date(startDate) > new Date(endDate)) {
-              Swal.fire({
-                icon: "error",
-                title: "Invalid Date",
-                text: "Start date must be before the end date.",
-              });
-              return;
-            }
+          document.getElementById('loader').style.display = 'none';
+        }
+      })
 
 
-            try {
-    const response = await fetch("/admin/downloadReport", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ startDate, endDate }),
-    });
 
-    if (response.ok) {
-      const blob = await response.blob(); 
-      const downloadUrl = window.URL.createObjectURL(blob); 
-      const downloadLink = document.createElement("a");
-      downloadLink.href = downloadUrl;
-      downloadLink.download = `salesReport_${startDate}-${endDate}.pdf`; 
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
 
-      
-      window.URL.revokeObjectURL(downloadUrl);
+      const today = new Date().toISOString().split('T')[0];
 
-      // Close the modal after successful download
-      const modalElement = document.getElementById("dateSelectionModal");
-      const modal = bootstrap.Modal.getInstance(modalElement);
-      if (modal) {
-        modal.hide();
-      } else {
-        $(modalElement).modal("hide"); 
-      }
-    } else {
-      const Data = await response.json();
-      if (Data.error === "No orders found for the selected date range.") {
-        Swal.fire({
-          icon: "info",
-          title: "No Orders Found",
-          text: "There are no orders in the specified date range.",
-          confirmButtonText: "OK",
-        });
-        return;
-      }
-      throw new Error("Failed to download the report.");
-    }
-  } catch (error) {
-    console.error("Error downloading the report:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Download Failed",
-      text: "An error occurred while downloading the report. Please try again later.",
-    });
-  } finally {
-       
-        document.getElementById('loader').style.display = 'none'; 
-    }
-          })
-        </script>
 
-        <%- include ('../partial/newAdminFooter')-%>
+      const startDateInput = document.getElementById("startDate");
+      startDateInput.setAttribute("max", today);
+
+
+      startDateInput.addEventListener("change", function () {
+        const selectedStartDate = this.value;
+        const endDateInput = document.getElementById("endDate");
+
+
+        if (selectedStartDate) {
+          endDateInput.setAttribute("min", selectedStartDate);
+        } else {
+
+          endDateInput.removeAttribute("min");
+        }
+      });
+
+
+
+      const reportStartDateInput = document.getElementById("reportStartDate");
+      reportStartDateInput.setAttribute("max", today);
+
+
+      reportStartDateInput.addEventListener("change", function () {
+        const selectedStartDate = this.value;
+        const reportEndDateInput = document.getElementById("reportEndDate");
+
+        if (selectedStartDate) {
+          reportEndDateInput.setAttribute("min", selectedStartDate);
+        } else {
+
+          reportEndDateInput.removeAttribute("min");
+        }
+      });
+
+    </script>
+
+    <%- include ('../partial/newAdminFooter')-%>

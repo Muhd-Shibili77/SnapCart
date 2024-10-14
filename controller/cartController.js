@@ -123,8 +123,9 @@ const add_to_cart = async (req, res) => {
       }
 
       
-      cart.total_price = cart.items.reduce((total, item) => total + item.price, 0);
-
+       cart.total_price = cart.items.reduce((total, item) => total + item.price, 0);
+      
+      
       await cart.save();
 
       res.json({ success: true, message: "Product variant added to cart" });
@@ -212,23 +213,32 @@ const deleteCart = async (req, res) => {
   try {
     const { id } = req.query;
     const user = await User.findOne({ email: req.session.email });
-    const cart = await Cart.findOneAndUpdate(
-      { user: user._id },
-      { $pull: { items: { _id: id } } },
-      { new: true }
-    );
-    if (cart) {
-      return res.status(200).json({ success: true, cart });
-    } else {
-      return res
-        .status(404)
-        .json({ success: false, message: "cart not found" });
+
+  
+    const cart = await Cart.findOne({ user: user._id });
+    if (!cart) {
+      return res.status(404).json({ success: false, message: "Cart not found" });
     }
+
+    
+    const itemToDelete = cart.items.find(item => item._id.toString() === id);
+    if (!itemToDelete) {
+      return res.status(404).json({ success: false, message: "Item not found in the cart" });
+    }
+
+  
+    cart.total_price -= itemToDelete.price;
+
+    cart.items = cart.items.filter(item => item._id.toString() !== id);
+    await cart.save();
+
+    return res.status(200).json({ success: true, cart });
   } catch (error) {
-    console.log("Error occurred while deleting cart items:", error);
+    console.log("Error occurred while deleting cart item:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 const cartCheckout = async (req, res) => {
   if (req.session.email) {
@@ -275,6 +285,7 @@ const cartCheckout = async (req, res) => {
 
 const cartCheckoutorder = async (req,res)=>{
   if(req.session.email){
+    let deliveryCharge = 0;
     const user = await User.findOne({ email: req.session.email });
     const address = await Address.find({ userId: user._id });
     const cart = await Cart.findOne({ user: user._id })
@@ -285,13 +296,15 @@ const cartCheckoutorder = async (req,res)=>{
     if(cart){
        cartCount  = cart.items.length;
     }
-
+    if(cart.total_price <2000){
+      deliveryCharge = 40;
+    }
     
-
+    
     if(!cart){
       res.redirect('/user/home')
     }else{
-      res.render('user/cartCheckout',{address,cart,cartCount})
+      res.render('user/cartCheckout',{address,cart,cartCount,deliveryCharge})
     }
   }else{
     res.redirect('/user/login')
@@ -321,8 +334,11 @@ const applyCoupon = async (req, res) => {
       }
 
       const now = new Date();
-      if (now < coupon.start_date || coupon.expiry_date < now) {
+      if (coupon.expiry_date < now) {
         return res.json({ success: false, error: 'Coupon is expired' });
+      }
+      if(now < coupon.start_date){
+        return res.json({ success: false, error: 'Coupon is not started Yet!' });
       }
 
       const cart = await Cart.findOne({ user: user._id }).populate('items.product');
@@ -412,18 +428,14 @@ const applyCouponFromUser = async (req, res) => {
       const { couponCode } = req.body;
       const user = await User.findOne({ email: req.session.email });
 
-      // Check if the coupon exists and if the user has used it
+      
       const coupon = await Coupon.findOne({ coupon_code: couponCode });
 
       if (!coupon) {
         return res.json({ success: false, error: 'Coupon not found' });
       }
 
-      
-
-      
-
-      
+    
       const result = await Coupon.findOneAndUpdate(
         { coupon_code: couponCode, "users.userId": user._id },
         {

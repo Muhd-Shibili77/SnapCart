@@ -8,7 +8,10 @@ const Offer = require("../model/offerDB");
 const offers = async (req, res) => {
   if (req.session.isAdmin) {
     const offer = await Offer.find();
-    const offerSelect = await Offer.find({isDelete:false});
+    const offerSelect = await Offer.find({
+      isDelete: false,
+      offerStartDate: { $lte: new Date() } 
+    });
     const products = await Product.find({ isDelete: false }).populate(
       "variants.offer"
     );
@@ -25,7 +28,7 @@ const addOffers = async (req, res) => {
   try {
     if (req.session.isAdmin) {
       const nameRegex = /^[a-zA-Z\s\-]+$/;
-      const { offerName, offerPercentage, offerStartDate, offerEndDate } =
+      const { offerName, offerPercentage, offerStartDate } =
         req.body;
       const currentDate = new Date();
 
@@ -82,22 +85,15 @@ const addOffers = async (req, res) => {
         });
       }
 
-      if (!offerEndDate) {
-        return res.json({ success: false, error: "offerEndDate is empty" });
-      }
+     
 
-      if (offerEndDate <= offerStartDate) {
-        return res.json({
-          success: false,
-          error: "End date must be after the start date",
-        });
-      }
+      
 
       const newOffer = new Offer({
         offerName: offerName,
         offerPercentage: offerPercentage,
         offerStartDate: new Date(offerStartDate),
-        offerEndDate: new Date(offerEndDate),
+       
       });
 
       await newOffer.save();
@@ -122,7 +118,18 @@ const deleteOffer = async (req, res) => {
       }
 
       await Offer.findByIdAndUpdate(offerId, { isDelete: true });
-      const products = await Product.find({ "variants.offer": offerId });
+      const products = await Product.find({ "variants.offer": offerId },);
+
+      await Product.updateOne(
+        { "variants.offer": offerId },
+        {
+          $set: {
+            "variants.$.offer": null, 
+            "variants.$.discount_price": null 
+          }
+        }
+      );
+      
       const categories = await Category.find({ offer: offerId });
       if (!products.length) {
         return res.json({
@@ -139,11 +146,11 @@ const deleteOffer = async (req, res) => {
 
 
       await Product.updateMany(
-        { "variants.offer": offerId }, // Find products with variants having the offer
+        { "variants.offer": offerId },
         {
           $set: {
-            "variants.$[].offer": null, // Set the offer field to null
-            "variants.$[].discount_price": null, // Set the discount_price to null
+            "variants.$[].offer": null, 
+            "variants.$[].discount_price": null,
           },
         }
       );
@@ -197,7 +204,7 @@ const editOffers = async (req, res) => {
         editOfferName,
         editOfferPercentage,
         editOfferStartDate,
-        editOfferEndDate,
+       
       } = req.body;
       const currentDate = new Date();
 
@@ -255,22 +262,15 @@ const editOffers = async (req, res) => {
         });
       }
 
-      if (!editOfferEndDate) {
-        return res.json({ success: false, error: "offerEndDate is empty" });
-      }
+     
 
-      if (editOfferEndDate <= editOfferStartDate) {
-        return res.json({
-          success: false,
-          error: "End date must be after the start date",
-        });
-      }
+     
 
       await Offer.findByIdAndUpdate(editOfferId, {
         offerName: editOfferName,
         offerPercentage: editOfferPercentage,
         offerStartDate: new Date(editOfferStartDate),
-        offerEndDate: new Date(editOfferEndDate),
+        
       });
 
       res.json({ success: true, message: "offer successfully edited" });

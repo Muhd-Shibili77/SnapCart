@@ -538,8 +538,7 @@
             const couponDescription = button.getAttribute('data-coupon-description')
             const startDate = new Date(couponStartDate).toISOString().slice(0, 16);
             const endDate = new Date(couponEndDate).toISOString().slice(0, 16);
-            console.log(couponStartDate)
-            console.log(couponEndDate)
+           
             document.getElementById('editCouponId').value = couponId
             document.getElementById('editCouponCode').value = couponCode
             document.getElementById('editDiscount').value = couponDiscount

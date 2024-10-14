@@ -678,24 +678,7 @@ const contact = async (req, res) => {
   }
 };
 
-const checkuser = async (req, res, next) => {
-  if (req.session.email) {
-    const email = req.session.email;
-    const userExist = await User.findOne({ email: email });
-    if (userExist.isBlock) {
-      req.session.destroy((err) => {
-        if (err) {
-          console.log(err);
-        }
-        res.redirect("/user/login");
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
-};
+
 
 const userProfile = async (req, res) => {
   if (req.session.email) {
@@ -1070,8 +1053,7 @@ module.exports = {
   singleProduct,
   category,
   about,
-  contact,
-  checkuser, 
+  contact, 
   userProfile,
   editProfile,
   address,

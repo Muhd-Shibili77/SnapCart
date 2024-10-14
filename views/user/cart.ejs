@@ -165,7 +165,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <p class="text-dark mb-2">Shipping:</p>
-                        <p class="text-dark mb-2">Free</p>
+                        <p class="text-dark mb-2 " id="deliveryCharge">FREE</p>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
@@ -344,6 +344,7 @@
         function cartTotal() {
             let cartItems = document.querySelectorAll('#cartItems tr')
             let subtotal = 0
+            let deliveryCharge=0
 
             cartItems.forEach(item => {
                 const priceElement = item.querySelector('[id^=price_] p');
@@ -352,8 +353,19 @@
                 subtotal += price
 
             })
+
+            if(subtotal <2000){
+                deliveryCharge = 40
+            }
+            
+            
             document.getElementById('cartSubtotal').textContent = `₹${subtotal.toFixed(2)}`
-            document.getElementById('cartTotal').textContent = `₹${subtotal.toFixed(2)}`
+            if(deliveryCharge == 0){
+                document.getElementById('deliveryCharge').textContent =`FREE`
+            }else{
+                document.getElementById('deliveryCharge').textContent =`₹${deliveryCharge.toFixed(2)}`
+            }
+            document.getElementById('cartTotal').textContent = `₹${(subtotal + deliveryCharge).toFixed(2)}`
 
         }
         document.addEventListener('DOMContentLoaded', cartTotal);
@@ -411,7 +423,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    // Proceed with checkout (you can redirect to a checkout page)
+                    
                     window.location.href = '/cart/checkoutOrder';
                 } else {
                     if (result.message === "This product is currently unavailable") {

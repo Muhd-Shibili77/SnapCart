@@ -1,6 +1,10 @@
 const express = require('express')
 const orderrouter = express.Router()
 const orderController = require('../controller/orderController')
+const userBlock = require('../middleware/userBlock')
+
+
+orderrouter.use(userBlock)
 
 orderrouter.post('/confrom_order',orderController.orderConfrom)
 
@@ -19,6 +23,10 @@ orderrouter.get('/order_detials',orderController.orderDetails)
 orderrouter.post('/order_return',orderController.orderReturn)
 
 orderrouter.post('/downloadInvoice',orderController.downloadInvoice)
+
+orderrouter.post('/repaymentRazorpay',orderController.repaymentRazorpay)
+
+orderrouter.post('/verifyRepayment',orderController.verifyRepayment)
 
 
 

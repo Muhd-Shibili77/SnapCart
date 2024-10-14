@@ -106,10 +106,12 @@ const orderConfrom = async (req, res) => {
       const coupon = await Coupon.findOne({
         "users.userId": user._id,
         "users.isBought": false,
-      });
+      }); 
 
       if (coupon) {
+        
         const discountPercentage = coupon.discount;
+       
         const discountAmount = parseInt(
           (totalAmount * discountPercentage) / 100
         );
@@ -122,8 +124,20 @@ const orderConfrom = async (req, res) => {
           }
         );
       }
+      
+      let payableAmount = totalAmount - discountOnOrder;
+      let deliveryCharge = 0;
 
-      const payableAmount = totalAmount - discountOnOrder;
+      if(totalAmount < 2000){
+        deliveryCharge = 40;
+      }
+      payableAmount += deliveryCharge
+     
+
+      if(payableAmount > 1000){
+        return res.json({success:false,message:'above 1000 is not allowed cash of delivery'})
+      }
+      
 
       const addressOrder = [
         {
@@ -138,7 +152,7 @@ const orderConfrom = async (req, res) => {
       ];
 
       const orderID = await generateOrderId();
-
+      
       const order = new Order({
         orderId: orderID,
         user: user._id,
@@ -147,11 +161,12 @@ const orderConfrom = async (req, res) => {
         paymentMethod,
         totalAmount,
         discountAmount: discountOnOrder,
+        deliveryCharge,
         payableAmount,
         couponApplied: coupon ? coupon._id : null,
         orderStatus: "Pending",
       });
-
+      
       await order.save();
       await Cart.findByIdAndDelete(cartId);
       res
@@ -280,7 +295,7 @@ const orderDetails = async (req, res) => {
         "items.product"
       );
 
-      res.render("user/orderDetails", { order ,cartCount});
+      res.render("user/orderDetails", { order ,cartCount,user});
     } else {
       res.redirect("/user/home");
     }
@@ -292,6 +307,7 @@ const orderDetails = async (req, res) => {
 const orderReturn = async (req, res) => {
   try {
     if (req.session.email) {
+      
       const { orderId, itemId, reason, additionalReason } = req.body;
 
       if (!orderId) {
@@ -327,6 +343,7 @@ const orderReturn = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "Return request submitted successfully",
+        
       });
     } else {
       res.redirect("/user/login");
@@ -412,7 +429,14 @@ const confrom_order_razorPay = async (req, res) => {
     );
   }
 
-  const payableAmount = totalAmount - discountOnOrder;
+  let payableAmount = totalAmount - discountOnOrder;
+  let deliveryCharge = 0;
+
+  if(totalAmount < 2000){
+    deliveryCharge = 40;
+  }
+  payableAmount += deliveryCharge
+  
   const option = {
     amount: Math.round(payableAmount * 100),
     currency: "INR",
@@ -536,7 +560,13 @@ try{
         );
       }
 
-      const payableAmount = totalAmount - discountOnOrder;
+      let payableAmount = totalAmount - discountOnOrder;
+      let deliveryCharge = 0;
+
+      if(totalAmount < 2000){
+        deliveryCharge = 40;
+      }
+      payableAmount += deliveryCharge
 
       const addressOrder = [
         {
@@ -564,6 +594,7 @@ try{
         paymentMethod,
         totalAmount,
         discountAmount: discountOnOrder,
+        deliveryCharge,
         payableAmount,
         couponApplied: coupon ? coupon._id : null,
         orderStatus: "Pending",
@@ -573,7 +604,7 @@ try{
       if (expectedSignature === signature) {
        
         order.paymentStatus = 'Paid';
-
+        
         await order.save();
 
         await Cart.findByIdAndDelete(cart._id);
@@ -583,12 +614,14 @@ try{
        
 
         order.paymentStatus = 'Failed';
+        const orderId = order._id;
+        
         await order.save();
-
+      
 
         await Cart.findByIdAndDelete(cart._id);
 
-        return res.json({success: false,message: "Payment verification failed, order created but payment incomplete"});
+        return res.json({success: false,message: "Payment verification failed, order created but payment incomplete",orderId:orderId});
     }
   } catch (error) {
     console.error('Error in razorpay payment:', error);
@@ -695,7 +728,13 @@ const confrom_order_wallet = async (req,res)=>{
         );
       }
 
-      const payableAmount = totalAmount - discountOnOrder;
+      let payableAmount = totalAmount - discountOnOrder;
+      let deliveryCharge = 0;
+
+      if(totalAmount < 2000){
+        deliveryCharge = 40;
+      }
+      payableAmount += deliveryCharge
 
       const walletBalance = wallet.balanceAmount;
       if(walletBalance < payableAmount){
@@ -726,6 +765,7 @@ const confrom_order_wallet = async (req,res)=>{
         paymentStatus:'Paid',
         totalAmount,
         discountAmount: discountOnOrder,
+        deliveryCharge,
         payableAmount,
         couponApplied: coupon ? coupon._id : null,
         orderStatus: "Pending",
@@ -1096,6 +1136,77 @@ function generateInvoiceNumber() {
   }
 
 
+  const repaymentRazorpay = async (req,res)=>{
+    try {
+      const { orderId } = req.body;
+      const order = await Order.findOne({ _id: orderId });
+
+      if (!order) {
+          return res.status(404).json({ success: false, message: 'Order not found' });
+      }
+
+      const payment_capture = 1; 
+      const amount = order.payableAmount * 100; 
+      const currency = 'INR';
+
+      const options = {
+          amount,
+          currency,
+          receipt: `receipt_${orderId}`,
+          payment_capture
+      };
+
+      const response = await razorpay.orders.create(options);
+      
+      res.status(200).json({
+          success: true,
+          orderId: response.id,
+          amount: response.amount,
+          currency: response.currency,
+          key: process.env.RAZOR_PAY_KEY_ID,
+          name: 'SnapCart', 
+          description: 'Repayment for Order',
+          orderReceipt: orderId 
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Server error occurred' });
+  }
+
+  }
+
+
+  const verifyRepayment = async (req,res)=>{
+    try {
+      const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId } = req.body;
+      
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const expectedSignature = crypto
+          .createHmac('sha256', process.env.RAZOR_PAY_KEY_SECRET)
+          .update(body.toString())
+          .digest('hex');
+
+      if (expectedSignature === razorpay_signature) {
+
+          const order = await Order.findById(orderId);
+          order.paymentStatus = 'Paid';
+          order.razorpayOrderId = razorpay_order_id;
+          await order.save();
+
+          res.status(200).json({ success: true, message: 'Payment successful' });
+      } else {
+          res.status(400).json({ success: false, message: 'Invalid signature' });
+      }
+
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Server error' });
+  }
+  }
+
+
+
 module.exports = {
   orderConfrom,
   orderHistory,
@@ -1106,4 +1217,6 @@ module.exports = {
   razorPay_verify_payment,
   confrom_order_wallet,
   downloadInvoice,
+  repaymentRazorpay,
+  verifyRepayment
 };

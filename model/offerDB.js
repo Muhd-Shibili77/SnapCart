@@ -13,10 +13,6 @@ const offerSchema = new mongoose.Schema({
         type:Date,
         required:true
     },
-    offerEndDate:{
-        type:Date,
-        required:true
-    },
     isDelete:{
         type:Boolean,
         default:false

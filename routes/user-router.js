@@ -2,9 +2,9 @@ const express = require("express");
 const userrouter = express.Router();
 const userController = require('../controller/user-controller')
 const walletController = require('../controller/walletController')
+const userBlock = require('../middleware/userBlock')
 
-
-userrouter.use(userController.checkuser)
+userrouter.use(userBlock)
 
 userrouter.get("/login", userController.get_login);
 

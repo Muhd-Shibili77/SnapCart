@@ -1,29 +1,29 @@
 <%- include ("../partial/header" )-%>
-<style>
-    .original-price {
-        color: red !important;
-        /* Sets the text color to red */
-        font-size: 15px !important;
-        text-decoration: line-through;
-        /* Adds a strikethrough effect */
-        margin-right: 5px;
-        /* Adds space between original and offer price */
-    }
+    <style>
+        .original-price {
+            color: red !important;
+            /* Sets the text color to red */
+            font-size: 15px !important;
+            text-decoration: line-through;
+            /* Adds a strikethrough effect */
+            margin-right: 5px;
+            /* Adds space between original and offer price */
+        }
 
-    .thumb {
-        position: relative;
-    }
+        .thumb {
+            position: relative;
+        }
 
-    .offer-badge {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        color: white;
-        border-radius: 50%;           
-        z-index: 1;
-        
-    }
-</style>
+        .offer-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: white;
+            border-radius: 50%;
+            z-index: 1;
+
+        }
+    </style>
 
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
@@ -38,7 +38,7 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            
+
                             <li class="scroll-to-section"><a href="/user/home">Home</a></li>
                             <li class="scroll-to-section"><a href="/user/home">Men's</a></li>
                             <li class="scroll-to-section"><a href="/user/home">Women's</a></li>
@@ -48,7 +48,8 @@
                                 <a href="/cart" class="d-flex align-items-center">
                                     <i class="bi bi-cart"></i>
                                     <!-- Badge for Cart Count next to the cart icon -->
-                                    <span class="badge badge-pill badge-secondary" style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <span class="badge badge-pill badge-secondary"
+                                        style=" width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                         <%=cartCount%>
                                     </span>
                                 </a>
@@ -101,10 +102,10 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="container mt-5">
             <div class="row">
-                <% if (products.length === 0) { %>
+                <% if (products.length===0) { %>
                     <div class="col-12 mt-5 d-flex justify-content-center" style="height: 50vh;">
                         <div class="text-center">
                             <div class="alert alert-warning">
@@ -112,59 +113,77 @@
                             </div>
                         </div>
                     </div>
-                <% } else { %>
-                    <% products.forEach((element) => { %>
-                        <% const product = element.product; %>
-                        <% const variant = product.variants.find(x => x._id.toString() === element.variantId); %>
-                        <div class="col-6 col-md-4 col-lg-3 mt-4 d-flex align-items-stretch">
-                            <div class="card h-100">
-                                <div class="position-relative">
-                                    <% if (variant.offer) { %>
-                                        <button class="offer-badge btn btn-danger" disabled><%= variant.offer.offerPercentage %>% off</button>
-                                            
-                                        
+                    <% } else { %>
+                        <% products.forEach((element)=> { %>
+                            <% const product=element.product; %>
+                                <% const variant=product.variants.find(x=> x._id.toString() === element.variantId); %>
+                                    <div class="col-6 col-md-4 col-lg-3 mt-4 d-flex align-items-stretch">
+                                        <div class="card h-100">
+                                            <div class="position-relative">
+                                                <% if (variant.offer) { %>
+                                                    <button class="offer-badge btn btn-danger" disabled>
+                                                        <%= variant.offer.offerPercentage %>% off
+                                                    </button>
+
+
+                                                    <% } %>
+                                                        <a
+                                                            href="/user/product?proId=<%= product._id %>&varId=<%= variant._id %>">
+                                                            <img class="card-img-top img-fluid img-thumbnail"
+                                                                src="/<%= variant.images[0] %>" alt="Card image cap"
+                                                                style="object-fit: cover; height: 40vh; width: 45vh;">
+                                                        </a>
+                                                        <button class="btn btn-outline-dark position-absolute"
+                                                            type="button"
+                                                            onclick="DelFromWishlist('<%= element._id %>')"
+                                                            style="top: 5px; right: 5px; border-radius: 50%;">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-center"
+                                                    style="min-height: 48px; line-height: 1.2em;">
+                                                    <strong>
+                                                        <%= product.product_name %>
+                                                    </strong>
+                                                </h5>
+                                                <p class="card-text mt-2 text-center">★★★★★</p>
+                                                <div class="d-block text-center">
+                                                    <%if(variant.offer){%>
+                                                        <span class="original-price">INR <%=variant.price %></span>
+                                                        <span>INR <%= variant.discount_price %></span>
+                                                        <%}else{%>
+                                                            <span>INR <%=variant.price %></span>
+                                                            <%}%>
+                                                </div>
+
+                                                <div class="mt-auto d-flex justify-content-center">
+                                                    <% if (variant.stock <= 0 ) {%>
+                                                        <button type="button"
+                                                           
+                                                            class="btn btn-danger" disabled>
+                                                            Out of Stock  
+                                                        </button>
+                                                        <% }else{ %>
+                                                            <button type="button"
+                                                                onclick="addToCart('<%= product._id %>', '<%= variant._id %>')"
+                                                                class="btn btn-outline-dark">
+                                                                <i class="bi bi-cart"></i> Add To Cart
+                                                            </button>
+
+                                                            <% } %>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }) %>
                                         <% } %>
-                                    <a href="/user/product?proId=<%= product._id %>&varId=<%= variant._id %>">
-                                        <img class="card-img-top img-fluid img-thumbnail"
-                                            src="/<%= variant.images[0] %>"
-                                            alt="Card image cap" style="object-fit: cover; height: 40vh; width: 45vh;">
-                                    </a>
-                                    <button class="btn btn-outline-dark position-absolute" type="button"
-                                        onclick="DelFromWishlist('<%= element._id %>')"
-                                        style="top: 5px; right: 5px; border-radius: 50%;">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title text-center" style="min-height: 48px; line-height: 1.2em;">
-                                        <strong><%= product.product_name %></strong>
-                                    </h5>
-                                    <p class="card-text mt-2 text-center">★★★★★</p>
-                                    <div class="d-block text-center">
-                                        <%if(variant.offer){%>
-                                            <span class="original-price">INR <%=variant.price %></span>
-                                            <span>INR <%= variant.discount_price %></span>
-                                            <%}else{%>
-                                                <span>INR <%=variant.price %></span>
-                                                <%}%>
-                                    </div>
-                                   
-                                    <div class="mt-auto d-flex justify-content-center">
-                                        <button type="button"
-                                            onclick="addToCart('<%= product._id %>', '<%= variant._id %>')"
-                                            class="btn btn-outline-dark">
-                                            <i class="bi bi-cart"></i> Add To Cart
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% }) %>
-                <% } %>
             </div>
         </div>
     </section>
-    
+
 
     <!-- ***** Footer Start ***** -->
     <footer>
