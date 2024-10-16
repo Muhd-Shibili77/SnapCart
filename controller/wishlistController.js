@@ -6,7 +6,7 @@ const Cart = require("../model/cartDb");
 const Wishlist = require("../model/wishlistDB");
 
 const wishlistGet = async (req, res) => {
-  if (req.session.email) {
+ 
     const user = await User.findOne({ email: req.session.email });
     
     const cart = await Cart.findOne({ user: user._id }).populate(
@@ -38,14 +38,12 @@ const wishlistGet = async (req, res) => {
     } else {
       res.render("user/wishlist", { products: [],cartCount });
     }
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 const addToWishlist = async (req, res) => {
   try {
-    if (req.session.email) {
+    
     
       const { productId, variantId } = req.body;
        
@@ -93,9 +91,7 @@ const addToWishlist = async (req, res) => {
       await wishlist.save()
 
       res.status(200).json({ success: true, message: "Product  added to wishlist" });
-    } else {
-      res.redirect("/user/login");
-    }
+    
   } catch (error) {
     console.error("Error in add to wishlist:", error);
     res.status(500).json({ success: false, message: "Something went wrong on the server" });
@@ -107,7 +103,7 @@ const addToWishlist = async (req, res) => {
 
 const removeFromWishlist =async (req,res)=>{
   try{
-    if(req.session.email){
+    
       const {productId}=req.body
           const user = await User.findOne({email:req.session.email})
           if(!user){
@@ -119,16 +115,6 @@ const removeFromWishlist =async (req,res)=>{
           console.log(result)
           
           res.json({success:true , message:' item removed from wishlist '})
-
-    }else{
-      res.redirect('/user/login')
-    }
-
-
-
-
-
-
 
 
   }catch(error){

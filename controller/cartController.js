@@ -8,7 +8,7 @@ const Coupon = require('../model/couponDB')
 
 const cart = async (req, res) => {
   try {
-    if (req.session.email) {
+    
       const user = await User.findOne({ email: req.session.email });
       
       const cart = await Cart.findOne({ user: user._id }).populate(
@@ -39,9 +39,7 @@ const cart = async (req, res) => {
       }
 
       res.render("user/cart", { cart,cartCount });
-    } else {
-      res.redirect("/user/login");
-    }
+    
   } catch (error) {
     console.log("error while loading cart page", error);
     res.status(500).send("error occur while loading this cart page");
@@ -49,7 +47,7 @@ const cart = async (req, res) => {
 };
 
 const add_to_cart = async (req, res) => {
-  if (req.session.email) {
+  
     try {
       const productId = req.body.product_id;
       const variantId = req.body.variant_id;
@@ -66,11 +64,12 @@ const add_to_cart = async (req, res) => {
         return res.status(404).json({ success: false, message: "User not found" });
       }
 
-      const product = await Product.findById(productId);
+      const product = await Product.findOne({_id:productId,isDelete:false});
       if (!product) {
         console.log("Product not found");
         return res.status(404).json({ success: false, message: "Product not found" });
       }
+
 
       const variant = product.variants.find(v => v._id.toString() === variantId);
       if (!variant) {
@@ -133,9 +132,7 @@ const add_to_cart = async (req, res) => {
       console.log("Error occurred while adding product to cart:", error);
       res.status(500).json({ success: false, message: "An error occurred" });
     }
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 
@@ -241,7 +238,7 @@ const deleteCart = async (req, res) => {
 
 
 const cartCheckout = async (req, res) => {
-  if (req.session.email) {
+  
     
     const user = await User.findOne({ email: req.session.email });
  
@@ -278,13 +275,11 @@ const cartCheckout = async (req, res) => {
 
     
     return res.json({success: true,});
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const cartCheckoutorder = async (req,res)=>{
-  if(req.session.email){
+ 
     let deliveryCharge = 0;
     const user = await User.findOne({ email: req.session.email });
     const address = await Address.find({ userId: user._id });
@@ -306,16 +301,14 @@ const cartCheckoutorder = async (req,res)=>{
     }else{
       res.render('user/cartCheckout',{address,cart,cartCount,deliveryCharge})
     }
-  }else{
-    res.redirect('/user/login')
-  }
+  
 }
 
 
 
 const applyCoupon = async (req, res) => {
   try {
-    if (req.session.email) {
+    
       const { couponCode } = req.body;
       const user = await User.findOne({ email: req.session.email });
       const coupon = await Coupon.findOne({ coupon_code: couponCode });
@@ -375,9 +368,7 @@ const applyCoupon = async (req, res) => {
 
       res.json({ success: true, discount: discount, price: subTotal });
       
-    } else {
-      res.redirect('/user/login');
-    }
+   
   } catch (error) {
     console.log('Error occurred while applying coupon:', error);
     return res.json({ success: false, error: 'An error occurred while applying the coupon' });
@@ -389,7 +380,7 @@ const applyCoupon = async (req, res) => {
 
 const applyCouponToUser = async (req, res) => {
   try {
-    if (req.session.email) {
+   
       const { couponCode } = req.body;
       const user = await User.findOne({ email: req.session.email });
 
@@ -409,9 +400,7 @@ const applyCouponToUser = async (req, res) => {
 
         return res.json({ success: true, message: 'Coupon applied successfully' });
       
-    } else {
-      res.redirect('/user/login');
-    }
+   
   } catch (error) {
     console.log('An error occurred while applying the coupon', error);
     return res.json({ success: false, error: 'An error occurred while applying the coupon' });
@@ -424,7 +413,7 @@ const applyCouponToUser = async (req, res) => {
 
 const applyCouponFromUser = async (req, res) => {
   try {
-    if (req.session.email) {
+   
       const { couponCode } = req.body;
       const user = await User.findOne({ email: req.session.email });
 
@@ -449,9 +438,7 @@ const applyCouponFromUser = async (req, res) => {
       }
 
       return res.json({ success: true, message: 'Coupon removed successfully' });
-    } else {
-      res.redirect('/user/login');
-    }
+    
   } catch (error) {
     console.error('An error occurred while removing the coupon:', error);
     return res.json({ success: false, error: 'An error occurred while removing the coupon' });

@@ -326,7 +326,7 @@ const resend_otp = async (req, res) => {
 };
 
 const get_home = async (req, res) => {
-  if (req.session.email) {
+ 
     const user = await User.findOne({email:req.session.email})
     const cart = await Cart.findOne({ user: user._id }).populate(
       "items.product"
@@ -377,13 +377,11 @@ const get_home = async (req, res) => {
       accessoris,
       cartCount,
     });
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const allProducts = async (req, res) => {
-  if (req.session.email) {
+  
     
     const { search, brand, category,priceRange, sort } = req.query;
     const user = await User.findOne({email:req.session.email})
@@ -543,13 +541,11 @@ const brands = await Brand.find({isDeleted:false})
       selectedBrand:brand,
       selectedPrice:priceRange,
     });
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const singleProduct = async (req, res) => {
-  if (req.session.email) {
+  
     const proId = req.query.proId;
     const varId = req.query.varId;
     const user = await User.findOne({ email: req.session.email });
@@ -597,13 +593,11 @@ const singleProduct = async (req, res) => {
       ProductInWishlist,
       cartCount,
     });
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const category = async (req, res) => {
-  if (req.session.email) {
+ 
     const user = await User.findOne({email:req.session.email})
     const cart = await Cart.findOne({ user: user._id }).populate(
       "items.product"
@@ -623,7 +617,7 @@ const category = async (req, res) => {
     }).countDocuments();
     const totalPage = Math.ceil(totalProducts / limit);
 
-    const category = await Product.find({ category_id: id })
+    const category = await Product.find({ category_id: id ,isDelete:false})
       .populate("category_id")
       .populate({
         path: "variants.offer",
@@ -633,13 +627,11 @@ const category = async (req, res) => {
       .limit(limit);
 
     res.render("user/category", { category, totalPage, currentPage: page ,cartCount});
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 const about = async (req, res) => {
-  if (req.session.email) {
+  
     const user = await User.findOne({email:req.session.email})
     const cart = await Cart.findOne({ user: user._id }).populate(
       "items.product"
@@ -654,12 +646,10 @@ const about = async (req, res) => {
     
 
     res.render("user/about",{cartCount});
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 const contact = async (req, res) => {
-  if (req.session.email) {
+  
     const user = await User.findOne({email:req.session.email})
     const cart = await Cart.findOne({ user: user._id }).populate(
       "items.product"
@@ -673,15 +663,13 @@ const contact = async (req, res) => {
 
 
     res.render("user/contact",{cartCount});
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 
 
 const userProfile = async (req, res) => {
-  if (req.session.email) {
+  
     const email = req.session.email;
     const user = await User.findOne({ email: email });
     
@@ -697,13 +685,11 @@ const userProfile = async (req, res) => {
 
     
     res.render("user/userProfile", { user,cartCount });
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const editProfile = async (req, res) => {
-  if (req.session.email) {
+  
     try {
       const { userName, userId, phone } = req.body;
       
@@ -720,13 +706,11 @@ const editProfile = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while updating the user" });
     }
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 const address = async (req, res) => {
-  if (req.session.email) {
+  
     const user = await User.findOne({ email: req.session.email });
     
     const cart = await Cart.findOne({ user: user._id }).populate(
@@ -753,13 +737,11 @@ const address = async (req, res) => {
       .limit(limit);
 
     res.render("user/address", { address, totalPage, currentPage: page,cartCount });
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const add_address = async (req, res) => {
-  if (req.session.email) {
+ 
     try {
       const user = await User.findOne({ email: req.session.email });
       const { fullName, address, pincode, phone, city, state, country } =
@@ -783,13 +765,11 @@ const add_address = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while adding new address" });
     }
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const edit_address = async (req, res) => {
-  if (req.session.email) {
+  
     try {
       const {
         userId,
@@ -817,9 +797,7 @@ const edit_address = async (req, res) => {
         .status(500)
         .json({ message: "something went wrong while editing the address" });
     }
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const delete_address = async (req, res) => {
@@ -837,7 +815,7 @@ const delete_address = async (req, res) => {
 };
 
 const password = async (req, res) => {
-  if (req.session.email) {
+  
     const user = await User.findOne({email:req.session.email})
     const cart = await Cart.findOne({ user: user._id }).populate(
       "items.product"
@@ -852,13 +830,11 @@ const password = async (req, res) => {
     
 
     res.render("user/changePassword", { success: false ,cartCount});
-  } else {
-    res.redirect("/user/login");
-  }
+  
 };
 
 const changePassword = async (req, res) => {
-  if (req.session.email) {
+ 
     try {
       const { oldPass, newPass } = req.body;
 
@@ -894,9 +870,7 @@ const changePassword = async (req, res) => {
         .status(500)
         .json({ success: false, message: "Error in updating password", error });
     }
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 const forgetPassword = (req, res) => {

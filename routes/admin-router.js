@@ -5,88 +5,90 @@ const adminController = require('../controller/adminController')
 const productController =require('../controller/productController')
 const offerController = require('../controller/offerController')
 const couponController = require('../controller/couponController')
+const adminAuth = require('../middleware/adminAuth')
+
 
 adminrouter.get("/login",adminController.admin_login);
 
 adminrouter.post("/login",adminController.post_admin_login);
 
-adminrouter.get("/dashboard",adminController.admin_dashboard);
+adminrouter.get("/dashboard",adminAuth,adminController.admin_dashboard);
 
-adminrouter.get("/users",adminController.admin_users);
+adminrouter.get("/users",adminAuth,adminController.admin_users);
 
-adminrouter.post("/block",adminController.block_users);
+adminrouter.post("/block",adminAuth,adminController.block_users);
 
-adminrouter.post("/unblock",adminController.unblock_users);
+adminrouter.post("/unblock",adminAuth,adminController.unblock_users);
 
-adminrouter.get("/products",productController.admin_products);
+adminrouter.get("/products",adminAuth,productController.admin_products);
 
-adminrouter.get("/product_detail",productController.product_detail);
+adminrouter.get("/product_detail",adminAuth,productController.product_detail);
 
-adminrouter.get("/add_products",productController.add_products);
+adminrouter.get("/add_products",adminAuth,productController.add_products);
 
-adminrouter.post("/add_products", upload.any(), productController.post_add_products);
+adminrouter.post("/add_products",adminAuth, upload.any(), productController.post_add_products);
 
-adminrouter.post("/delete_products",productController.delete_products);
+adminrouter.post("/delete_products",adminAuth,productController.delete_products);
 
-adminrouter.post("/restore_product",productController.restore_products);
+adminrouter.post("/restore_product",adminAuth,productController.restore_products);
 
-adminrouter.get("/edit_product",productController.get_edit_products);
+adminrouter.get("/edit_product",adminAuth,productController.get_edit_products);
 
-adminrouter.post("/edit_product", upload.any(),productController.post_edit_products);
+adminrouter.post("/edit_product",adminAuth, upload.any(),productController.post_edit_products);
 
-adminrouter.get("/category",adminController.admin_category);
+adminrouter.get("/category",adminAuth,adminController.admin_category);
 
 adminrouter.post("/add_category",adminController.add_category);
 
-adminrouter.post("/delete_category",adminController.delete_category);
+adminrouter.post("/delete_category",adminAuth,adminController.delete_category);
 
-adminrouter.post("/restore_category",adminController.restore_category);
+adminrouter.post("/restore_category",adminAuth,adminController.restore_category);
 
-adminrouter.post("/edit_category",adminController.edit_category);
+adminrouter.post("/edit_category",adminAuth,adminController.edit_category);
 
-adminrouter.get("/brand",adminController.admin_brand);
+adminrouter.get("/brand",adminAuth,adminController.admin_brand);
 
 adminrouter.post("/add_brand",adminController.add_brand);
 
-adminrouter.post("/delete_brand",adminController.delete_brand);
+adminrouter.post("/delete_brand",adminAuth,adminController.delete_brand);
 
-adminrouter.post("/restore_brand",adminController.restore_brand);
+adminrouter.post("/restore_brand",adminAuth,adminController.restore_brand);
 
-adminrouter.post("/edit_brand",adminController.edit_brand);
+adminrouter.post("/edit_brand",adminAuth,adminController.edit_brand);
 
-adminrouter.get("/orders",adminController.orders);
+adminrouter.get("/orders",adminAuth,adminController.orders);
 
-adminrouter.get("/offers",offerController.offers);
+adminrouter.get("/offers",adminAuth,offerController.offers);
 
-adminrouter.post("/addOffers",offerController.addOffers);
+adminrouter.post("/addOffers",adminAuth,offerController.addOffers);
 
-adminrouter.post("/deleteOffer",offerController.deleteOffer);
+adminrouter.post("/deleteOffer",adminAuth,offerController.deleteOffer);
 
-adminrouter.post("/restoreOffer",offerController.restoreOffer);
+adminrouter.post("/restoreOffer",adminAuth,offerController.restoreOffer);
 
-adminrouter.post("/editOffers",offerController.editOffers);
+adminrouter.post("/editOffers",adminAuth,offerController.editOffers);
 
 adminrouter.post("/updateProductOffer",offerController.updateProductOffer);
 
-adminrouter.post("/removeProductOffer",offerController.removeProductOffer);
+adminrouter.post("/removeProductOffer",adminAuth,offerController.removeProductOffer);
 
 adminrouter.post("/updateCategoryOffer",offerController.updateCategoryOffer);
 
 adminrouter.post("/removeCategoryOffer",offerController.removeCategoryOffer);
 
-adminrouter.post('/update_orderStatus',adminController.update_orderStatus)
+adminrouter.post('/update_orderStatus',adminAuth,adminController.update_orderStatus)
 
-adminrouter.post('/rejectReturn',adminController.rejectReturn)
+adminrouter.post('/rejectReturn',adminAuth,adminController.rejectReturn)
 
-adminrouter.post('/acceptReturn',adminController.acceptReturn)
+adminrouter.post('/acceptReturn',adminAuth,adminController.acceptReturn)
 
-adminrouter.get('/coupon',couponController.coupon)
+adminrouter.get('/coupon',adminAuth,couponController.coupon)
 
-adminrouter.post('/addCoupon',couponController.addCoupon)
+adminrouter.post('/addCoupon',adminAuth,couponController.addCoupon)
 
-adminrouter.post('/editCoupon',couponController.editCoupon)
+adminrouter.post('/editCoupon',adminAuth,couponController.editCoupon)
 
-adminrouter.post('/deleteCoupon',couponController.deleteCoupon)
+adminrouter.post('/deleteCoupon',adminAuth,couponController.deleteCoupon)
 
 adminrouter.post('/downloadReport',adminController.downloadReport)
 

@@ -10,9 +10,10 @@ const Wallet = require("../model/walletDB");
 const RazorPay = require("../config/razorPay");
 const razorpay = require("../config/razorPay");
 const crypto = require("crypto");
-const pdf = require("html-pdf-node");
+const PDFDocument = require('pdfkit');
 const fs = require('fs');
-
+const path = require('path');
+const { createInvoicePDF } = require('../utilies/createInvoice')
 
 
 const generateOrderId = async () => {
@@ -29,7 +30,7 @@ const generateOrderId = async () => {
 
 const orderConfrom = async (req, res) => {
   try {
-    if (req.session.email) {
+   
       const user = await User.findOne({ email: req.session.email });
       const { addressId, cartId } = req.body;
       let { paymentMethod } = req.body;
@@ -172,9 +173,7 @@ const orderConfrom = async (req, res) => {
       res
         .status(200)
         .json({ success: true, message: "order is placed successfully " });
-    } else {
-      res.redirect("/user/login");
-    }
+   
   } catch (error) {
     console.error("error in ordering item", error);
     res
@@ -184,7 +183,7 @@ const orderConfrom = async (req, res) => {
 };
 
 const orderHistory = async (req, res) => {
-  if (req.session.email) {
+  
     const user = await User.findOne({ email: req.session.email });
     
     const cart = await Cart.findOne({ user: user._id }).populate(
@@ -205,14 +204,12 @@ const orderHistory = async (req, res) => {
       .sort({ orderId: -1 });
 
     res.render("user/orderHistory", { order,cartCount });
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 const orderCancel = async (req, res) => {
   try {
-    if (req.session.email) {
+    
       const user = await User.findOne({ email: req.session.email });
       const { orderId } = req.body;
       const order = await Order.findById(orderId);
@@ -261,9 +258,7 @@ const orderCancel = async (req, res) => {
       res
         .status(200)
         .json({ success: true, message: "order cancelled succesfully" });
-    } else {
-      res.redirect("/user/login");
-    }
+    
   } catch (error) {
     console.log("Error occurred while deleting cart items:", error);
     return res.status(500).json({ success: false, message: "Server error" });
@@ -271,7 +266,7 @@ const orderCancel = async (req, res) => {
 };
 
 const orderDetails = async (req, res) => {
-  if (req.session.email) {
+  
     const orderId = req.query.orderId;
     const user = await User.findOne({ email: req.session.email });
     
@@ -299,14 +294,12 @@ const orderDetails = async (req, res) => {
     } else {
       res.redirect("/user/home");
     }
-  } else {
-    res.redirect("/user/login");
-  }
+ 
 };
 
 const orderReturn = async (req, res) => {
   try {
-    if (req.session.email) {
+    
       
       const { orderId, itemId, reason, additionalReason } = req.body;
 
@@ -345,9 +338,7 @@ const orderReturn = async (req, res) => {
         message: "Return request submitted successfully",
         
       });
-    } else {
-      res.redirect("/user/login");
-    }
+    
   } catch (error) {
     console.error("Error occurred while processing return product POST", error);
     res.status(500).json({
@@ -633,7 +624,7 @@ try{
 
 const confrom_order_wallet = async (req,res)=>{
   try {
-    if (req.session.email) {
+  
       const user = await User.findOne({ email: req.session.email });
       const { addressId, cartId ,paymentMethod } = req.body;
       const wallet = await Wallet.findOne({ user: user._id });
@@ -787,9 +778,7 @@ const confrom_order_wallet = async (req,res)=>{
 
 
       res.status(200).json({ success: true, message: "order is placed successfully " });
-    } else {
-      res.redirect("/user/login");
-    }
+    
   } catch (error) {
     console.error("error in ordering item", error);
     res
@@ -814,326 +803,43 @@ function generateInvoiceNumber() {
 
 
 
+const downloadInvoice = async (req, res) => {
+  try {
+   
 
-  const downloadInvoice = async (req,res)=>{
-    try{
-      if(req.session.email){
-        let orderItems = '';
-        const {orderId} = req.body
-        if(!orderId){
-          return res.json({success:false,error:'order Id not found'})
-        }
+    const { orderId } = req.body;
+    if (!orderId) {
+      return res.status(400).json({ success: false, error: 'Order Id not found' });
+    }
 
-        const order = await Order.findOne({orderId:orderId})
-        .populate("user", "name")
-        .populate({
-          path: "items.product",
-          select: "product_name variants",
-        })
-
-        const address = order.address[0];
-      
-        const invoiceNumber = generateInvoiceNumber();
-        
-
-        order.items.forEach(item => {
-          const product = item.product;
-          const variant = product.variants.find(v => v._id.toString() === item.variantId);
-         
-       
-
-          
-          
-
-          orderItems+= `
-          <tr>
-              <td>${product.product_name}</td>
-              <td>Color: ${variant.color}<br>Storage: ${variant.size}</td>
-              <td>${item.quantity}</td>
-              <td>${item.price}</td>         
-              <td>${item.price.toFixed(2)}</td>         
-          </tr>
-          `;
+ 
+    const order = await Order.findOne({ orderId: orderId })
+      .populate("user", "name")
+      .populate({
+        path: "items.product",
+        select: "product_name variants",
       });
-        
 
-        const html = `     
- <!DOCTYPE html>
-<html>
-<head>
-  <title>Invoice</title>
-  <style>
-    /* Reset Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
     }
 
-    /* Body Styles */
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #f0f8ff, #dff0ff);
-      color: #333;
-      padding: 20px;
-    }
-
-    /* Invoice Container */
-    .invoice-container {
-      max-width: 800px;
-      margin: 40px auto;
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      border-top: 8px solid #005b18;
-    }
-
-    /* Header Styles */
-    .invoice-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .invoice-header img {
-      max-width: 150px;
-      margin-bottom: 20px;
-    }
-
-    .invoice-header h1 {
-      font-size: 36px;
-      color: #005b18;
-      font-family: 'Georgia', serif;
-      letter-spacing: 2px;
-      text-shadow: 1px 1px 2px #ddd;
-    }
-
-    /* Details Section */
-    .invoice-details {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
-      padding: 20px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-    }
-
-    .details-column {
-      width: 48%;
-    }
-
-    .details-column h2 {
-      font-size: 20px;
-      color: #005b18;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #005b18;
-      display: inline-block;
-    }
-
-    .details-column p {
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #555;
-    }
-
-    /* Table Styles */
-    .invoice-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 30px;
-    }
-
-    .invoice-table th, .invoice-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .invoice-table th {
-      background-color: #005b18;
-      color: #fff;
-      text-transform: uppercase;
-      font-size: 14px;
-      font-family: 'Lora', serif;
-    }
-
-    .invoice-table tr:nth-child(even) {
-      background-color: #f4f9fd;
-    }
-
-    /* Totals Section */
-    .totals {
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    .totals table {
-      width: 300px;
-      margin-left: auto;
-      border-collapse: collapse;
-    }
-
-    .totals td {
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    .totals .totals-label {
-      text-align: left;
-      color: #555;
-      font-family: 'Lora', serif;
-    }
-
-    .totals .totals-value {
-      text-align: right;
-      color: #333;
-    }
-
-    .totals .grand-total {
-      font-weight: bold;
-      border-top: 2px solid #005b18;
-      font-size: 18px;
-      color: #2c3e50;
-    }
-
-    /* Footer Styles */
-    .invoice-footer {
-      text-align: center;
-      margin-top: 50px;
-      font-size: 12px;
-      color: #888;
-      font-family: 'Georgia', serif;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Icons */
-    .details-column h2::before {
-      content: '📋';
-      margin-right: 8px;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      .invoice-details {
-        flex-direction: column;
-      }
-      .details-column {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      .totals table {
-        width: 100%;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="invoice-container">
-    <!-- Header -->
-    <div class="invoice-header">
-      
-      <h1>Invoice</h1>
-    </div>
-
-    <!-- Invoice Details -->
-    <div class="invoice-details">
-      <!-- Billing Details -->
-      <div class="details-column">
-        <h2>Billing To</h2>
-        <p><strong>${address.fullName}</strong></p>
-        <p>${address.streetAddress}</p>
-        <p>${address.city}, ${address.state}, ${address.pincode}</p>
-        <p>${address.country}</p>
-        <p>Phone: ${address.phone}</p>
-      </div>
-
-      <!-- Invoice Info -->
-      <div class="details-column">
-        <h2>Invoice Info</h2>
-        <p>Invoice No: <strong>${invoiceNumber}</strong></p>
-        <p>Order ID: ${order.orderId}</p>
-        <p>Payment Status: ${order.paymentStatus}</p>
-        <p>Payment Method: ${order.paymentMethod}</p>
-        <p>Date: ${new Date().toLocaleDateString()}</p>
-      </div>
-    </div>
-
-    <!-- Order Details Table -->
-    <table class="invoice-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Variant</th>
-          <th>Qty</th>
-          <th>Price</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${orderItems}
-      </tbody>
-    </table>
-
-    <!-- Totals -->
-    <div class="totals">
-      <table>
-        <tr>
-          <td class="totals-label">Subtotal:</td>
-          <td class="totals-value">${order.totalAmount.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td class="totals-label">Discount:</td>
-          <td class="totals-value">- ${order.discountAmount.toFixed(2)}</td>
-        </tr>
-        <tr class="grand-total">
-          <td class="totals-label">Total Due:</td>
-          <td class="totals-value">${order.payableAmount.toFixed(2)}</td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Footer -->
-    <div class="invoice-footer">
-      <p>Thank you for your purchase!</p>
-      
-    </div>
-  </div>
-</body>
-</html>
-
-
-
-
-        ` 
-
-        const options = {
-          format: 'A4',
-          margin: {
-              top: '10mm',
-              left: '10mm',
-              right: '10mm'
-          },
-      };
-      
-      const file = { content: html };
-      const pdfBuffer = await pdf.generatePdf(file, options);
-      const pdfFilePath = `./invoices/invoice_${orderId}.pdf`;
-      fs.writeFileSync(pdfFilePath, pdfBuffer);
-      res.setHeader('Content-Disposition', `attachment; filename=invoice_${orderId}.pdf`);
-      res.setHeader('Content-Type', 'application/pdf');
-      fs.createReadStream(pdfFilePath).pipe(res);
-
-      }else{
-        res.redirect('/user/login')
-      }
-    }catch(error){
-      console.error("Error generating invoice:", error);
-      res.status(500).json({success:false, error: "An error occurred while generating the invoice" })
-    }
     
+    const invoiceNumber = generateInvoiceNumber(); 
+    const invoicePath = path.join(__dirname, `../invoices/invoice_${orderId}.pdf`);
+
+   
+    await createInvoicePDF(order, invoiceNumber, invoicePath, res);
+
+  } catch (error) {
+    console.error("Error generating invoice:", error);
+    res.status(500).json({ success: false, error: "An error occurred while generating the invoice" });
   }
+};
+
+
+
+
 
 
   const repaymentRazorpay = async (req,res)=>{

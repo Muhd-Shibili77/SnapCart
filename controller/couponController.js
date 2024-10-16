@@ -8,17 +8,16 @@ const Coupon = require('../model/couponDB')
 
 
 const coupon =async (req,res)=>{
-    if(req.session.isAdmin){
+    
       const coupon = await Coupon.find()
       res.render('admin/adminCoupon',{coupon})
-    }else{
-      res.redirect('/admin/login')
-    }
+    
   }
   
   const addCoupon =async (req,res)=>{
-    if(req.session.isAdmin){
+    
       const {couponCode , discount , startDate , endDate,minAmount,maxAmount,couponDescription} = req.body
+   
       
       const existingCoupon = await Coupon.findOne({
         coupon_code: { $regex: new RegExp(`^${couponCode}$`, "i") },
@@ -96,13 +95,11 @@ const coupon =async (req,res)=>{
   
      await newCoupon.save()
      res.json({success:true,message:'coupon successfully addedd'})
-    }else{
-      res.redirect('/admin/login')
-    }
+    
   }
   
   const editCoupon = async (req,res)=>{
-    if(req.session.isAdmin){
+   
         const {couponId,couponCode , discount , startDate , endDate,minAmount,maxAmount,couponDescription} = req.body
         
         
@@ -173,13 +170,11 @@ const coupon =async (req,res)=>{
         })
         res.json({success:true,message:'coupon edited successfully'})
 
-    }else{
-      res.redirect('/admin/login')
-    }
+   
   }
 
 const deleteCoupon = async (req,res)=>{
-    if(req.session.isAdmin){
+   
         const {couponId}=req.body
         if(!couponId){
             return res.json({success:false,error:'couponId not found'})
@@ -190,9 +185,7 @@ const deleteCoupon = async (req,res)=>{
         }
         await Coupon.findByIdAndDelete(couponId)
         res.json({success:true,message:'coupon is deleted successfully'})
-    }else{
-        res.redirect('/admin/login')
-    }
+    
 }
 
 module.exports={

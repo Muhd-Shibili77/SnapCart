@@ -71,7 +71,7 @@ $(async function () {
     yaxis: {
       show: true,
       min: 0,
-      max: 400000,
+      max: 200000,
       tickAmount: 4,
       labels: {
         style: {

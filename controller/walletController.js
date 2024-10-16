@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const Cart = require('../model/cartDb')
 
 const userWallet = async (req,res)=>{
-    if(req.session.email){
+   
     const user = await User.findOne({email:req.session.email})
         
     const cart = await Cart.findOne({ user: user._id }).populate(
@@ -36,15 +36,13 @@ const userWallet = async (req,res)=>{
         }
 
         res.render("user/wallet",{wallet,cartCount});
-    }else{
-        res.redirect('/user/login')
-    }
+   
 }
 
 
 
   const addFund = async (req, res) => {
-    if (req.session.email) {
+  
       const amount = req.body.amount;
       if (!amount) {
         return res.json({ success: false, error: 'Amount is empty' });
@@ -83,14 +81,12 @@ const userWallet = async (req,res)=>{
         return res.json({ success: false, error: 'Failed to create Razorpay order.' });
       }
   
-    } else {
-      res.redirect('/user/login');
-    }
+   
   };
 
 
   const verifyPayment = async (req,res)=>{
-    if (req.session.email) {
+    
      
       const { razorpay_order_id, razorpay_payment_id, razorpay_signature, amount } = req.body;
 
@@ -136,9 +132,7 @@ const userWallet = async (req,res)=>{
           });
       }
 
-    } else {
-      res.redirect('/user/login');
-    }
+   
   }
 
   

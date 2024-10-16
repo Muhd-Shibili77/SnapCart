@@ -3,6 +3,7 @@ const userrouter = express.Router();
 const userController = require('../controller/user-controller')
 const walletController = require('../controller/walletController')
 const userBlock = require('../middleware/userBlock')
+const userAuth = require('../middleware/userAuth')
 
 userrouter.use(userBlock)
 
@@ -20,33 +21,33 @@ userrouter.post("/otp", userController.post_otp_verification);
 
 userrouter.post("/resendOtp",userController.resend_otp);
 
-userrouter.get("/home",userController.get_home);
+userrouter.get("/home",userAuth,userController.get_home);
 
-userrouter.get('/products',userController.allProducts)
+userrouter.get('/products',userAuth,userController.allProducts)
 
-userrouter.get('/product',userController.singleProduct)
+userrouter.get('/product',userAuth,userController.singleProduct)
 
-userrouter.get('/category',userController.category)
+userrouter.get('/category',userAuth,userController.category)
 
-userrouter.get('/about',userController.about)
+userrouter.get('/about',userAuth,userController.about)
 
-userrouter.get('/contact',userController.contact) 
+userrouter.get('/contact',userAuth,userController.contact) 
 
-userrouter.get('/profile',userController.userProfile) 
+userrouter.get('/profile',userAuth,userController.userProfile) 
 
-userrouter.post('/edit_profile',userController.editProfile)
+userrouter.post('/edit_profile',userAuth,userController.editProfile)
 
-userrouter.get('/address',userController.address)
+userrouter.get('/address',userAuth,userController.address)
 
-userrouter.post('/add_address',userController.add_address)
+userrouter.post('/add_address',userAuth,userController.add_address)
 
-userrouter.post('/edit_address',userController.edit_address)
+userrouter.post('/edit_address',userAuth,userController.edit_address)
 
-userrouter.post('/delete_address',userController.delete_address)
+userrouter.post('/delete_address',userAuth,userController.delete_address)
 
-userrouter.get('/password',userController.password)
+userrouter.get('/password',userAuth,userController.password)
 
-userrouter.post('/changePassword',userController.changePassword)
+userrouter.post('/changePassword',userAuth,userController.changePassword)
 
 userrouter.get('/forgetPassword',userController.forgetPassword)
 

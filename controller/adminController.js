@@ -7,8 +7,11 @@ const Order = require("../model/orderDB");
 const Coupon = require("../model/couponDB");
 const Wallet = require("../model/walletDB");
 const moment = require("moment");
-const pdf = require("html-pdf-node");
+const path = require("path");
+const PDFDocument = require("pdfkit");
 const fs = require('fs')
+const {createReportPDF}=require('../utilies/createReport')
+
 const admin_login = (req, res) => {
   if (req.session.isAdmin) {
     res.redirect("/admin/dashboard");
@@ -51,7 +54,7 @@ const admin_dashboard = async (req, res) => {
   if (req.session.user) {
    return  res.redirect("/user/home");
   }
-  if (req.session.isAdmin) {
+ 
     let query = {};
     const { sortStats, startDate, endDate } = req.query;
 
@@ -403,34 +406,38 @@ const todayProfit = todayTotalEarnings.length > 0 ? todayTotalEarnings[0].totalE
       formattedTransactions,
       todayProfit
     });
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const admin_users = async (req, res) => {
-  if (req.session.isAdmin) {
+  
+    const searchQuery = req.query.search || '';
     const page = parseInt(req.query.page) || 1;
+    
+    const searchCriteria = {
+      isAdmin: false,
+      name: { $regex: `^${searchQuery}`, $options: 'i' } 
+    };
+    
+
     const limit = 10;
     const skip = (page - 1) * limit;
-    const totalProducts = await User.find({ isAdmin: false }).countDocuments();
+    const totalProducts = await User.find(searchCriteria).countDocuments();
     const totalPage = Math.ceil(totalProducts / limit);
-
-    const users = await User.find({ isAdmin: false })
+   
+    const users = await User.find(searchCriteria)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     res.render("admin/adminUsers", { users, totalPage, currentPage: page });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 //blocking the user
 
 const block_users = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { userId } = req.body;
       await User.findByIdAndUpdate(userId, { isBlock: true });
@@ -442,15 +449,13 @@ const block_users = async (req, res) => {
         .status(500)
         .json({ error: "Something went wrong in blocking the user" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 //unblocking the user
 
 const unblock_users = async (req, res) => {
-  if (req.session.isAdmin) {
+ 
     try {
       const { userId } = req.body;
       await User.findByIdAndUpdate(userId, { isBlock: false });
@@ -460,29 +465,29 @@ const unblock_users = async (req, res) => {
       console.log("something went wrong while unblocking the user");
       res.status(500).json({ err: "something went wrong in unblocking user" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const admin_category = async (req, res) => {
-  if (req.session.isAdmin) {
+ 
+    const searchQuery = req.query.search || '';
     const page = parseInt(req.query.page) || 1;
     const limit = 6;
     const skip = (page - 1) * limit;
+    const searchCriteria = {  
+     category_name: { $regex: searchQuery, $options: 'i' } 
+    };
 
     const totalProducts = await Category.countDocuments();
     const totalPage = Math.ceil(totalProducts / limit);
 
-    const cat = await Category.find()
+    const cat = await Category.find(searchCriteria)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     res.render("admin/adminCategries", { cat, totalPage, currentPage: page });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 const add_category = async (req, res) => {
@@ -514,7 +519,7 @@ const add_category = async (req, res) => {
 };
 
 const delete_category = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { catId } = req.body;
       await Category.findByIdAndUpdate(catId, { isDeleted: true });
@@ -536,13 +541,11 @@ const delete_category = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while deleting the category" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const restore_category = async (req, res) => {
-  if (req.session.isAdmin) {
+ 
     try {
       const { catId } = req.body;
       await Category.findByIdAndUpdate(catId, { isDeleted: false });
@@ -562,13 +565,11 @@ const restore_category = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while restoring the category" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const edit_category = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { categoryId, categoryName } = req.body;
       const catExit = await Category.findOne({ category_name: { $regex: new RegExp(`^${categoryName}$`, 'i') } });
@@ -584,29 +585,31 @@ const edit_category = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while updating the category" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const admin_brand = async (req, res) => {
-  if (req.session.isAdmin) {
+  
+
+    const searchQuery = req.query.search || '';
     const page = parseInt(req.query.page) || 1;
     const limit = 6;
     const skip = (page - 1) * limit;
 
-    const totalProducts = await Brand.countDocuments();
+    const searchCriteria = {  
+      brand_name: { $regex: searchQuery, $options: 'i' } 
+     };
+
+    const totalProducts = await Brand.find(searchCriteria).countDocuments();
     const totalPage = Math.ceil(totalProducts / limit);
 
-    const brand = await Brand.find()
+    const brand = await Brand.find(searchCriteria)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     res.render("admin/adminBrands", { brand, totalPage, currentPage: page });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 const add_brand = async (req, res) => {
@@ -637,7 +640,7 @@ const add_brand = async (req, res) => {
 };
 
 const delete_brand = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { brandId } = req.body;
       await Brand.findByIdAndUpdate(brandId, { isDeleted: true });
@@ -653,13 +656,11 @@ const delete_brand = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while deleting the brand" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const restore_brand = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { brandId } = req.body;
       await Brand.findByIdAndUpdate(brandId, { isDeleted: false });
@@ -673,13 +674,11 @@ const restore_brand = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while restoring the brand" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const edit_brand = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { brandId, brandName } = req.body;
 
@@ -695,21 +694,23 @@ const edit_brand = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while updating the brand" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const orders = async (req, res) => {
-  if (req.session.isAdmin) {
+  
+    const searchQuery = req.query.search || '';
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const skip = (page - 1) * limit;
+    const searchCriteria = {  
+      orderId: { $regex: searchQuery, $options: 'i' } 
+     };
 
-    const totalProducts = await Order.countDocuments();
+    const totalProducts = await Order.find(searchCriteria).countDocuments();
     const totalPage = Math.ceil(totalProducts / limit);
 
-    const order = await Order.find()
+    const order = await Order.find(searchCriteria)
       .populate("items.product")
       .populate("user")
       .sort({ orderId: -1 })
@@ -717,13 +718,11 @@ const orders = async (req, res) => {
       .limit(limit);
 
     res.render("admin/adminOrders", { order, totalPage, currentPage: page });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 const update_orderStatus = async (req, res) => {
-  if (req.session.isAdmin) {
+ 
     const { status, orderId } = req.body;
     const orderInfo = await Order.findById(orderId);
 
@@ -763,13 +762,11 @@ const update_orderStatus = async (req, res) => {
     res
       .status(200)
       .json({ success: true, message: "orderStatus successfully updated" });
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const acceptReturn = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     const { orderId, itemId } = req.body;
 
     if (!orderId) {
@@ -842,13 +839,11 @@ const acceptReturn = async (req, res) => {
     await order.save();
 
     res.json({ success: true, message: "Return request Accepted" });
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const rejectReturn = async (req, res) => {
-  if (req.session.isAdmin) {
+ 
     const { orderId, itemId } = req.body;
     if (!orderId) {
       return res.json({ success: false, error: "orderId is empty" });
@@ -879,227 +874,69 @@ const rejectReturn = async (req, res) => {
     await order.save();
 
     res.json({ success: true, message: "Return request rejected" });
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
+
+
+
+
 
 const downloadReport = async (req, res) => {
-  try{
+  try {
+    const { startDate, endDate } = req.body;
 
-
-  const { startDate, endDate } = req.body;
- 
-
- 
-  const query = {};
-  if (startDate || endDate) {
-    query.createdAt = {};
-    if (startDate) {
-      query.createdAt.$gte = moment(startDate).startOf("day").toDate();
+    
+    const query = {};
+    if (startDate || endDate) {
+      query.createdAt = {};
+      if (startDate) {
+        query.createdAt.$gte = moment(startDate).startOf("day").toDate();
+      }
+      if (endDate) {
+        query.createdAt.$lte = moment(endDate).endOf("day").toDate();
+      }
     }
-    if (endDate) {
-      query.createdAt.$lte = moment(endDate).endOf("day").toDate();
-    }
-  }
 
-  const orders = await Order.find(query)
-    .populate("user", "name")
-    .populate({
+    const orders = await Order.find(query)
+      .populate("user", "name")
+      .populate({
         path: "items.product",
         select: "product_name variants",
-    })
-    .exec();
-    
+      })
+      .exec();
 
-
-     if (!orders || orders.length === 0) {
-      console.log("No orders found for the specified date range.");
-     return res.status(404).json({ success:false,error: "No orders found for the selected date range." });
-     }
-
-     let totalPayableAmount = 0;
-
-      
-      const reportDate = moment().format("MMMM Do YYYY");
-      const startReportDate = moment(startDate).format("MMMM Do YYYY");
-      const endReportDate = moment(endDate).format("MMMM Do YYYY");
-      
-      
-      const html = `
-      <html>
-        <head>
-          <title>Sales Report</title>
-          <style>
-            body {
-              font-family: 'Arial', sans-serif; 
-              font-size: 12px; 
-              color: #333; 
-              margin: 20px;
-              background-color: #f9f9f9;
-            }
-            h1 {
-              text-align: center;
-              font-size: 24px;
-              color: #4CAF50;
-              margin-bottom: 10px;
-              text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            }
-            h5 {
-              text-align: center;
-              font-size: 14px;
-              color: #555;
-            }
-            p {
-              text-align: center;
-              font-size: 12px; 
-              color: #777; 
-            }
-            table {
-              width: 100%; 
-              border-collapse: collapse; 
-              margin-top: 20px; 
-              background-color: #fff;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            }
-            th, td {
-              border: 1px solid #ddd; 
-              padding: 10px; 
-              text-align: left; 
-            }
-            th {
-              background-color: #4CAF50; 
-              color: white; 
-              font-weight: bold; 
-              font-size: 14px;
-            }
-            td {
-              background-color: #f2f2f2;
-            }
-            tr:nth-child(even) td {
-              background-color: #e9e9e9;
-            }
-            .nested-table {
-              margin: 10px 0;
-              width: 95%;
-              border: none;
-              background-color: #f9f9f9;
-            }
-            .nested-table th, .nested-table td {
-              border: 1px solid #ddd; 
-              padding: 4px; 
-            }
-            .footer {
-              margin-top: 20px;
-              font-size: 14px;
-              font-weight: bold;
-              text-align: right;
-              color: #4CAF50;
-            }
-            .date-range {
-              font-size: 12px; 
-              text-align: center;
-              margin-bottom: 20px;
-            }
-            @media print {
-              body {
-                margin: 0;
-              }
-              table {
-                box-shadow: none;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <h1>Sales Report</h1>
-          <h5 class="date-range">Report Created On: ${reportDate}</h5>
-          <p class="date-range">Reporting Period: ${startReportDate} to ${endReportDate}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Date</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>User</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${orders.map(order => {
-                  totalPayableAmount += order.payableAmount || 0;
-                  return `
-                    <tr>
-                      <td>${order.orderId}</td>
-                      <td>${new Date(order.placeAt).toLocaleDateString()}</td>
-                      <td>₹${order.totalAmount.toFixed(2)}</td>
-                      <td>${order.paymentStatus}</td>
-                      <td>${order.user ? order.user.name : "N/A"}</td>
-                    </tr>
-                    <tr>
-                      <td colspan="5">
-                        <table class="nested-table">
-                          <thead>
-                            <tr>
-                              <th>Product</th>
-                              <th>Variant</th>
-                              <th>Quantity</th>
-                              <th>Price</th>
-                              <th>Net Price</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            ${order.items.map(item => {
-                                const netPrice = item.price * item.quantity;
-                                const variant = item.product.variants.find(v => v._id.toString() === item.variantId);
-                                const color = variant ? variant.color : "N/A";
-      
-                                return `
-                                  <tr>
-                                    <td>${item.product.product_name}</td>
-                                    <td>${color}</td>
-                                    <td>${item.quantity}</td>
-                                    <td>₹${item.price.toFixed(2)}</td>
-                                    <td>₹${netPrice.toFixed(2)}</td>
-                                  </tr>
-                                `;
-                            }).join("")}
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  `;
-              }).join("")}
-            </tbody>
-          </table>
-          <div class="footer">Total Payable Amount: ₹${totalPayableAmount.toFixed(2)}</div>
-        </body>
-      </html>
-      `;
-      
-      const options = {
-        format: "A4",
-        orientation: "portrait",
-        border: {
-          top: "0.3in",
-          right: "0.3in",
-          bottom: "0.3in",
-          left: "0.3in",
-        },
-      };
-      const file = { content: html };
-      const pdfBuffer = await pdf.generatePdf(file, options);
-      const pdfFilePath = `./salesReport/salesReport.pdf`;
-      fs.writeFileSync(pdfFilePath, pdfBuffer);
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", "attachment; filename=salesReport.pdf");
-      fs.createReadStream(pdfFilePath).pipe(res);
-
-    }catch(error){
-      console.error("Error generating sales report:", error);
-      res.status(500).json({success:false, error: "An error occurred while generating the sales report" })
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "No orders found for the selected date range.",
+      });
     }
+
+   
+    let totalPayableAmount = 0;
+    orders.forEach(order => {
+      totalPayableAmount += order.totalAmount;
+    });
+
+    const reportFilePath = path.join(__dirname, `../salesReport/salesReport.pdf`);
+
+    
+    await createReportPDF(orders, totalPayableAmount, reportFilePath, res, startDate, endDate);
+
+  } catch (error) {
+    console.error("Error generating sales report:", error);
+    res.status(500).json({
+      success: false,
+      error: "An error occurred while generating the sales report",
+    });
+  }
 };
+
+
+
+
+
+
 
 const admin_logout = (req, res) => {
   req.session.destroy((err) => {

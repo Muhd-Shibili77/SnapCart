@@ -6,7 +6,7 @@ const Order = require("../model/orderDB");
 const Offer = require("../model/offerDB");
 
 const offers = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     const offer = await Offer.find();
     const offerSelect = await Offer.find({
       isDelete: false,
@@ -19,14 +19,12 @@ const offers = async (req, res) => {
       "offer"
     );
     res.render("admin/adminOffer", { offer, products, category ,offerSelect });
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const addOffers = async (req, res) => {
   try {
-    if (req.session.isAdmin) {
+    
       const nameRegex = /^[a-zA-Z\s\-]+$/;
       const { offerName, offerPercentage, offerStartDate } =
         req.body;
@@ -98,9 +96,7 @@ const addOffers = async (req, res) => {
 
       await newOffer.save();
       res.json({ success: true, message: "new offer addedd successfully" });
-    } else {
-      res.redirect("/admin/login");
-    }
+    
   } catch (error) {
     console.error("Error occurred while adding new offer:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -109,7 +105,7 @@ const addOffers = async (req, res) => {
 
 const deleteOffer = async (req, res) => {
   try {
-    if (req.session.isAdmin) {
+    
       const offerId = req.body.offerId;
       const offer = await Offer.findById(offerId);
 
@@ -166,9 +162,7 @@ const deleteOffer = async (req, res) => {
     
 
       res.json({ success: true, messgae: "offer successfully deleted" });
-    } else {
-      res.redirect("/admin/login");
-    }
+   
   } catch (error) {
     console.log("error while deleting the offer", error);
     return res.status(500).json({ success: false, error: "server error" });
@@ -176,7 +170,7 @@ const deleteOffer = async (req, res) => {
 };
 const restoreOffer = async (req, res) => {
   try {
-    if (req.session.isAdmin) {
+    
       const offerId = req.body.offerId;
       const offer = await Offer.findById(offerId);
 
@@ -186,9 +180,7 @@ const restoreOffer = async (req, res) => {
 
       await Offer.findByIdAndUpdate(offerId, { isDelete: false });
       res.json({ success: true, messgae: "offer successfully restored" });
-    } else {
-      res.redirect("/admin/login");
-    }
+    
   } catch (error) {
     console.log("error while restoring the offer", error);
     return res.status(500).json({ success: false, error: "server error" });
@@ -197,7 +189,7 @@ const restoreOffer = async (req, res) => {
 
 const editOffers = async (req, res) => {
   try {
-    if (req.session.isAdmin) {
+  
       const nameRegex = /^[a-zA-Z\s\-]+$/;
       const {
         editOfferId,
@@ -274,9 +266,7 @@ const editOffers = async (req, res) => {
       });
 
       res.json({ success: true, message: "offer successfully edited" });
-    } else {
-      res.redirect("/admin/login");
-    }
+    
   } catch (error) {
     console.error("Error occurred while adding new offer:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -403,7 +393,7 @@ const updateCategoryOffer = async (req, res) => {
 const removeProductOffer = async (req,res)=>{
 
     try {
-        if (req.session.isAdmin) {
+        
           const {productId,variantId} = req.body;
          
           const product = await Product.findById(productId)
@@ -429,9 +419,7 @@ const removeProductOffer = async (req,res)=>{
           
     
           res.json({ success: true, message: "offer successfully deleted from the product" });
-        } else {
-          res.redirect("/admin/login");
-        }
+       
       } catch (error) {
         console.log("error while deleting the offer", error);
         return res.status(500).json({ success: false, error: "server error" });

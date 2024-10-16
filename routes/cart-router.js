@@ -2,25 +2,26 @@ const express = require("express");
 const cartrouter = express.Router();
 const cartController = require('../controller/cartController')
 const userBlock = require('../middleware/userBlock')
+const userAuth = require('../middleware/userAuth')
 
 cartrouter.use(userBlock)
 
-cartrouter.get('/',cartController.cart)
+cartrouter.get('/',userAuth,cartController.cart)
 
-cartrouter.post('/addToCart',cartController.add_to_cart)
+cartrouter.post('/addToCart',userAuth,cartController.add_to_cart)
 
 cartrouter.post('/updateCart',cartController.updateCart)
 
 cartrouter.delete('/deleteCart',cartController.deleteCart)
 
-cartrouter.get('/checkout',cartController.cartCheckout)
+cartrouter.get('/checkout',userAuth,cartController.cartCheckout)
 
-cartrouter.get('/checkoutOrder',cartController.cartCheckoutorder)
+cartrouter.get('/checkoutOrder',userAuth,cartController.cartCheckoutorder)
 
-cartrouter.post('/applyCoupon',cartController.applyCoupon)
+cartrouter.post('/applyCoupon',userAuth,cartController.applyCoupon)
 
-cartrouter.post('/applyCouponToUser',cartController.applyCouponToUser)
+cartrouter.post('/applyCouponToUser',userAuth,cartController.applyCouponToUser)
 
-cartrouter.post('/applyCouponFromUser',cartController.applyCouponFromUser)
+cartrouter.post('/applyCouponFromUser',userAuth,cartController.applyCouponFromUser)
 
 module.exports = cartrouter

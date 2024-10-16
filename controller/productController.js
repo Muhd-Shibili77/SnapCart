@@ -4,16 +4,22 @@ const Brand = require("../model/brandDB");
 const Product = require("../model/productDB");
 
 const admin_products = async (req, res) => {
-  if (req.session.isAdmin) {
+  
+    const searchQuery = req.query.search || '';
     const page = parseInt(req.query.page) || 1 
     const limit = 10
     const skip = (page - 1) * limit;
 
-    const totalProducts = await Product.countDocuments();
+    const searchCriteria = {  
+      product_name: { $regex:searchQuery, $options: 'i' } 
+     };
+
+    const totalProducts = await Product.find(searchCriteria).countDocuments();
     const totalPage = Math.ceil(totalProducts/limit)
 
 
-    const product = await Product.find()
+    const product = await Product.find(searchCriteria)
+      .sort({createdAt:1})
       .populate("category_id")
       .populate("brand_id")
       .skip(skip)
@@ -21,24 +27,20 @@ const admin_products = async (req, res) => {
       
 
     res.render("admin/adminProducts", { product,totalPage,currentPage:page });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 const add_products = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     const category = await Category.find();
     const brand = await Brand.find();
     res.render("admin/adminAddProduct", { category, brand });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 
 const post_add_products = async (req, res) => {
   try {
-    if (req.session.isAdmin) {
+    
       const {
         productName,
         productHighlights,
@@ -108,9 +110,7 @@ const post_add_products = async (req, res) => {
       await product.save();
       console.log("Product saved successfully");
       res.redirect("/admin/products");
-    } else {
-      res.redirect("/admin/login");
-    }
+    
   } catch (error) {
     console.error("Something went wrong while adding the product:", error);
     res
@@ -120,7 +120,7 @@ const post_add_products = async (req, res) => {
 };
 
 const delete_products = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { proId } = req.body;
       await Product.findByIdAndUpdate(proId, { isDelete: true });
@@ -132,12 +132,10 @@ const delete_products = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while deleting the product" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 const restore_products = async (req, res) => {
-  if (req.session.isAdmin) {
+  
     try {
       const { proId } = req.body;
       const product = await Product.findById(proId)
@@ -163,13 +161,11 @@ const restore_products = async (req, res) => {
         .status(500)
         .json({ err: "something went wrong while restoring the product" });
     }
-  } else {
-    res.redirect("/admin/login");
-  }
+  
 };
 
 const get_edit_products = async (req, res) => {
-  if (req.session.isAdmin) {
+ 
     const category = await Category.find();
     const brand = await Brand.find();
     const id = req.query.id;
@@ -178,13 +174,11 @@ const get_edit_products = async (req, res) => {
       .populate("brand_id");
 
     res.render("admin/adminEditProduct", { product, category, brand });
-  } else {
-    res.redirect("/admin/login");
-  }
+ 
 };
 const post_edit_products = async (req, res) => {
   try {
-    if (req.session.isAdmin) {
+    
       const {
         productId,
         productName,
@@ -264,9 +258,7 @@ const post_edit_products = async (req, res) => {
 
       console.log("Product updated successfully");
       res.redirect("/admin/products");
-    } else {
-      res.redirect("/admin/login");
-    }
+    
   } catch (error) {
     console.error("Something went wrong while updating the product:", error);
     res.status(500).json({ error: "Something went wrong while updating the product" });
@@ -275,14 +267,12 @@ const post_edit_products = async (req, res) => {
 
 
 const product_detail=async(req,res)=>{
-    if(req.session.isAdmin){
+    
         const id = req.query.id
         const product = await Product.findById(id).populate('category_id').populate('brand_id')
         
         res.render('admin/adminProductDetails',{product})
-    }else{
-        res.redirect('/admin/login')
-    }
+   
 }
 
 
