@@ -9,13 +9,14 @@ const cropper = require ('cropperjs')
 const Product = require('./model/productDB')
 const Category = require('./model/categoryDB')
 const Brand = require('./model/brandDB')
+const connectDB = require('./config/DB')
+require('dotenv').config();
 app.set('view engine','ejs')
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 
-require('dotenv').config();
 const port=process.env.PORT || 3000
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
@@ -28,26 +29,20 @@ const wishlistrouter = require('./routes/wishlist-router')
 const walletrouter = require('./routes/wallet-router')
 const User = require('./model/userdb')
 const OTP= require("./model/otpdb")
-
 require('./config/auth')
+
 app.use(session({
     secret:process.env.SESSION_SECRET || 'secert',
     resave:false,
     saveUninitialized:false
 }))
+connectDB()
 
 app.use(nocache())
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://127.0.0.1:27017/SnapCart")
-.then(()=>{
-    console.log('connected to mongodb');
-})
-.catch((err)=>{
-    console.log('mongodb connection error:',err);
-})
 
 
 app.use('/auth/google',googleAuth)

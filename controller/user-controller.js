@@ -26,13 +26,18 @@ const post_login = async (req, res) => {
 
   try {
     const userexist = await User.findOne({ email: email, isAdmin: false });
+    console.log(userexist)
     if (!userexist) {
       return res.json({ success: false, error: "User does not exist" });
     }
+  
     if (userexist.isBlock) {
       return res.json({ success: false, error: "You are blocked" });
     }
-
+  
+    console.log("User password:", userexist.password);
+    console.log("Password from req.body:", password);
+  
     const passwordmatch = await bcrypt.compare(password, userexist.password);
     if (passwordmatch) {
       req.session.email = userexist.email;
@@ -49,6 +54,7 @@ const post_login = async (req, res) => {
       error: "Server error. Please try again later.",
     });
   }
+  
 };
 
 const get_signup = (req, res) => {
@@ -109,14 +115,16 @@ const post_signup = async (req, res) => {
   if (req.session.email) {
     return res.json({ success: false, message: "Already logged in." });
   }
+  
   const referalCode = req.body.referalCode;
 
-  const user = await User.findOne({ referalCode: referalCode });
+  if(referalCode){
+    const user = await User.findOne({ referalCode: referalCode });
   
-  if (!user) {
-    return res.json({ success: false, message: "Invalid user name" });
-  }
-  let wallet = await Wallet.findOne({ user: user._id });
+    if (!user) {
+      return res.json({ success: false, message: "Invalid user name" });
+    }
+    let wallet = await Wallet.findOne({ user: user._id });
   if (!wallet) {
     wallet = new Wallet({
       user: user._id,
@@ -128,6 +136,9 @@ const post_signup = async (req, res) => {
 
   req.session.referalCode = referalCode;
 
+  }
+ 
+  
   const data = {
     name: req.body.name,
     email: req.body.email,
@@ -220,7 +231,7 @@ const post_otp_verification = async (req, res) => {
 
     // Find the OTP in the database
     const otpDoc = await OTP.findOne({ email });
-
+    console.log(otpDoc)
     if (otpDoc) {
       // Check if OTP is correct
       if (otpDoc.otp === otp) {
@@ -237,20 +248,23 @@ const post_otp_verification = async (req, res) => {
         }
 
         const referalCode = req.session.referalCode;
-        const user = await User.findOne({ referalCode: referalCode });
-        if (!user) {
-          return res.json({ success: false, message: "Invalid referal code" });
+        if(referalCode){
+          const user = await User.findOne({ referalCode: referalCode });
+          if (!user) {
+            return res.json({ success: false, message: "Invalid referal code" });
+          }
+          let wallet = await Wallet.findOne({ user: user._id });
+          if (wallet) {
+            wallet.balanceAmount += 200;
+            wallet.wallet_history.push({
+              amount: 200,
+              description: "Referral Reward",
+              transactionType: "credited",
+            });
+            await wallet.save();
+          }
         }
-        let wallet = await Wallet.findOne({ user: user._id });
-        if (wallet) {
-          wallet.balanceAmount += 200;
-          wallet.wallet_history.push({
-            amount: 200,
-            description: "Referral Reward",
-            transactionType: "credited",
-          });
-          await wallet.save();
-        }
+      
 
         const data = req.session.data;
         await User.insertMany([data]);

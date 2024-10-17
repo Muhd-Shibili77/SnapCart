@@ -23,10 +23,10 @@ const admin_login = (req, res) => {
 const post_admin_login = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  
   try {
     const adminexist = await User.findOne({ email: email });
-
+   
     if (adminexist) {
       if (adminexist.isAdmin) {
         const passwordmatch = await bcrypt.compare(
@@ -104,6 +104,7 @@ const admin_dashboard = async (req, res) => {
     const recentTransaction = await Order.find({}, { _id: 0, payableAmount: 1, placeAt: 1, orderId: 1 })
     .sort({ placeAt: -1 })
     .limit(6);
+
     const formattedTransactions = recentTransaction.map(transaction => {
     const date = new Date(transaction.placeAt);
     let hours = date.getHours();
@@ -118,6 +119,7 @@ const admin_dashboard = async (req, res) => {
         time: time 
     };
 });
+
 
 const startOfToday = new Date();
 startOfToday.setHours(0, 0, 0, 0); 

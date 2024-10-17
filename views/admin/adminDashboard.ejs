@@ -375,172 +375,65 @@
 
         <div class="row">
           <div class="col-lg-4 d-flex align-items-stretch">
-            <div class="card w-100">
-              <div class="card-body p-4">
-                <div class="mb-4">
-                  <h5 class="card-title fw-semibold">Recent Transactions</h5>
-                </div>
-            
-
-                <% if (formattedTransactions ){ %>
-
-
-                  <ul class="timeline-widget mb-0 position-relative mb-n5">
-                    <li class="timeline-item d-flex position-relative overflow-hidden">
-                      <div class="timeline-time text-dark flex-shrink-0 text-end">
-                        <%=formattedTransactions[0].time %>
+              <div class="card w-100">
+                  <div class="card-body p-4">
+                      <div class="mb-4">
+                          <h5 class="card-title fw-semibold">Recent Transactions</h5>
                       </div>
-                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                        <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                      </div>
-                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
-                          formattedTransactions[0].payableAmount %> for order <%= formattedTransactions[0].orderId %>"
-                      </div>
-                    </li>
-                    <li class="timeline-item d-flex position-relative overflow-hidden">
-                      <div class="timeline-time text-dark flex-shrink-0 text-end">
-                        <%=formattedTransactions[1].time %>
-                      </div>
-                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                        <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                      </div>
-                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
-                          formattedTransactions[1].payableAmount %> for order <%= formattedTransactions[1].orderId %>"
-                      </div>
-                    </li>
-                    <li class="timeline-item d-flex position-relative overflow-hidden">
-                      <div class="timeline-time text-dark flex-shrink-0 text-end">
-                        <%=formattedTransactions[2].time %>
-                      </div>
-                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                        <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                      </div>
-                      <div class="timeline-desc fs-3 text-dark mt-n1">"Received ₹<%=
-                          formattedTransactions[2].payableAmount %> for order <%= formattedTransactions[2].orderId %>"
-                      </div>
-                    </li>
-                    <li class="timeline-item d-flex position-relative overflow-hidden">
-                      <div class="timeline-time text-dark flex-shrink-0 text-end">
-                        <%=formattedTransactions[3].time %>
-                      </div>
-                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                        <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                      </div>
-                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
-                          formattedTransactions[3].payableAmount %> for order <%= formattedTransactions[3].orderId %>"
-                      </div>
-                    </li>
-                    <li class="timeline-item d-flex position-relative overflow-hidden">
-                      <div class="timeline-time text-dark flex-shrink-0 text-end">
-                        <%=formattedTransactions[4].time %>
-                      </div>
-                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                        <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                      </div>
-                      <div class="timeline-desc fs-3 text-dark mt-n1 ">"Received ₹<%=
-                          formattedTransactions[4].payableAmount %> for order <%= formattedTransactions[4].orderId %>"
-                      </div>
-                    </li>
-                    <li class="timeline-item d-flex position-relative overflow-hidden">
-                      <div class="timeline-time text-dark flex-shrink-0 text-end">
-                        <%=formattedTransactions[5].time %>
-                      </div>
-                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                        <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                      </div>
-                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">"Received ₹<%=
-                          formattedTransactions[5].payableAmount %> for order <%= formattedTransactions[5].orderId %>"
-                      </div>
-                    </li>
-                  </ul>
-
-                  <%  }else{ %>
-
-                    <ul class="timeline-widget mb-0 position-relative mb-n5">
-                      <li class="timeline-item d-flex position-relative overflow-hidden">
-                        <div class="timeline-time text-dark flex-shrink-0 text-end">
-                         00:00
-                        </div>
-                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                          <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                        </div>
-                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
-                          No Transactions found
-                        </div>
-                      </li>
-                      <li class="timeline-item d-flex position-relative overflow-hidden">
-                        <div class="timeline-time text-dark flex-shrink-0 text-end">
-                          00:00
-                        </div>
-                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                          <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                        </div>
-                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
-                           No Transactions found
-                        </div>
-                      </li>
-                      <li class="timeline-item d-flex position-relative overflow-hidden">
-                        <div class="timeline-time text-dark flex-shrink-0 text-end">
-                          00:00
-                        </div>
-                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                          <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                        </div>
-                        <div class="timeline-desc fs-3 text-dark mt-n1">
-                           No Transactions found
-                        </div>
-                      </li>
-                      <li class="timeline-item d-flex position-relative overflow-hidden">
-                        <div class="timeline-time text-dark flex-shrink-0 text-end">
-                          00:00
-                        </div>
-                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                          <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                        </div>
-                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
-                           No Transactions found
-                        </div>
-                      </li>
-                      <li class="timeline-item d-flex position-relative overflow-hidden">
-                        <div class="timeline-time text-dark flex-shrink-0 text-end">
-                          00:00
-                        </div>
-                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                          <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                        </div>
-                        <div class="timeline-desc fs-3 text-dark mt-n1 ">
-                           No Transactions found
-                        </div>
-                      </li>
-                      <li class="timeline-item d-flex position-relative overflow-hidden">
-                        <div class="timeline-time text-dark flex-shrink-0 text-end">
-                          00:00
-                        </div>
-                        <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                          <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                        </div>
-                        <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
-                           No Transactions found
-                        </div>
-                      </li>
-                    </ul>
-
-
-                  <%  } %>
-                
+      
+                      <% if (formattedTransactions && formattedTransactions.length > 0) { %>
+                          <ul class="timeline-widget mb-0 position-relative mb-n5">
+                              <% for (let i = 0; i < formattedTransactions.length; i++) { %>
+                                  <li class="timeline-item d-flex position-relative overflow-hidden">
+                                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                                          <%= formattedTransactions[i].time %>
+                                      </div>
+                                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                          <span class="timeline-badge border-2 border <%= 
+                                              i === 0 ? 'border-primary' : 
+                                              i === 1 ? 'border-info' : 
+                                              i === 2 ? 'border-success' : 
+                                              i === 3 ? 'border-warning' : 
+                                              i === 4 ? 'border-danger' : 
+                                              'border-success' %> flex-shrink-0 my-8"></span>
+                                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                      </div>
+                                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
+                                          "Received ₹<%= formattedTransactions[i].payableAmount %> for order <%= formattedTransactions[i].orderId %>"
+                                      </div>
+                                  </li>
+                              <% } %>
+                          </ul>
+                      <% } else { %>
+                          <ul class="timeline-widget mb-0 position-relative mb-n5">
+                              <% for (let j = 0; j < 6; j++) { %>
+                                  <li class="timeline-item d-flex position-relative overflow-hidden">
+                                      <div class="timeline-time text-dark flex-shrink-0 text-end">
+                                          00:00
+                                      </div>
+                                      <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                          <span class="timeline-badge border-2 border <%= 
+                                              j === 0 ? 'border-primary' : 
+                                              j === 1 ? 'border-info' : 
+                                              j === 2 ? 'border-success' : 
+                                              j === 3 ? 'border-warning' : 
+                                              j === 4 ? 'border-danger' : 
+                                              'border-success' %> flex-shrink-0 my-8"></span>
+                                          <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                      </div>
+                                      <div class="timeline-desc fs-3 text-dark mt-n1 fw-semibold">
+                                          No Transactions found
+                                      </div>
+                                  </li>
+                              <% } %>
+                          </ul>
+                      <% } %>
+      
+                  </div>
               </div>
-            </div>
           </div>
+      
+      
              
 
           <div class="col-lg-8 d-flex align-items-stretch">

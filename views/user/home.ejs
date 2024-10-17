@@ -202,18 +202,22 @@
                 <div class="col-lg-6">
                     <div class="section-heading">
                         <h2>Men's Latest</h2>
-
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-
-                        <a href="/user/category?id=<%= mensProduct[0].category_id._id %>"
-                            class="btn btn-outline-dark">View More</a>
+                        <% if (mensProduct && mensProduct.length > 0) { %>
+                            <a href="/user/category?id=<%= mensProduct[0].category_id._id %>"
+                                class="btn btn-outline-dark">View More</a>
+                        <% } else { %>
+                            <a href="#" class="btn btn-outline-dark disabled">No Products Available</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
+   
+    
 
 
 
@@ -288,12 +292,17 @@
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                        <a href="/user/category?id=<%= womensProduct[0].category_id._id %>"
-                            class="btn btn-outline-dark">View More</a>
+                        <% if (womensProduct && womensProduct.length > 0) { %>
+                            <a href="/user/category?id=<%= womensProduct[0].category_id._id %>"
+                                class="btn btn-outline-dark">View More</a>
+                        <% } else { %>
+                            <a href="#" class="btn btn-outline-dark disabled">No Products Available</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -361,12 +370,17 @@
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                        <a href="/user/category?id=<%= kidsProduct[0].category_id._id %>"
-                            class="btn btn-outline-dark">View More</a>
+                        <% if (kidsProduct && kidsProduct.length > 0) { %>
+                            <a href="/user/category?id=<%= kidsProduct[0].category_id._id %>"
+                                class="btn btn-outline-dark">View More</a>
+                        <% } else { %>
+                            <a href="#" class="btn btn-outline-dark disabled">No Products Available</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -436,12 +450,17 @@
                 </div>
                 <div class="col-lg-6 d-flex justify-content-end">
                     <div class="section-heading">
-                        <a href="/user/category?id=<%= accessoris[0].category_id._id %>"
-                            class="btn btn-outline-dark">View More</a>
+                        <% if (accessoris && accessoris.length > 0) { %>
+                            <a href="/user/category?id=<%= accessoris[0].category_id._id %>"
+                                class="btn btn-outline-dark">View More</a>
+                        <% } else { %>
+                            <a href="#" class="btn btn-outline-dark disabled">No Products Available</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -513,69 +532,67 @@
             </div>
             <br>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                
+                <% if (womensProduct && womensProduct.length > 0) { %>
                 <div class="col">
                     <div class="product-card p-3">
-                        <a
-                            href="/user/product?proId=<%= womensProduct[0]._id %>&varId=<%=womensProduct[0].variants[0]._id %>"><img
-                                src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress"
+                        <a href="/user/product?proId=<%= womensProduct[0]._id %>&varId=<%=womensProduct[0].variants[0]._id %>">
+                            <img src="/<%= womensProduct[0].variants[0].images[0] %>" alt="dress"
                                 class="product-img card-img-top img-thumbnail"
                                 style="height: 40vh; object-fit: cover;"></a>
-                        <h4>
-                            <%= womensProduct[0].product_name %>
-                        </h4>
-                        <p class="price">INR <%= womensProduct[0].variants[0].price %>
-                        </p>
+                        <h4><%= womensProduct[0].product_name %></h4>
+                        <p class="price">INR <%= womensProduct[0].variants[0].price %></p>
                         <p class="rating">★★★★★</p>
                     </div>
                 </div>
+                <% } %>
+    
+                <% if (mensProduct && mensProduct.length > 0) { %>
                 <div class="col">
                     <div class="product-card p-3">
-                        <a
-                            href="/user/product?proId=<%= mensProduct[0]._id %>&varId=<%=mensProduct[0].variants[0]._id %>"><img
-                                src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress"
+                        <a href="/user/product?proId=<%= mensProduct[0]._id %>&varId=<%=mensProduct[0].variants[0]._id %>">
+                            <img src="/<%= mensProduct[0].variants[0].images[0] %>" alt="dress"
                                 class="product-img card-img-top img-thumbnail"
                                 style="height: 40vh; object-fit: cover;"></a>
-                        <h4>
-                            <%= mensProduct[0].product_name %>
-                        </h4>
-                        <p class="price">INR <%= mensProduct[0].variants[0].price %>
-                        </p>
+                        <h4><%= mensProduct[0].product_name %></h4>
+                        <p class="price">INR <%= mensProduct[0].variants[0].price %></p>
                         <p class="rating">★★★★☆</p>
                     </div>
                 </div>
+                <% } %>
+    
+                <% if (kidsProduct && kidsProduct.length > 0) { %>
                 <div class="col">
                     <div class="product-card p-3">
-                        <a
-                            href="/user/product?proId=<%= kidsProduct[0]._id %>&varId=<%=kidsProduct[0].variants[0]._id %>"><img
-                                src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress"
+                        <a href="/user/product?proId=<%= kidsProduct[0]._id %>&varId=<%=kidsProduct[0].variants[0]._id %>">
+                            <img src="/<%= kidsProduct[0].variants[0].images[0] %>" alt="dress"
                                 class="product-img card-img-top img-thumbnail"
                                 style="height: 40vh; object-fit: cover;"></a>
-                        <h4>
-                            <%= kidsProduct[0].product_name %>
-                        </h4>
-                        <p class="price">INR <%= kidsProduct[0].variants[0].price %>
-                        </p>
+                        <h4><%= kidsProduct[0].product_name %></h4>
+                        <p class="price">INR <%= kidsProduct[0].variants[0].price %></p>
                         <p class="rating">★★★★☆</p>
                     </div>
                 </div>
+                <% } %>
+    
+                <% if (accessoris && accessoris.length > 0) { %>
                 <div class="col">
                     <div class="product-card p-3">
-                        <a
-                            href="/user/product?proId=<%= accessoris[0]._id %>&varId=<%=accessoris[0].variants[0]._id %>"><img
-                                src="/<%= accessoris[0].variants[0].images[0] %>" alt="dress"
+                        <a href="/user/product?proId=<%= accessoris[0]._id %>&varId=<%=accessoris[0].variants[0]._id %>">
+                            <img src="/<%= accessoris[0].variants[0].images[0] %>" alt="dress"
                                 class="product-img card-img-top img-thumbnail"
                                 style="height: 40vh; object-fit: cover;"></a>
-                        <h4>
-                            <%= accessoris[0].product_name %>
-                        </h4>
-                        <p class="price">INR <%= accessoris[0].variants[0].price %>
-                        </p>
+                        <h4><%= accessoris[0].product_name %></h4>
+                        <p class="price">INR <%= accessoris[0].variants[0].price %></p>
                         <p class="rating">★★★★☆ (65)</p>
                     </div>
                 </div>
+                <% } %>
+    
             </div>
         </div>
     </section>
+    
 
     <section class="section" id="end">
         <div class="container my-5">
