@@ -896,6 +896,7 @@ const downloadInvoice = async (req, res) => {
 
           const order = await Order.findById(orderId);
           order.paymentStatus = 'Paid';
+          order.paymentMethod = 'Bank Transfer';
           order.razorpayOrderId = razorpay_order_id;
           await order.save();
 

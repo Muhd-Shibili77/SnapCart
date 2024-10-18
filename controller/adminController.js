@@ -754,6 +754,30 @@ const update_orderStatus = async (req, res) => {
       await category.save();
       await product.save();
     }
+
+
+    if (orderInfo.paymentStatus === "Paid") {
+      const user = await User.findOne({_id:orderInfo.user})
+      const refund = orderInfo.payableAmount;
+      let wallet = await Wallet.findOne({ user: user._id });
+      if (!wallet) {
+        wallet = new Wallet({
+          user: orderInfo.user,
+          balanceAmount: 0,
+          wallet_history: [],
+        });
+      }
+
+      wallet.balanceAmount += refund;
+      wallet.wallet_history.push({
+        date: new Date(),
+        amount: refund,
+        description: `Refund for cancelled item (Order ID: ${orderInfo.orderId})`,
+        transactionType: "credited",
+      });
+      await wallet.save();
+    }
+
     }
    
 
