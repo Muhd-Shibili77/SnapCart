@@ -26,7 +26,7 @@ const post_login = async (req, res) => {
 
   try {
     const userexist = await User.findOne({ email: email, isAdmin: false });
-    console.log(userexist)
+    
     if (!userexist) {
       return res.json({ success: false, error: "User does not exist" });
     }
@@ -35,8 +35,7 @@ const post_login = async (req, res) => {
       return res.json({ success: false, error: "You are blocked" });
     }
   
-    console.log("User password:", userexist.password);
-    console.log("Password from req.body:", password);
+    
   
     const passwordmatch = await bcrypt.compare(password, userexist.password);
     if (passwordmatch) {
@@ -231,7 +230,7 @@ const post_otp_verification = async (req, res) => {
 
     // Find the OTP in the database
     const otpDoc = await OTP.findOne({ email });
-    console.log(otpDoc)
+  
     if (otpDoc) {
       // Check if OTP is correct
       if (otpDoc.otp === otp) {
@@ -926,12 +925,12 @@ const postForgetOtp = async (req, res) => {
   if (req.session.tempemail) {
     const { otp } = req.body;
     const email = req.session.tempemail;
-    console.log('hei')
+ 
     const otpuse = await OTP.findOne({ email: email });
     if (!otpuse) {
       return res.status(400).json({ error: "OTP is expired" });
     }
-    console.log('httt');
+    
    
     
 
