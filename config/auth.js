@@ -15,7 +15,7 @@ passport.use(new GoogleStrategy({
         
         // Find the user by email instead of googleId
         let user = await User.findOne({ email: profile.emails[0].value });
-  
+        
         if (user) {
           // If the user exists, update the googleId if it's not set
           if (!user.googleId) {
