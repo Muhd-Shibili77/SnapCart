@@ -1,6 +1,7 @@
 const express = require('express')
 const app=express()
 const path=require('path')
+const flash = require('connect-flash');
 const mongoose = require('mongoose')
 const passport = require ('passport')
 const session = require('express-session')
@@ -34,9 +35,17 @@ require('./config/auth')
 app.use(session({
     secret:process.env.SESSION_SECRET || 'secert',
     resave:false,
-    saveUninitialized:false
+    saveUninitialized:true
 }))
+
 connectDB()
+// Setup connect-flash middleware
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.successMessage = req.flash('successMessage');
+    res.locals.errorMessage = req.flash('errorMessage');
+    next();
+  });
 
 app.use(nocache())
 

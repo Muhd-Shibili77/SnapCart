@@ -147,6 +147,21 @@ data-sidebar-position="fixed" data-header-position="fixed">
       <h2 class="mb-4">Edit Product</h2>
       <div class="card shadow-sm">
         <div class="card-body">
+          <!-- Show error message -->
+          <% if (errorMessage.length >0 ) { %>
+            <div class="alert alert-danger">
+              
+              <%= errorMessage %>
+            </div>
+          <% } %>
+
+        <!-- Show success message -->
+        <% if (successMessage >0) { %>
+          <div class="alert alert-success">
+            <%= successMessage %>
+          </div>
+        <% } %>
+
           <form action="/admin/edit_product" method="post" enctype="multipart/form-data">
             <div class="row mb-3">
               <div class="col-md-6">
@@ -157,14 +172,14 @@ data-sidebar-position="fixed" data-header-position="fixed">
                 <input type="text" class="form-control" style="display: none;" name="productId" id="productId"
                   value="<%= product._id %>" required>
                 <input type="text" class="form-control" name="productName" id="productName"
-                  value="<%= product.product_name %>" required>
+                  value="<%= product.product_name %>" >
               </div>
               <div class="col-md-6">
 
                 <label for="productPrice" class="form-label">Product Highlights</label>
                 <p></p>
                 <input type="text" class="form-control" name="productHighlights" id="productHighlights"
-                  value="<%= product.product_highlights %>" required>
+                  value="<%= product.product_highlights %>" >
               </div>
             </div>
             <div class="row mb-3">
@@ -252,13 +267,13 @@ data-sidebar-position="fixed" data-header-position="fixed">
                   </div>
                   <div class="col-md-3">
 
-                    <input type="number" min="0" class="form-control form-edge" name="productPrice[]" id="productPrice"
-                      placeholder="Price" value="<%= element.price %>" required>
+                    <input type="number"  class="form-control form-edge" name="productPrice[]" id="productPrice"
+                      placeholder="Price" value="<%= element.price %>" >
                   </div>
                   <div class="col-md-3">
 
-                    <input type="number" min="0" class="form-control form-edge" name="productStock[]" id="productStock"
-                      placeholder="Stock" value="<%= element.stock %>" required>
+                    <input type="number"  class="form-control form-edge" name="productStock[]" id="productStock"
+                      placeholder="Stock" value="<%= element.stock %>" >
                   </div>
                 </div>
 

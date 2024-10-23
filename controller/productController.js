@@ -178,92 +178,143 @@ const get_edit_products = async (req, res) => {
 };
 const post_edit_products = async (req, res) => {
   try {
-    
-      const {
-        productId,
-        productName,
-        productHighlights,
-        productCategory,
-        productBrand,
-        productDescription,
-        variant_count,
-      } = req.body;
+    const {
+      productId,
+      productName,
+      productHighlights,
+      productCategory,
+      productBrand,
+      productDescription,
+      variant_count,
+    } = req.body;
 
-      const images = req.files;
-      
+    if(!productName){
+      req.flash('errorMessage', `product name is empty`);
+      return res.redirect(`/admin/edit_product?id=${productId}`); // Redirect with flash message
+    }
+    if(!productHighlights){
+      req.flash('errorMessage', `productHighlights is empty`);
+      return res.redirect(`/admin/edit_product?id=${productId}`); // Redirect with flash message
+    }
+    if(!productCategory){
+      req.flash('errorMessage', `productCategory is empty`);
+      return res.redirect(`/admin/edit_product?id=${productId}`); // Redirect with flash message
+    }
+    if(!productBrand){
+      req.flash('errorMessage', `productBrand is empty`);
+      return res.redirect(`/admin/edit_product?id=${productId}`); // Redirect with flash message
+    }
+    if(!productDescription){
+      req.flash('errorMessage', `productDescription is empty`);
+      return res.redirect(`/admin/edit_product?id=${productId}`); // Redirect with flash message
+    }
 
-      // Find the product by ID
-      const product = await Product.findById(productId);
 
-      if (!product) {
-        return res.status(404).json({ error: "Product not found" });
+    // Fetch product by its ID
+    const product = await Product.findById(productId);
+    if (!product) {
+      req.flash('errorMessage', "Product not found");
+      return res.redirect("/admin/products");
+    }
+
+    const images = req.files; // Uploaded images
+    const variantDetails = [];
+
+    for (let i = 0; i < variant_count; i++) {
+      const priceArray = req.body.productPrice;
+      const colorArray = req.body.productColor;
+      const sizeArray = req.body.productSize;
+      const stockArray = req.body.productStock;
+
+      const price = parseInt(priceArray[i]);
+      const color = colorArray[i];
+      const size = sizeArray[i];
+      const stock = parseInt(stockArray[i]); 
+
+
+      if(!price){
+        req.flash('errorMessage', `Variant ${i + 1}: price is empty`);
+        return res.redirect(`/admin/edit_product?id=${productId}`); 
+      }
+      if(!stock){
+        req.flash('errorMessage', `Variant ${i + 1}: stock is empty`);
+        return res.redirect(`/admin/edit_product?id=${productId}`); 
+      }
+      if(!color){
+        req.flash('errorMessage', `Variant ${i + 1}: color is empty`);
+        return res.redirect(`/admin/edit_product?id=${productId}`); 
+      }
+      if(!size){
+        req.flash('errorMessage', `Variant ${i + 1}: size is empty`);
+        return res.redirect(`/admin/edit_product?id=${productId}`); 
       }
 
-      const variantDetails = [];
 
-      for (let i = 0; i < variant_count; i++) {
-        const priceArray = req.body.productPrice;
-        const colorArray = req.body.productColor;
-        const sizeArray = req.body.productSize;
-        const stockArray = req.body.productStock;
+      
+      if (stock < 0) {
+        req.flash('errorMessage', `Variant ${i + 1}: Stock cannot be negative.`);
+        return res.redirect(`/admin/edit_product?id=${productId}`); 
+      }
+      
+   
+      if (price < 0) {
+        req.flash('errorMessage', `Variant ${i + 1}: Price cannot be negative.`);
+        return res.redirect(`/admin/edit_product?id=${productId}`); 
+      }
 
-        const price = priceArray[i];
-        const color = colorArray[i];
-        const size = sizeArray[i];
-        const stock = stockArray[i];
+      let existingVariant = product.variants[i] || {}; 
+      let variantImages = existingVariant.images ? [...existingVariant.images] : [];
 
-        // Get existing variant details
-        let existingVariant = product.variants[i] || {};
-
-        // Keep the existing variant's _id
-        let variantImages = existingVariant.images ? [...existingVariant.images] : [];
-
-        // Handle new image uploads for this variant
-        if (images && images.length > 0) {
-          images.forEach((image) => {
-            if (image.fieldname.startsWith(`productImage${i + 1}`)) {
-              const imageIndex = parseInt(image.fieldname.replace(`productImage${i + 1}-`, ''), 10) - 1;
-              if (variantImages[imageIndex]) {
-                variantImages[imageIndex] = image.path;  // Update existing image
-              } else {
-                variantImages.push(image.path);  // Add new image
-              }
+      
+      if (images && images.length > 0) {
+        images.forEach((image) => {
+          if (image.fieldname.startsWith(`productImage${i + 1}`)) {
+            const imageIndex = parseInt(image.fieldname.replace(`productImage${i + 1}-`, ''), 10) - 1;
+            if (variantImages[imageIndex]) {
+              variantImages[imageIndex] = image.path; 
+            } else {
+              variantImages.push(image.path); 
             }
-          });
-        }
-
-        // Push updated variant details while keeping the _id intact
-        variantDetails.push({
-          _id: existingVariant._id,  // Keep the existing _id
-          price: price,
-          size: size,
-          stock: stock,
-          color: color,
-          images: variantImages,
-          offer: existingVariant.offer || null, 
-          discount_price: existingVariant.discount_price || null, 
+          }
         });
       }
 
-      // Update product details
-      product.product_name = productName;
-      product.product_highlights = productHighlights;
-      product.category_id = productCategory;
-      product.brand_id = productBrand;
-      product.product_description = productDescription;
-      product.variants = variantDetails;  // Keep updated variants
+     
+      variantDetails.push({
+        _id: existingVariant._id,
+        price: price,
+        size: size,
+        stock: stock,
+        color: color,
+        images: variantImages,
+        offer: existingVariant.offer || null,
+        discount_price: existingVariant.discount_price || null,
+      });
+    }
 
-      // Save the updated product
-      await product.save();
-
-      console.log("Product updated successfully");
-      res.redirect("/admin/products");
     
+    product.product_name = productName;
+    product.product_highlights = productHighlights;
+    product.category_id = productCategory;
+    product.brand_id = productBrand;
+    product.product_description = productDescription;
+    product.variants = variantDetails; 
+
+    await product.save(); 
+
+    
+    req.flash('successMessage', 'Product updated successfully');
+    res.redirect("/admin/products");
+
   } catch (error) {
-    console.error("Something went wrong while updating the product:", error);
-    res.status(500).json({ error: "Something went wrong while updating the product" });
+
+    console.error("Error updating product:", error);
+    req.flash('errorMessage', 'Internal server error');
+    res.redirect(`/admin/edit_product?id=${req.body.productId}`);
   }
 };
+
+
 
 
 const product_detail=async(req,res)=>{
