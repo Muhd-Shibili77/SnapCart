@@ -123,7 +123,7 @@
                                 <%= order.orderId %>
                             </td>
                             <td class="text-center align-middle">
-                                <%= new Date(order.placeAt).toLocaleDateString() %>
+                                <%= new Date(order.placeAt).toLocaleDateString('en-GB') %>
                             </td>
                             <td>
                                 <% order.items.forEach((item) => { %>
