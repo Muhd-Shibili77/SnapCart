@@ -107,6 +107,7 @@
             <thead>
                 <tr>
                     <th scope="col" class="text-center align-middle">OrderID</th>
+                    <th scope="col" class="text-center align-middle">Date</th>
                     <th scope="col" class="text-center align-middle">Product</th>
                     <th scope="col" class="text-center align-middle">Net_Quantity</th>
                     <th scope="col" class="text-center align-middle">Net_Amount</th>
@@ -120,6 +121,9 @@
                         <tr>
                             <td class="text-center align-middle">
                                 <%= order.orderId %>
+                            </td>
+                            <td class="text-center align-middle">
+                                <%= new Date(order.placeAt).toLocaleDateString() %>
                             </td>
                             <td>
                                 <% order.items.forEach((item) => { %>
@@ -149,7 +153,7 @@
                             <td class="text-center align-middle">
                                 <% if(order.orderStatus != 'Cancelled' && order.orderStatus != 'Delivered') { %>
                                     <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-success">Details</a>
-                                    <a onclick="cancelOrder('<%=order._id %>')" class="btn btn-outline-danger">Cancel Order</a>
+                                    <a onclick="cancelOrder('<%=order._id %>')" class="btn btn-outline-danger mt-2">Cancel Order</a>
                                 <% } else { %>
                                     <% if(order.orderStatus === 'Delivered'){%>
                                         <a href="/order/order_detials?orderId=<%=order._id%>" class="btn btn-outline-success">Details</a>

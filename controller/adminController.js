@@ -843,7 +843,7 @@ const acceptReturn = async (req, res) => {
     }
 
     item.isAdminAcceptedReturn = "Accepted";
-    const refundAmount = item.price;
+    const refundAmount = order.payableAmount;
 
     let wallet = await Wallet.findOne({ user: order.user });
     if (!wallet) {
