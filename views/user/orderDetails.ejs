@@ -129,7 +129,7 @@
                             </h6>
                         </div>
                         <h6 class="mt-3"><strong>Order At:</strong>
-                            <%= new Date(order.placeAt).toLocaleDateString() %>
+                            <%= new Date(order.placeAt).toLocaleDateString('en-GB') %>
                         </h6>
                         <h6 class="mt-3"><strong>Estimate Delivery:</strong>
                             <%= new Date(new Date(order.placeAt).setDate(new Date(order.placeAt).getDate() +
