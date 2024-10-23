@@ -697,7 +697,7 @@ if (response.ok) {
           title: 'Payment Failed',
           text: 'The payment was not completed. Redirecting to order details...',
           confirmButtonText: 'OK',
-          timer: 2000,
+          timer: 1000,
           willClose: () => {
             if (failedData.response) {
               window.location = failedData.response;
