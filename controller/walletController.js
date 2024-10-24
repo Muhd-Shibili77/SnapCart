@@ -53,7 +53,7 @@ const userWallet = async (req,res)=>{
       if (parseFloat(amount) <= 0) {
         return res.json({ success: false, error: 'Amount must be greater than zero.' });
       }
-      const maxAmount = 1000000;
+      const maxAmount = 100000;
       if (parseFloat(amount) > maxAmount) {
         return res.json({ success: false, error: `Amount cannot exceed ${maxAmount}.` });
       }
