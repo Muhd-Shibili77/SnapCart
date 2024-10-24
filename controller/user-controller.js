@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const mongoose = require("mongoose"); 
 const User = require("../model/userdb");
 const validator = require("validator");
 const nodemailer = require("nodemailer");
@@ -609,28 +610,40 @@ const singleProduct = async (req, res) => {
   
 };
 
+
+
 const category = async (req, res) => {
- 
-    const user = await User.findOne({email:req.session.email})
+  try {
+    
+    const id = req.query.id;
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).send("Invalid category ID");
+    }
+
+   
+    const user = await User.findOne({ email: req.session.email });
     const cart = await Cart.findOne({ user: user._id }).populate(
       "items.product"
     );
 
-     let cartCount=0;
-    if(cart){
-       cartCount  = cart.items.length;
+    let cartCount = 0;
+    if (cart) {
+      cartCount = cart.items.length;
     }
 
-    const id = req.query.id;
     const page = parseInt(req.query.page) || 1;
     const limit = 8;
     const skip = (page - 1) * limit;
+
+    
     const totalProducts = await Product.find({
       category_id: id,
     }).countDocuments();
+    
     const totalPage = Math.ceil(totalProducts / limit);
 
-    const category = await Product.find({ category_id: id ,isDelete:false})
+  
+    const category = await Product.find({ category_id: id, isDelete: false })
       .populate("category_id")
       .populate({
         path: "variants.offer",
@@ -639,9 +652,23 @@ const category = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-    res.render("user/category", { category, totalPage, currentPage: page ,cartCount});
- 
+   
+    
+
+   
+    res.render("user/category", {
+      category,
+      totalPage,
+      currentPage: page,
+      cartCount,
+    });
+  } catch (err) {
+   
+    console.error(err);
+    res.status(500).send("Server error");
+  }
 };
+
 
 const about = async (req, res) => {
   
