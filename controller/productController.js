@@ -54,10 +54,31 @@ const post_add_products = async (req, res) => {
       const existProduct = await Product.findOne({ product_name: productName });
 
       if (existProduct) {
-        return res.render("admin/adminAddProduct", {
-          exist: "Product already exists",
-        });
+        req.flash('errorMessage', `product is already exist`);
+        return res.redirect(`/admin/add_products`); // Redirect with flash message
       }
+
+      if(!productName){
+        req.flash('errorMessage', `product name is empty`);
+        return res.redirect(`/admin/add_products`); // Redirect with flash message
+      }
+      if(!productHighlights){
+        req.flash('errorMessage', `productHighlights is empty`);
+        return res.redirect(`/admin/add_products`); // Redirect with flash message
+      }
+      if(!productCategory){
+        req.flash('errorMessage', `productCategory is empty`);
+        return res.redirect(`/admin/add_products`); // Redirect with flash message
+      }
+      if(!productBrand){
+        req.flash('errorMessage', `productBrand is empty`);
+        return res.redirect(`/admin/add_products`); // Redirect with flash message
+      }
+      if(!productDescription){
+        req.flash('errorMessage', `productDescription is empty`);
+        return res.redirect(`/admin/add_products`); // Redirect with flash message
+      }
+
 
       const varientDetials = [];
 
@@ -70,11 +91,40 @@ const post_add_products = async (req, res) => {
         const sizeArray = req.body.productSize 
         const stockArray = req.body.productStock 
 
-        const price = priceArray[i];
+        const price = parseInt(priceArray[i]);
         const color = colorArray[i];
         const size = sizeArray[i];
-        const stock = stockArray[i];
-       
+        const stock = parseInt(stockArray[i]);
+
+        if(!price){
+          req.flash('errorMessage', `Variant ${i + 1}: price is empty`);
+          return res.redirect(``); 
+        }
+        if(!stock){
+          req.flash('errorMessage', `Variant ${i + 1}: stock is empty`);
+          return res.redirect(``); 
+        }
+        if(!color){
+          req.flash('errorMessage', `Variant ${i + 1}: color is empty`);
+          return res.redirect(``); 
+        }
+        if(!size){
+          req.flash('errorMessage', `Variant ${i + 1}: size is empty`);
+          return res.redirect(``); 
+        }
+  
+  
+        
+        if (stock < 0) {
+          req.flash('errorMessage', `Variant ${i + 1}: Stock cannot be negative.`);
+          return res.redirect(`/admin/add_products`); 
+        }
+        
+     
+        if (price < 0) {
+          req.flash('errorMessage', `Variant ${i + 1}: Price cannot be negative.`);
+          return res.redirect(`/admin/add_products`); 
+        }
 
         
 
@@ -83,7 +133,7 @@ const post_add_products = async (req, res) => {
           if (images) {
             images.forEach((image) => {
               if (image.fieldname.startsWith(`productImage${i + 1}`)) {
-                varientImages.push(image.path); // Ensure this is the correct property
+                varientImages.push(image.path); 
               }
             });
           }
@@ -108,10 +158,12 @@ const post_add_products = async (req, res) => {
       });
 
       await product.save();
+      req.flash('successMessage', 'Product added successfully');
       console.log("Product saved successfully");
       res.redirect("/admin/products");
     
   } catch (error) {
+    req.flash('errorMessage', 'Internal server error');
     console.error("Something went wrong while adding the product:", error);
     res
       .status(500)
