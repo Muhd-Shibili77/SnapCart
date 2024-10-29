@@ -3,8 +3,7 @@ $(async function () {
 
   const dataString = JSON.parse(document.getElementById('chartData').value);
   const chartData = JSON.parse(dataString);
-  console.log('he',chartData);  
-  console.log('helo',chartData.labels)
+  
   // =====================================
   // Profit
   // =====================================

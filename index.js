@@ -71,8 +71,7 @@ app.get('/',async(req,res)=>{
     if(req.session.email){
         
         res.redirect('/user/home')
-    }else if(req.session.isAdmin){
-        res.redirect('/admin')
+    
     }else{
         const mensProduct = await Product.find({category_id:'66e01b1fb148f23cc19fa331'}).populate('category_id')
         const womensProduct = await Product.find({category_id:'66e18d806bf28e92c6d2e0ea'}).populate('category_id')
