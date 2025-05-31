@@ -90,11 +90,10 @@ const post_add_products = async (req, res) => {
         const colorArray = req.body.productColor
         const sizeArray = req.body.productSize 
         const stockArray = req.body.productStock 
-
-        const price = parseInt(priceArray[i]);
+        const price = parseInt(priceArray);
         const color = colorArray[i];
         const size = sizeArray[i];
-        const stock = parseInt(stockArray[i]);
+        const stock = parseInt(stockArray);
 
         if(!price){
           req.flash('errorMessage', `Variant ${i + 1}: price is empty`);

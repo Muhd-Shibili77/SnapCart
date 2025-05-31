@@ -1,25 +1,27 @@
 const express = require("express");
 const userrouter = express.Router();
-const userController = require('../controller/user-controller')
-const walletController = require('../controller/walletController')
+// const userController = require('../controller/user-controller')
+const addressController = require('../controller/user/addressController')
+const authController = require('../controller/user/authController')
+const userController = require('../controller/user/userController')
 const userBlock = require('../middleware/userBlock')
 const userAuth = require('../middleware/userAuth')
 
 userrouter.use(userBlock)
 
-userrouter.get("/login", userController.get_login);
+userrouter.get("/login", authController.get_login);
 
-userrouter.post("/login", userController.post_login);
+userrouter.post("/login", authController.post_login);
 
-userrouter.get("/signup", userController.get_signup);
+userrouter.get("/signup", authController.get_signup);
 
-userrouter.post("/signup", userController.post_signup);
+userrouter.post("/signup", authController.post_signup);
 
-userrouter.get("/otp", userController.get_otp_verification);
+userrouter.get("/otp", authController.get_otp_verification);
 
-userrouter.post("/otp", userController.post_otp_verification);
+userrouter.post("/otp", authController.post_otp_verification);
 
-userrouter.post("/resendOtp",userController.resend_otp);
+userrouter.post("/resendOtp",authController.resend_otp);
 
 userrouter.get("/home",userAuth,userController.get_home);
 
@@ -37,13 +39,13 @@ userrouter.get('/profile',userAuth,userController.userProfile)
 
 userrouter.post('/edit_profile',userAuth,userController.editProfile)
 
-userrouter.get('/address',userAuth,userController.address)
+userrouter.get('/address',userAuth,addressController.address)
 
-userrouter.post('/add_address',userAuth,userController.add_address)
+userrouter.post('/add_address',userAuth,addressController.add_address)
 
-userrouter.post('/edit_address',userAuth,userController.edit_address)
+userrouter.post('/edit_address',userAuth,addressController.edit_address)
 
-userrouter.post('/delete_address',userAuth,userController.delete_address)
+userrouter.post('/delete_address',userAuth,addressController.delete_address)
 
 userrouter.get('/password',userAuth,userController.password)
 
@@ -63,6 +65,6 @@ userrouter.post('/passwordChange',userController.post_forgetChangePassword)
 
 userrouter.post('/forgetResendOtp',userController.forgetResendOtp)
 
-userrouter.get("/logout",userController.user_logout);
+userrouter.get("/logout",authController.user_logout);
 
 module.exports = userrouter;

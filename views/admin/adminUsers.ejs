@@ -235,9 +235,180 @@ style="background-color: transparent !important; display: flex; justify-content:
 
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-
-
     document.addEventListener("DOMContentLoaded", () => {
+  const blockbuttons = document.querySelectorAll(".block-button")
+  const unblockbuttons = document.querySelectorAll(".unblock-button")
+
+  // Blocking user
+  blockbuttons.forEach(button => {
+    button.addEventListener('click', async () => {
+      const userId = button.getAttribute("data-user-id")
+
+      if (!userId) {
+        Swal.fire({
+          icon: 'error',
+          title: 'User not found',
+          confirmButtonText: 'OK'
+        });
+        return
+      }
+
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to block this user?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, Block!',
+        cancelButtonText: 'Close!'
+      });
+
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch('/admin/block', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId })
+          });
+
+          if (response.ok) {
+            // Update the button without page reload
+            button.textContent = 'UNBLOCK';
+            button.className = 'btn btn-success unblock-button';
+            button.setAttribute('data-user-id', userId);
+            
+            // Add event listener to the new unblock button
+            addUnblockListener(button);
+            
+            Swal.fire('Blocked!', 'This user is blocked.', 'success');
+          } else {
+            Swal.fire('Error!', 'Failed to block user.', 'error');
+          }
+        } catch (error) {
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+      }
+    })
+  })
+
+  // Unblocking user
+  unblockbuttons.forEach(button => {
+    addUnblockListener(button);
+  });
+
+  function addUnblockListener(button) {
+    button.addEventListener('click', async () => {
+      const userId = button.getAttribute('data-user-id');
+
+      if (!userId) {
+        Swal.fire({
+          icon: 'error',
+          title: 'User not found',
+          confirmButtonText: 'OK'
+        });
+        return
+      }
+
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to unblock this user?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, unblock!',
+        cancelButtonText: 'Close!'
+      });
+
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch('/admin/unblock', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId })
+          });
+
+          if (response.ok) {
+            // Update the button without page reload
+            button.textContent = 'BLOCK';
+            button.className = 'btn btn-danger block-button';
+            button.setAttribute('data-user-id', userId);
+            
+            // Add event listener to the new block button
+            addBlockListener(button);
+            
+            Swal.fire('Unblocked!', 'This user is unblocked.', 'success');
+          } else {
+            Swal.fire('Error!', 'Failed to unblock user.', 'error');
+          }
+        } catch (error) {
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+      }
+    });
+  }
+
+  function addBlockListener(button) {
+    button.addEventListener('click', async () => {
+      const userId = button.getAttribute("data-user-id")
+
+      if (!userId) {
+        Swal.fire({
+          icon: 'error',
+          title: 'User not found',
+          confirmButtonText: 'OK'
+        });
+        return
+      }
+
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to block this user?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, Block!',
+        cancelButtonText: 'Close!'
+      });
+
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch('/admin/block', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId })
+          });
+
+          if (response.ok) {
+            // Update the button without page reload
+            button.textContent = 'UNBLOCK';
+            button.className = 'btn btn-success unblock-button';
+            button.setAttribute('data-user-id', userId);
+            
+            // Add event listener to the new unblock button
+            addUnblockListener(button);
+            
+            Swal.fire('Blocked!', 'This user is blocked.', 'success');
+          } else {
+            Swal.fire('Error!', 'Failed to block user.', 'error');
+          }
+        } catch (error) {
+          Swal.fire('Error!', 'There was a problem processing your request.', 'error');
+        }
+      }
+    });
+  }
+});
+
+    // document.addEventListener("DOMContentLoaded", () => {
       const blockbuttons = document.querySelectorAll(".block-button")
       const unblockbuttons = document.querySelectorAll(".unblock-button")
 
@@ -345,7 +516,7 @@ style="background-color: transparent !important; display: flex; justify-content:
 
         });
       });
-    })
+   
   </script>
 
 <%- include ('../partial/newAdminFooter')-%>
